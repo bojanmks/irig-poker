@@ -33,5 +33,6 @@ namespace WebApi.DataAccess
         }
 
         public DbSet<Translation> Translations { get; set; }
+        public DbSet<Game> Games { get; set; }
     }
 }

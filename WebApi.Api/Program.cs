@@ -17,9 +17,10 @@ app.UseRouting();
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.UseFastEndpoints();
+app.UseFastEndpoints(config =>
+{
+    config.Endpoints.AllowEmptyRequestDtos = true;
+    config.Endpoints.RoutePrefix = "api";
+});
 
 app.Run();

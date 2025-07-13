@@ -8,6 +8,14 @@ namespace WebApi.Api.Endpoints
     public abstract class BaseEndpoint<TRequest, TResponse> : Endpoint<TRequest, EndpointResponse<TResponse>>
         where TRequest : notnull
     {
+        public override void Configure()
+        {
+            AllowAnonymous();
+            ConfigureEndpoint();
+        }
+
+        protected abstract void ConfigureEndpoint();
+
         protected async Task RespondFromResult(Result<TResponse> result, CancellationToken cancellationToken = default(CancellationToken))
         {
             int statusCode = result.HttpStatusCode.HasValue

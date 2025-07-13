@@ -1,23 +1,24 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using System.Data;
 using Microsoft.Extensions.Caching.Memory;
 using WebApi.Application.ApplicationUsers;
 using WebApi.Application.Localization;
+using WebApi.DataAccess;
 
 namespace WebApi.Implementation.Localization
 {
-    public class SqlTranslator : ITranslator
+    public class EFTranslator : ITranslator
     {
-        private readonly SqlConnection _connection;
+        private readonly DatabaseContext _dbContext;
         private readonly IApplicationUser _user;
         private readonly IMemoryCache _memoryCache;
 
-        public SqlTranslator(
-            SqlConnection connection,
+        public EFTranslator(
+            DatabaseContext dbContext,
             IApplicationUser user,
             IMemoryCache memoryCache
         )
         {
-            _connection = connection;
+            _dbContext = dbContext;
             _user = user;
             _memoryCache = memoryCache;
         }
@@ -45,21 +46,10 @@ namespace WebApi.Implementation.Localization
                 return localizationData;
             }
 
-            localizationData = new Dictionary<string, string>();
-
-            var query = $"SELECT [Key], [Value] FROM Translations WHERE Locale = '{_user.Locale}'";
-            var command = new SqlCommand(query, _connection);
-
-            _connection.Open();
-
-            var reader = command.ExecuteReader();
-
-            while (reader.Read())
-            {
-                localizationData.Add(reader.GetString(0), reader.GetString(1));
-            }
-
-            _connection.Close();
+            localizationData = _dbContext.Translations
+                .Where(x => x.Locale == _user.Locale.Name)
+                .Select(x => new KeyValuePair<string, string>(x.Key, x.Value))
+                .ToDictionary();
 
             var cacheEntryOptions = new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(TimeSpan.FromHours(12));

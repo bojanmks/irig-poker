@@ -1,12 +1,7 @@
 ﻿using System.Data;
 using System.Reflection;
-using System.Text;
 using FluentValidation;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using WebApi.Api.Core;
 using WebApi.Application.ApplicationUsers;
 using WebApi.Application.AppSettings;
@@ -41,36 +36,7 @@ namespace WebApi.Api.Extensions
 
         private static void AddSwagger(this IServiceCollection services)
         {
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi.Api", Version = "v1" });
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Description = @"JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below. Example: 'Bearer 12345abcdef'",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer"
-                });
-
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            },
-                            Scheme = "oauth2",
-                            Name = "Bearer",
-                            In = ParameterLocation.Header
-                        },
-                        new List<string>()
-                    }
-                });
-            });
+            services.AddSwaggerGen();
         }
 
         private static void RegisterDependencies(this IServiceCollection services, AppSettings appSettings)
@@ -82,14 +48,10 @@ namespace WebApi.Api.Extensions
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddDbContext(appSettings);
-            services.AddJwt(appSettings);
             services.AddApplicationUser();
             services.AddUseCases();
             services.AddAutoMapper();
             services.SetupLocalization();
-
-            services.AddTransient(provider => new SqlConnection(appSettings.ConnectionStrings.Primary));
-            services.AddTransient<IDbConnection>(provider => provider.GetService<SqlConnection>());
 
             services.AddTransient<EntityAccessor>();
             services.AddTransient<IUseCaseLogger, ConsoleUseCaseLogger>();
@@ -123,40 +85,6 @@ namespace WebApi.Api.Extensions
                 options.UseNpgsql(config.ConnectionStrings.Primary, x => x.MigrationsAssembly(typeof(DatabaseContext).Assembly.GetName().Name))
                        .UseLazyLoadingProxies();
             });
-        }
-
-        private static void AddJwt(this IServiceCollection services, AppSettings appSettings)
-        {
-            var jwtSettings = appSettings.JwtSettings;
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(o =>
-            {
-                o.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidIssuer = jwtSettings.Issuer,
-                    ValidAudience = jwtSettings.Audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateIssuerSigningKey = true,
-                    LifetimeValidator = (DateTime? notBefore, DateTime? expires, SecurityToken securityToken, TokenValidationParameters validationParameters) =>
-                    {
-                        if (expires.HasValue)
-                        {
-                            return DateTime.UtcNow < expires.Value;
-                        }
-
-                        return false;
-                    }
-                };
-            });
-
-            services.AddAuthorization();
         }
 
         private static void AddApplicationUser(this IServiceCollection services)
@@ -306,7 +234,7 @@ namespace WebApi.Api.Extensions
 
         private static void SetupLocalization(this IServiceCollection services)
         {
-            services.AddTransient<ITranslator, SqlTranslator>();
+            services.AddTransient<ITranslator, EFTranslator>();
         }
     }
 }
