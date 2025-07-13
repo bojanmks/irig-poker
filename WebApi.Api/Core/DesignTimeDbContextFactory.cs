@@ -13,7 +13,7 @@ namespace WebApi.Api.Core
 
             var builder = new DbContextOptionsBuilder<DatabaseContext>();
 
-            builder.UseSqlServer(config.ConnectionStrings.Primary, x => x.MigrationsAssembly(typeof(DatabaseContext).Assembly.GetName().Name)).UseLazyLoadingProxies();
+            builder.UseNpgsql(config.ConnectionStrings.Primary, x => x.MigrationsAssembly(typeof(DatabaseContext).Assembly.GetName().Name)).UseLazyLoadingProxies();
 
             return new DatabaseContext(builder.Options);
         }

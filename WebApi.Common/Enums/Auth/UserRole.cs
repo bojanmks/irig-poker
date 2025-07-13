@@ -2,8 +2,8 @@
 {
     public enum UserRole
     {
-        Anonymous = 1,
-        Regular = 2,
-        Admin = 3
+        NotPlaying = 1,
+        RoomOwner = 2,
+        Player = 3
     }
 }

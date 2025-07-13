@@ -1,4 +1,4 @@
-insert into Translations([Key], Value, Locale)
+insert into "Translations"("Key", "Value", "Locale")
 values
 ('isRequired', 'Field is required', 'en-US'),
 ('isRequired', 'Polje je obavezno', 'sr-Latn-RS'),

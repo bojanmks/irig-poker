@@ -51,7 +51,6 @@ namespace WebApi.Implementation.UseCases
 
             var log = new UseCaseLoggerData
             {
-                UserId = _applicationUser.Id,
                 UseCaseId = useCase.Id,
                 IsAuthorized = isAuthorized,
                 ExecutionDateTime = DateTime.UtcNow,

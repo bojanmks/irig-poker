@@ -2,7 +2,6 @@
 {
     public class UseCaseLoggerData
     {
-        public int? UserId { get; set; }
         public string UseCaseId { get; set; }
         public bool IsAuthorized { get; set; }
         public DateTime ExecutionDateTime { get; set; }

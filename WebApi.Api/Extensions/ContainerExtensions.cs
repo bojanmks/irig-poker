@@ -10,7 +10,6 @@ using Microsoft.OpenApi.Models;
 using WebApi.Api.Core;
 using WebApi.Application.ApplicationUsers;
 using WebApi.Application.AppSettings;
-using WebApi.Application.Jwt;
 using WebApi.Application.Localization;
 using WebApi.Application.Logging;
 using WebApi.Application.UseCases;
@@ -20,7 +19,6 @@ using WebApi.DataAccess;
 using WebApi.Implementation.ApplicationUsers;
 using WebApi.Implementation.Core;
 using WebApi.Implementation.Extensions;
-using WebApi.Implementation.Jwt;
 using WebApi.Implementation.Localization;
 using WebApi.Implementation.Logging;
 using WebApi.Implementation.Search;
@@ -96,11 +94,6 @@ namespace WebApi.Api.Extensions
             services.AddTransient<EntityAccessor>();
             services.AddTransient<IUseCaseLogger, ConsoleUseCaseLogger>();
             services.AddTransient<IExceptionLogger, ConsoleExceptionLogger>();
-            services.AddTransient<TokenCryptor>();
-            services.AddTransient<ClaimsGenerator>();
-            services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
-            services.AddTransient<IJwtTokenValidator, JwtTokenValidator>();
-            services.AddTransient<IJwtTokenStorage, EfJwtTokenStorage>();
             services.AddTransient<EfSearchObjectQueryBuilder>();
             services.AddTransient<EfSearchExecutor>();
         }
@@ -112,7 +105,7 @@ namespace WebApi.Api.Extensions
                 var options = new DbContextOptionsBuilder<DatabaseContext>()
                                     .EnableSensitiveDataLogging()
                                     .UseLazyLoadingProxies()
-                                    .UseSqlServer(appSettings.ConnectionStrings.Primary, x => x.MigrationsAssembly(typeof(DatabaseContext).Assembly.GetName().Name))
+                                    .UseNpgsql(appSettings.ConnectionStrings.Primary, x => x.MigrationsAssembly(typeof(DatabaseContext).Assembly.GetName().Name))
                                     .UseLazyLoadingProxies()
                                     .Options;
 
@@ -127,7 +120,7 @@ namespace WebApi.Api.Extensions
 
             services.AddDbContext<DatabaseContext>(options =>
             {
-                options.UseSqlServer(config.ConnectionStrings.Primary, x => x.MigrationsAssembly(typeof(DatabaseContext).Assembly.GetName().Name))
+                options.UseNpgsql(config.ConnectionStrings.Primary, x => x.MigrationsAssembly(typeof(DatabaseContext).Assembly.GetName().Name))
                        .UseLazyLoadingProxies();
             });
         }
@@ -170,45 +163,33 @@ namespace WebApi.Api.Extensions
         {
             services.AddTransient<IApplicationUser>(provider =>
             {
-                var localeGetter = provider.GetService<ILocaleGetter>();
+                var localeGetter = provider.GetService<ILocaleGetter>()!;
                 var locale = localeGetter.GetLocale();
 
                 var accessor = provider.GetService<IHttpContextAccessor>();
-                var userRoleUseCaseMap = provider.GetService<UserRoleUseCaseMapStore>();
+                var userRoleUseCaseMap = provider.GetService<UserRoleUseCaseMapStore>()!;
 
-                var anonymousUser = new AnonymousUser
+                var notPlayingUser = new ApplicationUser
                 {
                     Locale = locale,
-                    AllowedUseCases = userRoleUseCaseMap.GetUseCases(UserRole.Anonymous)
+                    Role = UserRole.NotPlaying,
+                    AllowedUseCases = userRoleUseCaseMap.GetUseCases(UserRole.NotPlaying)
                 };
 
-                if (accessor?.HttpContext?.User is null)
-                {
-                    return anonymousUser;
-                }
+                return notPlayingUser;
 
-                var claims = accessor.HttpContext.User;
+                //if (accessor?.HttpContext?.User is null)
+                //{
+                //    return anonymousUser;
+                //}
 
-                if (claims.FindFirst(WebApiClaims.UserId) is null)
-                {
-                    return anonymousUser;
-                }
+                //var claims = accessor.HttpContext.User;
 
-                var userRole = Enum.Parse<UserRole>(claims.FindFirst(WebApiClaims.Role).Value);
-
-                if (userRole == UserRole.Anonymous)
-                {
-                    return anonymousUser;
-                }
-
-                return new ApplicationUser
-                {
-                    Id = int.Parse(claims.FindFirst(WebApiClaims.UserId).Value),
-                    Email = claims.FindFirst(WebApiClaims.Email).Value,
-                    Role = userRole,
-                    Locale = locale,
-                    AllowedUseCases = userRoleUseCaseMap.GetUseCases(userRole)
-                };
+                //return new ApplicationUser
+                //{
+                //    Locale = locale,
+                //    AllowedUseCases = userRoleUseCaseMap.GetUseCases(userRole)
+                //};
             });
         }
 

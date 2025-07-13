@@ -26,6 +26,9 @@
 
   <ItemGroup>
     <Folder Include="ExceptionHandling\" />
+    <Folder Include="MappingProfiles\" />
+    <Folder Include="Search\SearchObjects\" />
+    <Folder Include="UseCaseSubscribers\" />
   </ItemGroup>
 
 </Project>
