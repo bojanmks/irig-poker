@@ -1,0 +1,7 @@
+﻿namespace WebApi.Common.DTO.Players;
+
+public class PlayerDto
+{
+    public string Username { get; set; }
+    public bool IsAdmin { get; set; }
+}

@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WebApi.Common\WebApi.Common.csproj" />
-    <ProjectReference Include="..\WebApi.DataAccess\WebApi.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

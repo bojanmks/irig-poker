@@ -1,22 +1,19 @@
 ﻿using System.Data;
 using System.Reflection;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using WebApi.Api.Core;
 using WebApi.Application.ApplicationUsers;
 using WebApi.Application.AppSettings;
+using WebApi.Application.Games;
 using WebApi.Application.Localization;
 using WebApi.Application.Logging;
 using WebApi.Application.UseCases;
 using WebApi.Application.Validation;
 using WebApi.Common.Enums.Auth;
-using WebApi.DataAccess;
 using WebApi.Implementation.ApplicationUsers;
-using WebApi.Implementation.Core;
 using WebApi.Implementation.Extensions;
+using WebApi.Implementation.Games;
 using WebApi.Implementation.Localization;
 using WebApi.Implementation.Logging;
-using WebApi.Implementation.Search;
 using WebApi.Implementation.UseCases;
 using WebApi.Implementation.Validators;
 
@@ -29,62 +26,31 @@ namespace WebApi.Api.Extensions
             var appSettings = new AppSettings();
             builder.Configuration.Bind(appSettings);
 
-            builder.Services.AddSwagger();
             builder.Services.AddMemoryCache();
             builder.Services.RegisterDependencies(appSettings);
-        }
-
-        private static void AddSwagger(this IServiceCollection services)
-        {
-            services.AddSwaggerGen();
         }
 
         private static void RegisterDependencies(this IServiceCollection services, AppSettings appSettings)
         {
             services.AddSingleton(appSettings);
-            services.AddSingleton(appSettings.JwtSettings);
 
             services.AddTransient<ILocaleGetter, LocaleGetter>();
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddDbContext(appSettings);
             services.AddApplicationUser();
             services.AddUseCases();
             services.AddAutoMapper();
             services.SetupLocalization();
 
-            services.AddTransient<EntityAccessor>();
             services.AddTransient<IUseCaseLogger, ConsoleUseCaseLogger>();
             services.AddTransient<IExceptionLogger, ConsoleExceptionLogger>();
-            services.AddTransient<EfSearchObjectQueryBuilder>();
-            services.AddTransient<EfSearchExecutor>();
-        }
 
-        private static void AddDbContext(this IServiceCollection services, AppSettings appSettings)
-        {
-            services.AddTransient(x =>
-            {
-                var options = new DbContextOptionsBuilder<DatabaseContext>()
-                                    .EnableSensitiveDataLogging()
-                                    .UseLazyLoadingProxies()
-                                    .UseNpgsql(appSettings.ConnectionStrings.Primary, x => x.MigrationsAssembly(typeof(DatabaseContext).Assembly.GetName().Name))
-                                    .UseLazyLoadingProxies()
-                                    .Options;
-
-                var context = new DatabaseContext(options);
-
-                return context;
-            });
-
-            services.AddTransient<DbContext>(x => x.GetService<DatabaseContext>());
-
-            var config = Configuration.GetConfiguration<AppSettings>();
-
-            services.AddDbContext<DatabaseContext>(options =>
-            {
-                options.UseNpgsql(config.ConnectionStrings.Primary, x => x.MigrationsAssembly(typeof(DatabaseContext).Assembly.GetName().Name))
-                       .UseLazyLoadingProxies();
-            });
+            // Games
+            services.AddSingleton<GameStore>();
+            services.AddTransient<ICreateGameService, CreateGameService>();
+            services.AddTransient<IGetGameService, GetGameService>();
+            services.AddTransient<IDeleteGameService, DeleteGameService>();
+            services.AddTransient<IGameExistsService, GameExistsService>();
         }
 
         private static void AddApplicationUser(this IServiceCollection services)
@@ -234,7 +200,7 @@ namespace WebApi.Api.Extensions
 
         private static void SetupLocalization(this IServiceCollection services)
         {
-            services.AddTransient<ITranslator, EFTranslator>();
+            services.AddTransient<ITranslator, JsonTranslator>();
         }
     }
 }

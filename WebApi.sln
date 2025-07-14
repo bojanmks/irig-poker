@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi.Application", "WebAp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi.Implementation", "WebApi.Implementation\WebApi.Implementation.csproj", "{88F061B2-0F78-49A3-A5AC-FA64BEBCF464}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi.DataAccess", "WebApi.DataAccess\WebApi.DataAccess.csproj", "{79C1927B-23C6-4802-9A4F-2000CA9AA88D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi.Common", "WebApi.Common\WebApi.Common.csproj", "{ED09F2E8-96CB-4F4B-BFA6-6A1C7080A5FD}"
 EndProject
 Global
@@ -31,10 +29,6 @@ Global
 		{88F061B2-0F78-49A3-A5AC-FA64BEBCF464}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88F061B2-0F78-49A3-A5AC-FA64BEBCF464}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88F061B2-0F78-49A3-A5AC-FA64BEBCF464}.Release|Any CPU.Build.0 = Release|Any CPU
-		{79C1927B-23C6-4802-9A4F-2000CA9AA88D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{79C1927B-23C6-4802-9A4F-2000CA9AA88D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{79C1927B-23C6-4802-9A4F-2000CA9AA88D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{79C1927B-23C6-4802-9A4F-2000CA9AA88D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ED09F2E8-96CB-4F4B-BFA6-6A1C7080A5FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ED09F2E8-96CB-4F4B-BFA6-6A1C7080A5FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED09F2E8-96CB-4F4B-BFA6-6A1C7080A5FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
