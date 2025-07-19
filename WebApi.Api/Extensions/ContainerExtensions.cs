@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Reflection;
 using FluentValidation;
+using WebApi.Api.Hubs;
 using WebApi.Application.ApplicationUsers;
 using WebApi.Application.AppSettings;
 using WebApi.Application.Games;
@@ -34,6 +35,8 @@ namespace WebApi.Api.Extensions
         {
             services.AddSingleton(appSettings);
 
+            services.AddScoped<HubContextRegistry>();
+
             services.AddTransient<ILocaleGetter, LocaleGetter>();
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -50,6 +53,7 @@ namespace WebApi.Api.Extensions
             services.AddTransient<IGetGameService, GetGameService>();
             services.AddTransient<IDeleteGameService, DeleteGameService>();
             services.AddTransient<IGameExistsService, GameExistsService>();
+            services.AddTransient<IAddPlayerToGameService, AddPlayerToGameService>();
         }
 
         private static void AddApplicationUser(this IServiceCollection services)
@@ -112,7 +116,7 @@ namespace WebApi.Api.Extensions
         private static void AddUseCaseSubscribers(this IServiceCollection services)
         {
             var interfaceType = typeof(IUseCaseSubscriber<,,>);
-            var assembliesToLookThrough = new Assembly[] { typeof(UserRoleUseCaseMapStore).Assembly };
+            var assembliesToLookThrough = new Assembly[] { typeof(UserRoleUseCaseMapStore).Assembly, typeof(Program).Assembly };
 
             var useCaseSubscribersTypesData = interfaceType.GetGenericInterfaceImplementationTypes(assembliesToLookThrough);
 

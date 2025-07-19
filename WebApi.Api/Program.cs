@@ -1,4 +1,5 @@
 using FastEndpoints;
+using Microsoft.AspNetCore.SignalR;
 using WebApi.Api.Extensions;
 using WebApi.Api.Hubs;
 using WebApi.Api.Middleware;
@@ -21,7 +22,10 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(options =>
+{
+    options.AddFilter<GlobalHubFilter>();
+});
 
 var app = builder.Build();
 

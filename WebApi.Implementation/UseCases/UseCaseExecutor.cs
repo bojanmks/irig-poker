@@ -35,12 +35,7 @@ namespace WebApi.Implementation.UseCases
 
             var response = await handler.HandleAsync(useCase);
 
-            if (!response.IsSuccess)
-            {
-                return response;
-            }
-
-            await ExecuteUseCaseSubscribers(useCase, response.Data);
+            await ExecuteUseCaseSubscribers(useCase, response);
 
             return response;
         }
@@ -90,7 +85,7 @@ namespace WebApi.Implementation.UseCases
             return Result<TOut>.Success();
         }
 
-        private async Task ExecuteUseCaseSubscribers(TUseCase useCase, TOut useCaseResponse)
+        private async Task ExecuteUseCaseSubscribers(TUseCase useCase, Result<TOut> useCaseResponse)
         {
             var subscribers = _subscriberResolver.ResolveAll<TUseCase, TData, TOut>();
 
