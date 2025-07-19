@@ -39,7 +39,6 @@ namespace WebApi.Api.Extensions
 
             services.AddApplicationUser();
             services.AddUseCases();
-            services.AddAutoMapper();
             services.SetupLocalization();
 
             services.AddTransient<IUseCaseLogger, ConsoleUseCaseLogger>();
@@ -191,11 +190,6 @@ namespace WebApi.Api.Extensions
                     services.AddTransient(baseType, t);
                 }
             }
-        }
-
-        private static void AddAutoMapper(this IServiceCollection services)
-        {
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         private static void SetupLocalization(this IServiceCollection services)

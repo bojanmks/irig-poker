@@ -1,4 +1,5 @@
-﻿using WebApi.Application.Logging;
+﻿using Newtonsoft.Json;
+using WebApi.Application.Logging;
 using WebApi.Application.Logging.LoggerData;
 
 namespace WebApi.Implementation.Logging
@@ -7,7 +8,7 @@ namespace WebApi.Implementation.Logging
     {
         public Task Log(UseCaseLoggerData data)
         {
-            Console.WriteLine(data);
+            Console.WriteLine(JsonConvert.SerializeObject(data));
             return Task.CompletedTask;
         }
     }

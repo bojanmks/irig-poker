@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using WebApi.Application.ApplicationUsers;
+﻿using WebApi.Application.ApplicationUsers;
 using WebApi.Application.Logging;
 using WebApi.Application.UseCases;
 using WebApi.Application.Validation;
@@ -10,7 +9,6 @@ namespace WebApi.Implementation.UseCases
 {
     public class UseCaseMediator
     {
-        private readonly IMapper _mapper;
         private readonly IApplicationUser _applicationUser;
         private readonly IUseCaseLogger _useCaseLogger;
         private readonly IUseCaseSubscriberResolver _subscriberResolver;
@@ -18,7 +16,6 @@ namespace WebApi.Implementation.UseCases
         private readonly IUseCaseHandlerResolver _useCaseHandlerResolver;
 
         public UseCaseMediator(
-            IMapper mapper,
             IApplicationUser applicationUser,
             IUseCaseLogger useCaseLogger,
             IUseCaseSubscriberResolver subscriberResolver,
@@ -26,7 +23,6 @@ namespace WebApi.Implementation.UseCases
             IUseCaseHandlerResolver useCaseHandlerResolver
         )
         {
-            _mapper = mapper;
             _applicationUser = applicationUser;
             _useCaseLogger = useCaseLogger;
             _subscriberResolver = subscriberResolver;
