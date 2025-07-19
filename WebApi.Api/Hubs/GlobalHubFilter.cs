@@ -8,7 +8,8 @@ public class GlobalHubFilter(
 {
     public async ValueTask<object?> InvokeMethodAsync(
         HubInvocationContext invocationContext,
-        Func<HubInvocationContext, ValueTask<object?>> next)
+        Func<HubInvocationContext, ValueTask<object?>> next
+    )
     {
         _hubContextRegistry.SetContext(invocationContext.Context);
         _hubContextRegistry.SetClients(invocationContext.Hub.Clients);

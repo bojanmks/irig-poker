@@ -15,6 +15,7 @@ using WebApi.Implementation.Extensions;
 using WebApi.Implementation.Games;
 using WebApi.Implementation.Localization;
 using WebApi.Implementation.Logging;
+using WebApi.Implementation.Players;
 using WebApi.Implementation.UseCases;
 using WebApi.Implementation.Validators;
 
@@ -49,6 +50,7 @@ namespace WebApi.Api.Extensions
 
             // Games
             services.AddSingleton<GameStore>();
+            services.AddSingleton<PlayersGamesMap>();
             services.AddTransient<ICreateGameService, CreateGameService>();
             services.AddTransient<IGetGameService, GetGameService>();
             services.AddTransient<IDeleteGameService, DeleteGameService>();

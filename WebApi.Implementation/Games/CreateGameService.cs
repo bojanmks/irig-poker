@@ -30,7 +30,7 @@ public class CreateGameService(
     private string MakeGameCode()
     {
         const string ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        const int LENGTH = 20;
+        const int LENGTH = 10;
 
         var code = new StringBuilder(LENGTH);
         using var rng = RandomNumberGenerator.Create();
