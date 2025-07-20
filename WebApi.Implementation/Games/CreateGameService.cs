@@ -18,7 +18,7 @@ public class CreateGameService(
             GameCode = gameCode
         };
 
-        while (!_gameStore.GameStates.TryAdd(gameCode, gameState))
+        while (!_gameStore.Games.TryAdd(gameCode, gameState))
         {
             gameCode = MakeGameCode();
             gameState.GameCode = gameCode;

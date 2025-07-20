@@ -56,6 +56,7 @@ namespace WebApi.Api.Extensions
             services.AddTransient<IDeleteGameService, DeleteGameService>();
             services.AddTransient<IGameExistsService, GameExistsService>();
             services.AddTransient<IAddPlayerToGameService, AddPlayerToGameService>();
+            services.AddTransient<IDisconnectFromGameService, DisconnectFromGameService>();
         }
 
         private static void AddApplicationUser(this IServiceCollection services)

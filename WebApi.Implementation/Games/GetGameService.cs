@@ -9,7 +9,7 @@ public class GetGameService(
 {
     public Task<GameDto?> GetAsync(string gameCode, CancellationToken cancellationToken = default)
     {
-        var gameState = _gameStore.GameStates.GetValueOrDefault(gameCode);
+        var gameState = _gameStore.Games.GetValueOrDefault(gameCode);
         return Task.FromResult(gameState);
     }
 }

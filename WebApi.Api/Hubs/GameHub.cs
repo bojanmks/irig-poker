@@ -15,4 +15,9 @@ public class GameHub(
         data.ConnectionId = Context.ConnectionId;
         await _mediator.Execute<JoinGameUseCase, JoinGameDto, Empty>(new JoinGameUseCase(data));
     }
+
+    public override async Task OnDisconnectedAsync(Exception? exception)
+    {
+        await _mediator.Execute<DisconnectFromGameUseCase, string, DisconnectResult>(new DisconnectFromGameUseCase(Context.ConnectionId));
+    }
 }

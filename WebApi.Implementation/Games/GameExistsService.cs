@@ -8,7 +8,7 @@ public class GameExistsService(
 {
     public Task<bool> ExistsAsync(string gameCode, CancellationToken cancellationToken = default)
     {
-        bool gameExist = _gameStore.GameStates.ContainsKey(gameCode);
+        bool gameExist = _gameStore.Games.ContainsKey(gameCode);
         return Task.FromResult(gameExist);
     }
 }

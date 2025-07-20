@@ -5,5 +5,5 @@ namespace WebApi.Implementation.Games;
 
 public class GameStore
 {
-    public ConcurrentDictionary<string, GameDto> GameStates { get; } = new();
+    public ConcurrentDictionary<string, GameDto> Games { get; } = new();
 }

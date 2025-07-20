@@ -6,5 +6,6 @@ namespace WebApi.Common.DTO.Games;
 public class GameDto
 {
     public string GameCode { get; set; }
+    public bool HasStarted { get; set; }
     public ConcurrentDictionary<string, PlayerDto> Players { get; set; } = new();
 }

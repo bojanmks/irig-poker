@@ -1,0 +1,70 @@
+﻿using WebApi.Application.Games;
+using WebApi.Common.DTO.Games;
+using WebApi.Implementation.Players;
+
+namespace WebApi.Implementation.Games;
+
+public class DisconnectFromGameService(
+    PlayersGamesMap _playersGamesMap,
+    IGetGameService _getGameService,
+    IDeleteGameService _deleteGameService
+) : IDisconnectFromGameService
+{
+    public async Task<DisconnectResult> DisconnectAsync(string connectionId, CancellationToken cancellationToken = default)
+    {
+        var result = new DisconnectResult();
+
+        if (!_playersGamesMap.Map.TryRemove(connectionId, out string gameCode))
+        {
+            return result;
+        }
+
+        var game = await _getGameService.GetAsync(gameCode, cancellationToken);
+
+        if (game is null)
+        {
+            return result;
+        }
+
+        if (!game.Players.TryGetValue(connectionId, out var player))
+        {
+            return result;
+        }
+
+        if (game.HasStarted)
+        {
+            player.IsDisconnected = true;
+        }
+        else
+        {
+            game.Players.Remove(connectionId, out _);
+        }
+
+        if (game.HasStarted && game.Players.Count(x => !x.Value.IsDisconnected) <= 1)
+        {
+            await _deleteGameService.DeleteAsync(gameCode, cancellationToken);
+            result.HasGameEnded = true;
+            return result;
+        }
+
+        if (!player.IsAdmin)
+        {
+            return result;
+        }
+
+        player.IsAdmin = false;
+        var newAdmin = game.Players.FirstOrDefault(x => x.Key != connectionId && !x.Value.IsDisconnected);
+
+        if (newAdmin.Value is null)
+        {
+            await _deleteGameService.DeleteAsync(gameCode, cancellationToken);
+            result.HasGameEnded = true;
+            return result;
+        }
+
+        newAdmin.Value.IsAdmin = true;
+        result.ChangedAdminTo = newAdmin.Key;
+
+        return result;
+    }
+}
