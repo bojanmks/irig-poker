@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using WebApi.Api.Extensions;
 using WebApi.Api.Hubs;
 using WebApi.Application.UseCases;
 using WebApi.Application.UseCases.Games;
@@ -9,25 +8,19 @@ namespace WebApi.Api.UseCaseSubscribers.Games;
 
 public class JoinGameUseCaseSubscriber(
     IHubContext<GameHub> _hubContext,
-    HubContextRegistry _hubContextRegistry
+    HubCallerContextRegistry _hubCallerContextRegistry
 ) : IUseCaseSubscriber<JoinGameUseCase, JoinGameDto, Empty>
 {
     public async Task OnUseCaseExecuted(UseCaseSubscriberData<JoinGameDto, Empty> data)
     {
-        var context = _hubContextRegistry.Context;
-        var clients = _hubContextRegistry.Clients;
+        var callerContext = _hubCallerContextRegistry.Context;
+        var callerContextClients = _hubCallerContextRegistry.Clients;
 
-        if (!data.Response.IsSuccess)
+        await _hubContext.Groups.AddToGroupAsync(callerContext.ConnectionId, data.UseCaseData.GameCode);
+
+        await callerContextClients.Group(data.UseCaseData.GameCode).SendAsync("PlayerJoined", new PlayerJoinNotification
         {
-            await clients.Caller.SendAsync("JoinFailed", data.Response.ToHubActionResponse());
-            return;
-        }
-
-        await _hubContext.Groups.AddToGroupAsync(context.ConnectionId, data.UseCaseData.GameCode);
-
-        await clients.Group(data.UseCaseData.GameCode).SendAsync("PlayerJoined", new PlayerJoinNotification
-        {
-            ConnectionId = context.ConnectionId,
+            ConnectionId = callerContext.ConnectionId,
             Username = data.UseCaseData.Username
         });
     }

@@ -36,7 +36,7 @@ namespace WebApi.Api.Extensions
         {
             services.AddSingleton(appSettings);
 
-            services.AddScoped<HubContextRegistry>();
+            services.AddScoped<HubCallerContextRegistry>();
 
             services.AddTransient<ILocaleGetter, LocaleGetter>();
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();

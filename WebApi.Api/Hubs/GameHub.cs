@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using WebApi.Api.Extensions;
 using WebApi.Application.UseCases;
+using WebApi.Application.UseCases.Connection;
 using WebApi.Application.UseCases.Games;
 using WebApi.Common.DTO.Games;
 using WebApi.Implementation.UseCases;
@@ -10,14 +12,15 @@ public class GameHub(
     UseCaseMediator _mediator
 ) : Hub
 {
-    public async Task JoinGame(JoinGameDto data)
+    public async Task<HubActionResponse<Empty>> JoinGame(JoinGameDto data)
     {
         data.ConnectionId = Context.ConnectionId;
-        await _mediator.Execute<JoinGameUseCase, JoinGameDto, Empty>(new JoinGameUseCase(data));
+        var result = await _mediator.Execute<JoinGameUseCase, JoinGameDto, Empty>(new JoinGameUseCase(data));
+        return result.ToHubActionResponse();
     }
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        await _mediator.Execute<DisconnectFromGameUseCase, string, DisconnectResult>(new DisconnectFromGameUseCase(Context.ConnectionId));
+        await _mediator.Execute<DisconnectUseCase, string, DisconnectResult>(new DisconnectUseCase(Context.ConnectionId));
     }
 }

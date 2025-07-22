@@ -35,7 +35,10 @@ namespace WebApi.Implementation.UseCases
 
             var response = await handler.HandleAsync(useCase);
 
-            await ExecuteUseCaseSubscribers(useCase, response);
+            if (response.IsSuccess)
+            {
+                await ExecuteUseCaseSubscribers(useCase, response);
+            }
 
             return response;
         }
@@ -97,7 +100,7 @@ namespace WebApi.Implementation.UseCases
             var subscriberData = new UseCaseSubscriberData<TData, TOut>
             {
                 UseCaseData = useCase.Data,
-                Response = useCaseResponse
+                UseCaseResult = useCaseResponse
             };
 
             foreach (var subscriber in subscribers)

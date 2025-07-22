@@ -3,7 +3,7 @@
 namespace WebApi.Api.Hubs;
 
 public class GlobalHubFilter(
-    HubContextRegistry _hubContextRegistry
+    HubCallerContextRegistry _hubContextRegistry
 ) : IHubFilter
 {
     public async ValueTask<object?> InvokeMethodAsync(

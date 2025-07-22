@@ -26,6 +26,8 @@ public class DisconnectFromGameService(
             return result;
         }
 
+        result.GameCode = game.GameCode;
+
         if (!game.Players.TryGetValue(connectionId, out var player))
         {
             return result;

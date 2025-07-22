@@ -2,7 +2,7 @@
 
 namespace WebApi.Api.Hubs;
 
-public class HubContextRegistry
+public class HubCallerContextRegistry
 {
     public HubCallerContext Context { get; private set; }
     public IHubCallerClients Clients { get; private set; }
