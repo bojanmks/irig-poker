@@ -2,7 +2,7 @@
 
 namespace WebApi.Application.UseCases.Games;
 
-public class JoinGameUseCase : UseCase<JoinGameDto, Empty>
+public class JoinGameUseCase : UseCase<JoinGameDto, PublicGameState>
 {
     public JoinGameUseCase(JoinGameDto data) : base(data)
     {

@@ -2,7 +2,7 @@
 
 public class PlayerDto
 {
-    public string Username { get; set; }
+    public required string Username { get; set; }
     public bool IsAdmin { get; set; }
     public bool IsDisconnected { get; set; }
 }

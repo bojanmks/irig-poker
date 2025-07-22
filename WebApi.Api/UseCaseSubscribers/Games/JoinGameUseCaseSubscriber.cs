@@ -9,9 +9,9 @@ namespace WebApi.Api.UseCaseSubscribers.Games;
 public class JoinGameUseCaseSubscriber(
     IHubContext<GameHub> _hubContext,
     HubCallerContextRegistry _hubCallerContextRegistry
-) : IUseCaseSubscriber<JoinGameUseCase, JoinGameDto, Empty>
+) : IUseCaseSubscriber<JoinGameUseCase, JoinGameDto, PublicGameState>
 {
-    public async Task OnUseCaseExecuted(UseCaseSubscriberData<JoinGameDto, Empty> data)
+    public async Task OnUseCaseExecuted(UseCaseSubscriberData<JoinGameDto, PublicGameState> data)
     {
         var callerContext = _hubCallerContextRegistry.Context;
         var callerContextClients = _hubCallerContextRegistry.Clients;
