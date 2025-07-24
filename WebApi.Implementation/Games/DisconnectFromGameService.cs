@@ -10,9 +10,9 @@ public class DisconnectFromGameService(
     IDeleteGameService _deleteGameService
 ) : IDisconnectFromGameService
 {
-    public async Task<DisconnectResult> DisconnectAsync(string connectionId, CancellationToken cancellationToken = default)
+    public async Task<DisconnectResultDto> DisconnectAsync(string connectionId, CancellationToken cancellationToken = default)
     {
-        var result = new DisconnectResult();
+        var result = new DisconnectResultDto();
 
         if (!_playersGamesMap.Map.TryRemove(connectionId, out string gameCode))
         {

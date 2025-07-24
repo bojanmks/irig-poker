@@ -1,6 +1,6 @@
 ﻿namespace WebApi.Common.DTO.Games;
 
-public class DisconnectResult
+public class DisconnectResultDto
 {
     public string? GameCode { get; set; }
     public string? ChangedAdminTo { get; set; }

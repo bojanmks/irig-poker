@@ -8,11 +8,11 @@ namespace WebApi.Implementation.UseCaseHandlers.Connection;
 
 public class DisconnectUseCaseHandler(
     IDisconnectFromGameService _disconnectFromGameService    
-) : UseCaseHandler<DisconnectUseCase, string, DisconnectResult>
+) : UseCaseHandler<DisconnectUseCase, string, DisconnectResultDto>
 {
-    public override async Task<Result<DisconnectResult>> HandleAsync(DisconnectUseCase useCase, CancellationToken cancellationToken = default)
+    public override async Task<Result<DisconnectResultDto>> HandleAsync(DisconnectUseCase useCase, CancellationToken cancellationToken = default)
     {
         var result = await _disconnectFromGameService.DisconnectAsync(useCase.Data, cancellationToken);
-        return Result<DisconnectResult>.Success(result);
+        return Result<DisconnectResultDto>.Success(result);
     }
 }

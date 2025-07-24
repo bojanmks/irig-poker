@@ -2,7 +2,7 @@
 
 namespace WebApi.Application.UseCases.Connection;
 
-public class DisconnectUseCase : UseCase<string, DisconnectResult>
+public class DisconnectUseCase : UseCase<string, DisconnectResultDto>
 {
     public DisconnectUseCase(string data) : base(data)
     {

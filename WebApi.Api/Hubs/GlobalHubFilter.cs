@@ -16,4 +16,16 @@ public class GlobalHubFilter(
 
         return await next(invocationContext);
     }
+
+    public async Task OnDisconnectedAsync(
+        HubLifetimeContext context,
+        Exception? exception,
+        Func<HubLifetimeContext, Exception?, Task> next
+    )
+    {
+        _hubContextRegistry.SetContext(context.Context);
+        _hubContextRegistry.SetClients(context.Hub.Clients);
+
+        await next(context, exception);
+    }
 }

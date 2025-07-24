@@ -4,5 +4,5 @@ namespace WebApi.Application.Games;
 
 public interface IDisconnectFromGameService
 {
-    Task<DisconnectResult> DisconnectAsync(string connectionId, CancellationToken cancellationToken = default);
+    Task<DisconnectResultDto> DisconnectAsync(string connectionId, CancellationToken cancellationToken = default);
 }

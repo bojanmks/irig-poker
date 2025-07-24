@@ -2,7 +2,7 @@
 
 namespace WebApi.Common.DTO.Games;
 
-public class PublicGameState
+public class PublicGameStateDto
 {
     public Dictionary<string, PlayerDto> Players { get; set; } = new();
 }
