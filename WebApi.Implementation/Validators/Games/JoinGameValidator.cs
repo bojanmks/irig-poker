@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using WebApi.Application.AppSettings;
 using WebApi.Application.Games;
 using WebApi.Application.Localization;
 using WebApi.Application.UseCases.Games;
@@ -7,7 +8,11 @@ namespace WebApi.Implementation.Validators.Games;
 
 public class JoinGameValidator : BaseValidator<JoinGameUseCase>
 {
-    public JoinGameValidator(ITranslator translator, IGameExistsService gameExistsService) : base(translator)
+    public JoinGameValidator(
+        ITranslator translator,
+        IGetGameService getGameService,
+        AppSettings appSettings
+    ) : base(translator)
     {
         RuleFor(x => x.Data.Username)
             .NotEmpty()
@@ -18,7 +23,27 @@ public class JoinGameValidator : BaseValidator<JoinGameUseCase>
         RuleFor(x => x.Data.GameCode)
             .NotEmpty()
             .WithMessage(IsRequired())
-            .MustAsync(gameExistsService.ExistsAsync)
-            .WithMessage(T("gameNotFound"));
+            .CustomAsync(async (gameCode, context, ct) =>
+            {
+                var game = await getGameService.GetAsync(gameCode, ct);
+
+                if (game is null)
+                {
+                    context.AddFailure(T("gameNotFound"));
+                    return;
+                }
+
+                if (game.HasStarted)
+                {
+                    context.AddFailure(T("gameHasAlreadyStarted"));
+                    return;
+                }
+
+                if (game.Players.Count >= appSettings.MaxPlayersPerGame)
+                {
+                    context.AddFailure(T("gameIsFull"));
+                    return;
+                }
+            });
     }
 }
