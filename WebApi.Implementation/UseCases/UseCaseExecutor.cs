@@ -11,41 +11,48 @@ namespace WebApi.Implementation.UseCases
 {
     public class UseCaseExecutor<TUseCase, TData, TOut> where TUseCase : UseCase<TData, TOut>
     {
-        private readonly IApplicationUser _applicationUser;
+        private readonly IApplicationUserResolver _applicationUserResolver;
         private readonly IUseCaseLogger _useCaseLogger;
         private readonly IUseCaseSubscriberResolver _subscriberResolver;
         private readonly IValidatorResolver _validatorResolver;
 
-        public UseCaseExecutor(IApplicationUser applicationUser, IUseCaseLogger useCaseLogger, IUseCaseSubscriberResolver subscriberResolver, IValidatorResolver validatorResolver)
+        public UseCaseExecutor(
+            IApplicationUserResolver applicationUserResolver,
+            IUseCaseLogger useCaseLogger,
+            IUseCaseSubscriberResolver subscriberResolver,
+            IValidatorResolver validatorResolver
+        )
         {
-            _applicationUser = applicationUser;
+            _applicationUserResolver = applicationUserResolver;
             _useCaseLogger = useCaseLogger;
             _subscriberResolver = subscriberResolver;
             _validatorResolver = validatorResolver;
         }
 
-        public async Task<Result<TOut>> Execute(TUseCase useCase, UseCaseHandler<TUseCase, TData, TOut> handler)
+        public async Task<Result<TOut>> ExecuteAsync(TUseCase useCase, UseCaseHandler<TUseCase, TData, TOut> handler, CancellationToken cancellationToken = default)
         {
-            var validationResponse = await ValidateAndLog(useCase);
+            var validationResponse = await ValidateAndLog(useCase, cancellationToken);
 
             if (!validationResponse.IsSuccess)
             {
                 return validationResponse;
             }
 
-            var response = await handler.HandleAsync(useCase);
+            var response = await handler.HandleAsync(useCase, cancellationToken);
 
             if (response.IsSuccess)
             {
-                await ExecuteUseCaseSubscribers(useCase, response);
+                await ExecuteUseCaseSubscribers(useCase, response, cancellationToken);
             }
 
             return response;
         }
 
-        private async Task<Result<TOut>> ValidateAndLog(TUseCase useCase)
+        private async Task<Result<TOut>> ValidateAndLog(TUseCase useCase, CancellationToken cancellationToken = default)
         {
-            var isAuthorized = _applicationUser.AllowedUseCases.Contains(useCase.Id);
+            var applicationUser = await _applicationUserResolver.ResolveAsync(cancellationToken);
+
+            var isAuthorized = applicationUser.AllowedUseCases.Contains(useCase.Id);
 
             var log = new UseCaseLoggerData
             {
@@ -69,7 +76,7 @@ namespace WebApi.Implementation.UseCases
 
             if (validator is not null)
             {
-                var validationResult = await validator.ValidateAsync(useCase);
+                var validationResult = await validator.ValidateAsync(useCase, cancellationToken);
 
                 if (!validationResult.IsValid)
                 {
@@ -88,7 +95,7 @@ namespace WebApi.Implementation.UseCases
             return Result<TOut>.Success();
         }
 
-        private async Task ExecuteUseCaseSubscribers(TUseCase useCase, Result<TOut> useCaseResponse)
+        private async Task ExecuteUseCaseSubscribers(TUseCase useCase, Result<TOut> useCaseResponse, CancellationToken cancellationToken = default)
         {
             var subscribers = _subscriberResolver.ResolveAll<TUseCase, TData, TOut>();
 
@@ -105,7 +112,7 @@ namespace WebApi.Implementation.UseCases
 
             foreach (var subscriber in subscribers)
             {
-                await subscriber.OnUseCaseExecuted(subscriberData);
+                await subscriber.ExecuteAsync(subscriberData, cancellationToken);
             }
         }
     }

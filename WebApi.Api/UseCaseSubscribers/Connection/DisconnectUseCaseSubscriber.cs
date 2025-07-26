@@ -11,15 +11,15 @@ public class DisconnectUseCaseSubscriber(
     HubCallerContextRegistry _hubCallerContextRegistry
 ) : IUseCaseSubscriber<DisconnectUseCase, string, DisconnectResultDto>
 {
-    public async Task OnUseCaseExecuted(UseCaseSubscriberData<string, DisconnectResultDto> data)
+    public async Task ExecuteAsync(UseCaseSubscriberData<string, DisconnectResultDto> data, CancellationToken cancellationToken = default)
     {
         string? gameCode = data.UseCaseResult.Data!.GameCode;
         var callerContextClients = _hubCallerContextRegistry.Clients;
 
         if (!string.IsNullOrEmpty(gameCode) && _hubContext?.Groups is not null)
         {
-            await _hubContext.Groups.RemoveFromGroupAsync(data.UseCaseData, gameCode);
-            await callerContextClients.GroupExcept(gameCode, data.UseCaseData).SendAsync("PlayerLeft", data.UseCaseData);
+            await _hubContext.Groups.RemoveFromGroupAsync(data.UseCaseData, gameCode, cancellationToken);
+            await callerContextClients.GroupExcept(gameCode, data.UseCaseData).SendAsync("PlayerLeft", data.UseCaseData, cancellationToken);
         }
     }
 }

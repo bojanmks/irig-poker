@@ -1,4 +1,5 @@
-﻿using WebApi.Application.Games;
+﻿using WebApi.Application.ApplicationUsers;
+using WebApi.Application.Games;
 using WebApi.Common.DTO.Games;
 using WebApi.Common.DTO.Players;
 using WebApi.Implementation.Players;
@@ -7,14 +8,17 @@ namespace WebApi.Implementation.Games;
 
 public class AddPlayerToGameService(
     IGetGameService _getGameService,
-    PlayersGamesMap _playersGamesMap
+    PlayersGamesMap _playersGamesMap,
+    IApplicationUserResolver _applicationUserResolver
 ) : IAddPlayerToGameService
 {
     public async Task<bool> AddAsync(JoinGameDto data, CancellationToken cancellationToken = default)
     {
-        var game = await _getGameService.GetAsync(data.GameCode);
+        var applicationUser = await _applicationUserResolver.ResolveAsync(cancellationToken);
 
-        bool addToGameResult = game!.Players.TryAdd(data.ConnectionId, new PlayerDto
+        var game = await _getGameService.GetAsync(data.GameCode, cancellationToken);
+
+        bool addToGameResult = game!.Players.TryAdd(applicationUser.ConnectionId, new PlayerDto
         {
             Username = data.Username,
             IsAdmin = !game.Players.Any()
@@ -25,11 +29,11 @@ public class AddPlayerToGameService(
             return false;
         }
 
-        bool addToMapResult = _playersGamesMap.Map.TryAdd(data.ConnectionId, data.GameCode);
+        bool addToMapResult = _playersGamesMap.Map.TryAdd(applicationUser.ConnectionId, data.GameCode);
 
         if (!addToMapResult)
         {
-            game!.Players.Remove(data.ConnectionId, out _);
+            game!.Players.Remove(applicationUser.ConnectionId, out _);
             return false;
         }
 

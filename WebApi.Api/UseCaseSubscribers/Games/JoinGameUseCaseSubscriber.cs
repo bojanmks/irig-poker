@@ -11,12 +11,12 @@ public class JoinGameUseCaseSubscriber(
     HubCallerContextRegistry _hubCallerContextRegistry
 ) : IUseCaseSubscriber<JoinGameUseCase, JoinGameDto, PublicGameStateDto>
 {
-    public async Task OnUseCaseExecuted(UseCaseSubscriberData<JoinGameDto, PublicGameStateDto> data)
+    public async Task ExecuteAsync(UseCaseSubscriberData<JoinGameDto, PublicGameStateDto> data, CancellationToken cancellationToken)
     {
         var callerContext = _hubCallerContextRegistry.Context;
         var callerContextClients = _hubCallerContextRegistry.Clients;
 
-        await _hubContext.Groups.AddToGroupAsync(callerContext.ConnectionId, data.UseCaseData.GameCode);
+        await _hubContext.Groups.AddToGroupAsync(callerContext.ConnectionId, data.UseCaseData.GameCode, cancellationToken);
 
         await callerContextClients
             .GroupExcept(data.UseCaseData.GameCode, callerContext.ConnectionId)
@@ -24,6 +24,6 @@ public class JoinGameUseCaseSubscriber(
             {
                 ConnectionId = callerContext.ConnectionId,
                 Player = data.UseCaseResult.Data!.Players[callerContext.ConnectionId]
-            });
+            }, cancellationToken);
     }
 }

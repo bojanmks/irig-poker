@@ -33,16 +33,9 @@ public class DisconnectFromGameService(
             return result;
         }
 
-        if (game.HasStarted)
-        {
-            player.IsDisconnected = true;
-        }
-        else
-        {
-            game.Players.Remove(connectionId, out _);
-        }
+        game.Players.Remove(connectionId, out _);
 
-        if (game.HasStarted && game.Players.Count(x => !x.Value.IsDisconnected) <= 1)
+        if (game.HasStarted && game.Players.Count() <= 1)
         {
             await _deleteGameService.DeleteAsync(gameCode, cancellationToken);
             result.HasGameEnded = true;
@@ -55,7 +48,7 @@ public class DisconnectFromGameService(
         }
 
         player.IsAdmin = false;
-        var newAdmin = game.Players.FirstOrDefault(x => x.Key != connectionId && !x.Value.IsDisconnected);
+        var newAdmin = game.Players.FirstOrDefault(x => x.Key != connectionId);
 
         if (newAdmin.Value is null)
         {
