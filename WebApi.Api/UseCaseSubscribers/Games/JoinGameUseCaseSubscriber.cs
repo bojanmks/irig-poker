@@ -20,10 +20,10 @@ public class JoinGameUseCaseSubscriber(
 
         await callerContextClients
             .GroupExcept(data.UseCaseData.GameCode, callerContext.ConnectionId)
-            .SendAsync("PlayerJoined", new PlayerJoinNotification
+            .SendAsync("PlayerJoined", HubNotification.From(new PlayerJoinNotification
             {
                 ConnectionId = callerContext.ConnectionId,
                 Player = data.UseCaseResult.Data!.Players[callerContext.ConnectionId]
-            }, cancellationToken);
+            }), cancellationToken);
     }
 }

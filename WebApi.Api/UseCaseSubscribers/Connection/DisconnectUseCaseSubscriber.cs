@@ -19,7 +19,7 @@ public class DisconnectUseCaseSubscriber(
         if (!string.IsNullOrEmpty(gameCode) && _hubContext?.Groups is not null)
         {
             await _hubContext.Groups.RemoveFromGroupAsync(data.UseCaseData, gameCode, cancellationToken);
-            await callerContextClients.GroupExcept(gameCode, data.UseCaseData).SendAsync("PlayerLeft", data.UseCaseData, cancellationToken);
+            await callerContextClients.GroupExcept(gameCode, data.UseCaseData).SendAsync("PlayerLeft", HubNotification.From(data.UseCaseData), cancellationToken);
         }
     }
 }

@@ -19,6 +19,6 @@ public class StartGameUseCaseSubscriber(
 
         await callerContextClients
             .Group(applicationUser.GameCode)
-            .SendAsync("GameStarted", cancellationToken: cancellationToken);
+            .SendAsync("GameStarted", HubNotification.From(Empty.Value), cancellationToken: cancellationToken);
     }
 }
