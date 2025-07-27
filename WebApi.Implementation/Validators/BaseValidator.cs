@@ -29,17 +29,17 @@ namespace WebApi.Implementation.Validators
 
         protected string IsRequired()
         {
-            return T("isRequired");
+            return T("validation.isRequired");
         }
 
         protected string MinLength(int value)
         {
-            return TF("minimumLength", value);
+            return TF("validation.minimumLength", value);
         }
 
         protected string MaxLength(int value)
         {
-            return TF("maximumLength", value);
+            return TF("validation.maximumLength", value);
         }
     }
 }
