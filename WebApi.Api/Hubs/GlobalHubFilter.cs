@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using System.Globalization;
 using WebApi.Application.ApplicationUsers;
+using WebApi.Application.Localization;
+using WebApi.Common.DTO;
 
 namespace WebApi.Api.Hubs;
 
 public class GlobalHubFilter(
     HubCallerContextRegistry _hubContextRegistry,
-    IUserSessionRegistry _userSessionRegistry
+    IUserSessionRegistry _userSessionRegistry,
+    ILocaleResolver _localeResolver
 ) : IHubFilter
 {
     public async ValueTask<object?> InvokeMethodAsync(
@@ -17,6 +21,14 @@ public class GlobalHubFilter(
         _hubContextRegistry.SetClients(invocationContext.Hub.Clients);
 
         _userSessionRegistry.SetConnectionId(invocationContext.Context.ConnectionId);
+
+        foreach (var argument in invocationContext.HubMethodArguments)
+        {
+            if (argument is IHasLocaleInfo argWithLocaleInfo && !string.IsNullOrWhiteSpace(argWithLocaleInfo.LanguageCode))
+            {
+                _localeResolver.ForceLocale(new CultureInfo(argWithLocaleInfo.LanguageCode));
+            }
+        }
 
         return await next(invocationContext);
     }

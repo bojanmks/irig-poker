@@ -1,0 +1,15 @@
+﻿{
+  "common": {
+    "anErrorOccurred": "Došlo je do greške"
+  },
+  "validation": {
+    "isRequired": "Polje je obavezno",
+    "minimumLength": "Minimalna dužina je {0}",
+    "maximumLength": "Maksimalna dužina je {0}"
+  },
+  "game": {
+    "notFound": "Igra ne postoji",
+    "alreadyStarted": "Igra je već počela",
+    "isFull": "Igra je puna"
+  }
+}

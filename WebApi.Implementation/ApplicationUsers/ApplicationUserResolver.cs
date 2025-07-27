@@ -8,7 +8,7 @@ using WebApi.Implementation.UseCases;
 namespace WebApi.Implementation.ApplicationUsers;
 
 public class ApplicationUserResolver(
-    ILocaleGetter _localeGetter,
+    ILocaleResolver _localeGetter,
     UserRoleUseCaseMapStore _userRoleUseCaseMapStore,
     IUserSessionRegistry _userSessionRegistry,
     PlayersGamesMap _playersGamesMap,
@@ -17,7 +17,7 @@ public class ApplicationUserResolver(
 {
     public async Task<IApplicationUser> ResolveAsync(CancellationToken cancellationToken = default)
     {
-        var locale = _localeGetter.GetLocale();
+        var locale = _localeGetter.Resolve();
 
         var notPlayingUser = new ApplicationUser
         {

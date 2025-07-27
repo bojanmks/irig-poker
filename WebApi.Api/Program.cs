@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.SignalR;
 using WebApi.Api.Extensions;
 using WebApi.Api.Hubs;
 using WebApi.Api.Middleware;
-using WebApi.Application.AppSettings;
 
 var builder = WebApplication.CreateBuilder(args);
 

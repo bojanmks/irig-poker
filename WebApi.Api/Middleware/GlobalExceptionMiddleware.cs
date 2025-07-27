@@ -11,17 +11,10 @@ namespace WebApi.Api.Middleware
     public class GlobalExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IExceptionLogger _exceptionLogger;
-        private readonly ITranslator _translator;
 
-        public GlobalExceptionMiddleware(
-            RequestDelegate next,
-            IExceptionLogger exceptionLogger,
-            ITranslator translator)
+        public GlobalExceptionMiddleware(RequestDelegate next)
         {
             _next = next;
-            _exceptionLogger = exceptionLogger;
-            _translator = translator;
         }
 
         public async Task Invoke(HttpContext httpContext)
@@ -38,14 +31,17 @@ namespace WebApi.Api.Middleware
 
         private async Task HandleException(HttpContext httpContext, Exception ex)
         {
-            await _exceptionLogger.Log(ex);
+            var exceptionLogger = httpContext.RequestServices.GetRequiredService<IExceptionLogger>();
+            await exceptionLogger.Log(ex);
+
+            var translator = httpContext.RequestServices.GetRequiredService<ITranslator>();
 
             int statusCode = (int)HttpStatusCode.InternalServerError;
 
             var responseBody = new EndpointResponse<Empty>
             {
                 Data = Empty.Value,
-                ErrorMessages = new string[] { _translator.Translate("anErrorOccurred") },
+                ErrorMessages = new string[] { translator.Translate("common.anErrorOccurred") },
                 StatusCode = statusCode
             };
 

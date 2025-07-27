@@ -12,13 +12,13 @@ public class GameHub(
     UseCaseMediator _mediator
 ) : Hub
 {
-    public async Task<HubActionResponse<PublicGameStateDto>> JoinGame(JoinGameDto data)
+    public async Task<HubActionResponse<PublicGameStateDto>> JoinGame(HubActionRequest<JoinGameDto> request)
     {
-        var result = await _mediator.Execute<JoinGameUseCase, JoinGameDto, PublicGameStateDto>(new JoinGameUseCase(data), Context.ConnectionAborted);
+        var result = await _mediator.Execute<JoinGameUseCase, JoinGameDto, PublicGameStateDto>(new JoinGameUseCase(request.Data), Context.ConnectionAborted);
         return result.ToHubActionResponse();
     }
 
-    public async Task<HubActionResponse<Empty>> StartGame()
+    public async Task<HubActionResponse<Empty>> StartGame(HubActionRequest<Empty> _)
     {
         var result = await _mediator.Execute<StartGameUseCase, Empty, Empty>(new StartGameUseCase(Empty.Value), Context.ConnectionAborted);
         return result.ToHubActionResponse();

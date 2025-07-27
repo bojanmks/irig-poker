@@ -18,6 +18,6 @@ public class StartGameValidator : BaseValidator<StartGameUseCase>
 
                 return !game!.HasStarted;
             })
-            .WithMessage(T("gameHasAlreadyStarted"));
+            .WithMessage(T("game.alreadyStarted"));
     }
 }

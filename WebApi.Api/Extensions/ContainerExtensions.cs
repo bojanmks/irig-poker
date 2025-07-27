@@ -38,7 +38,7 @@ public static class ContainerExtensions
 
         services.AddScoped<HubCallerContextRegistry>();
 
-        services.AddTransient<ILocaleGetter, LocaleGetter>();
+        services.AddScoped<ILocaleResolver, LocaleResolver>();
         services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
         services.AddApplicationUser();
@@ -174,6 +174,6 @@ public static class ContainerExtensions
 
     private static void SetupLocalization(this IServiceCollection services)
     {
-        services.AddTransient<ITranslator, JsonTranslator>();
+        services.AddScoped<ITranslator, JsonTranslator>();
     }
 }

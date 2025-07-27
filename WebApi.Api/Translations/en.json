@@ -1,0 +1,15 @@
+{
+  "common": {
+    "anErrorOccurred": "An error occurred"
+  },
+  "validation": {
+    "isRequired": "Field is required",
+    "minimumLength": "Minimum length is {0}",
+    "maximumLength": "Maximum length is {0}"
+  },
+  "game": {
+    "notFound": "Game not found",
+    "alreadyStarted": "Game has already started",
+    "isFull": "Game is full"
+  }
+}

@@ -29,19 +29,19 @@ public class JoinGameValidator : BaseValidator<JoinGameUseCase>
 
                 if (game is null)
                 {
-                    context.AddFailure(T("gameNotFound"));
+                    context.AddFailure(T("game.notFound"));
                     return;
                 }
 
                 if (game.HasStarted)
                 {
-                    context.AddFailure(T("gameHasAlreadyStarted"));
+                    context.AddFailure(T("game.alreadyStarted"));
                     return;
                 }
 
                 if (game.Players.Count >= appSettings.MaxPlayersPerGame)
                 {
-                    context.AddFailure(T("gameIsFull"));
+                    context.AddFailure(T("game.isFull"));
                     return;
                 }
             });
