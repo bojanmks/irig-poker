@@ -7,8 +7,8 @@ namespace WebApi.Application.ApplicationUsers
     {
         public UserRole Role { get; set; }
         public CultureInfo Locale { get; set; }
-        public string ConnectionId { get; set; }
-        public string GameCode { get; set; }
+        public string? ConnectionId { get; set; }
+        public string? GameCode { get; set; }
         public List<string> AllowedUseCases { get; set; }
     }
 }

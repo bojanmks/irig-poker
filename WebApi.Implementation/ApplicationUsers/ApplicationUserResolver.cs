@@ -10,11 +10,12 @@ namespace WebApi.Implementation.ApplicationUsers;
 public class ApplicationUserResolver(
     ILocaleResolver _localeGetter,
     UserRoleUseCaseMapStore _userRoleUseCaseMapStore,
-    IUserSessionRegistry _userSessionRegistry,
     PlayersGamesMap _playersGamesMap,
     IGetGameService _getGameService
 ) : IApplicationUserResolver
 {
+    private string? _connectionId = null;
+
     public async Task<IApplicationUser> ResolveAsync(CancellationToken cancellationToken = default)
     {
         var locale = _localeGetter.Resolve();
@@ -23,13 +24,11 @@ public class ApplicationUserResolver(
         {
             Locale = locale,
             Role = UserRole.NotPlaying,
-            AllowedUseCases = _userRoleUseCaseMapStore.GetUseCases(UserRole.NotPlaying)
+            AllowedUseCases = _userRoleUseCaseMapStore.GetUseCases(UserRole.NotPlaying),
+            ConnectionId = _connectionId
         };
 
-        string connectionId = _userSessionRegistry.ConnectionId;
-        notPlayingUser.ConnectionId = connectionId;
-
-        if (string.IsNullOrWhiteSpace(connectionId) || !_playersGamesMap.Map.TryGetValue(connectionId, out string? gameCode))
+        if (string.IsNullOrWhiteSpace(_connectionId) || !_playersGamesMap.Map.TryGetValue(_connectionId, out string? gameCode))
         {
             return notPlayingUser;
         }
@@ -41,15 +40,20 @@ public class ApplicationUserResolver(
             return notPlayingUser;
         }
 
-        var userRole = game.Players[connectionId].IsAdmin ? UserRole.RoomOwner : UserRole.Player;
+        var userRole = game.Players[_connectionId].IsAdmin ? UserRole.RoomOwner : UserRole.Player;
 
         return new ApplicationUser
         {
             Locale = locale,
-            ConnectionId = connectionId,
+            ConnectionId = _connectionId,
             GameCode = gameCode,
             Role = userRole,
             AllowedUseCases = _userRoleUseCaseMapStore.GetUseCases(userRole)
         };
+    }
+
+    public void SetConnectionId(string connectionId)
+    {
+        _connectionId = connectionId;
     }
 }

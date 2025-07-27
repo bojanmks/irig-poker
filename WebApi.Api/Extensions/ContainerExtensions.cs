@@ -62,8 +62,7 @@ public static class ContainerExtensions
 
     private static void AddApplicationUser(this IServiceCollection services)
     {
-        services.AddScoped<IUserSessionRegistry, UserSessionRegistry>();
-        services.AddTransient<IApplicationUserResolver, ApplicationUserResolver>();
+        services.AddScoped<IApplicationUserResolver, ApplicationUserResolver>();
     }
 
     #region UseCases

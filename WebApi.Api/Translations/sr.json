@@ -10,6 +10,8 @@
   "game": {
     "notFound": "Igra ne postoji",
     "alreadyStarted": "Igra je već počela",
-    "isFull": "Igra je puna"
+    "isFull": "Igra je puna",
+    "notEnoughPlayers": "Nema dovoljno igrača u igri",
+    "tooManyPlayers": "Previše igrača je u igri"
   }
 }

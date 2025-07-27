@@ -10,6 +10,8 @@
   "game": {
     "notFound": "Game not found",
     "alreadyStarted": "Game has already started",
-    "isFull": "Game is full"
+    "isFull": "Game is full",
+    "notEnoughPlayers": "Not enough players in the game",
+    "tooManyPlayers": "Too many players in the game"
   }
 }
