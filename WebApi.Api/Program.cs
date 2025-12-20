@@ -1,8 +1,9 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.SignalR;
-using WebApi.Api.Extensions;
-using WebApi.Api.Hubs;
-using WebApi.Api.Middleware;
+using WebApi.Api.Core.ErrorHandling.Middleware;
+using WebApi.Api.Core.Hubs.Filters;
+using WebApi.Api.Core.Reflection.Extensions;
+using WebApi.Api.Features.Games.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
