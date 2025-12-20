@@ -4,7 +4,6 @@ using WebApi.Api.Core.Hubs.Registries;
 using WebApi.Api.Features.Games.Hubs;
 using WebApi.Application.Core.UseCases;
 using WebApi.Application.Features.Games.UseCases;
-using WebApi.Common.Features.Games.Joining;
 using WebApi.Common.Features.Games.Joining.Models;
 using WebApi.Common.Features.Games.Models;
 
