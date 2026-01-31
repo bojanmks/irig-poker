@@ -1,97 +1,42 @@
-﻿using System.Data;
+﻿using FluentValidation;
 using System.Reflection;
-using FluentValidation;
-using WebApi.Api.Core.Hubs.Registries;
-using WebApi.Application.Core.ApplicationUsers;
-using WebApi.Application.Core.AppSettings;
-using WebApi.Application.Core.Localization;
-using WebApi.Application.Core.Logging;
+using WebApi.Api.Core.Reflection.Extensions;
 using WebApi.Application.Core.UseCases;
 using WebApi.Application.Core.Validation;
-using WebApi.Application.Features.Games.Services;
 using WebApi.Common.Core.Auth.Enums;
-using WebApi.Implementation.Core.ApplicationUsers.Models;
-using WebApi.Implementation.Core.Localization.Resolvers;
-using WebApi.Implementation.Core.Localization.Translators;
-using WebApi.Implementation.Core.Logging.Loggers;
 using WebApi.Implementation.Core.Reflexion.Extensions;
 using WebApi.Implementation.Core.UseCases.Execution;
 using WebApi.Implementation.Core.UseCases.Resolvers;
 using WebApi.Implementation.Core.UseCases.Stores;
 using WebApi.Implementation.Core.Validation.Resolvers;
-using WebApi.Implementation.Features.Games.Services;
-using WebApi.Implementation.Features.Games.Stores;
 
-namespace WebApi.Api.Core.Reflection.Extensions;
+namespace WebApi.Api.Core.UseCases;
 
-public static class ContainerExtensions
+public class UseCasesModule : BaseModule
 {
-    public static void SetupApplication(this WebApplicationBuilder builder)
-    {
-        var appSettings = new AppSettings();
-        builder.Configuration.Bind(appSettings);
-
-        builder.Services.AddMemoryCache();
-        builder.Services.RegisterDependencies(appSettings);
-    }
-
-    private static void RegisterDependencies(this IServiceCollection services, AppSettings appSettings)
-    {
-        services.AddSingleton(appSettings);
-
-        services.AddScoped<HubCallerContextRegistry>();
-
-        services.AddScoped<ILocaleResolver, LocaleResolver>();
-        services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
-
-        services.AddApplicationUser();
-        services.AddUseCases();
-        services.SetupLocalization();
-
-        services.AddTransient<IUseCaseLogger, ConsoleUseCaseLogger>();
-        services.AddTransient<IExceptionLogger, ConsoleExceptionLogger>();
-
-        // Games
-        services.AddSingleton<GameStore>();
-        services.AddSingleton<PlayersGamesMap>();
-        services.AddTransient<ICreateGameService, CreateGameService>();
-        services.AddTransient<IGetGameService, GetGameService>();
-        services.AddTransient<IDeleteGameService, DeleteGameService>();
-        services.AddTransient<IGameExistsService, GameExistsService>();
-        services.AddTransient<IAddPlayerToGameService, AddPlayerToGameService>();
-        services.AddTransient<IDisconnectFromGameService, DisconnectFromGameService>();
-        services.AddTransient<IStartGameService, StartGameService>();
-    }
-
-    private static void AddApplicationUser(this IServiceCollection services)
-    {
-        services.AddScoped<IApplicationUserResolver, ApplicationUserResolver>();
-    }
-
-    #region UseCases
-    private static void AddUseCases(this IServiceCollection services)
+    public override void RegisterServices(IServiceCollection services)
     {
         services.AddTransient<UseCaseMediator>();
 
-        services.AddUseCaseHandlers();
-        services.AddUseCaseValidators();
-        services.AddUseCaseSubscribers();
-        services.AddUserRoleUseCaseMapStore();
+        AddUseCaseHandlers(services);
+        AddUseCaseValidators(services);
+        AddUseCaseSubscribers(services);
+        AddUserRoleUseCaseMapStore(services);
     }
 
-    private static void AddUseCaseValidators(this IServiceCollection services)
+    private static void AddUseCaseValidators(IServiceCollection services)
     {
-        services.AddImplementationsByBaseType<IValidator>([typeof(UserRoleUseCaseMapStore).Assembly]);
+        AddImplementationsByBaseType<IValidator>(services, [typeof(UserRoleUseCaseMapStore).Assembly]);
         services.AddTransient<IValidatorResolver, ServiceProviderValidatorResolver>();
     }
 
-    private static void AddUseCaseHandlers(this IServiceCollection services)
+    private static void AddUseCaseHandlers(IServiceCollection services)
     {
-        services.AddImplementationsByBaseType<IUseCaseHandlerBase>([typeof(UserRoleUseCaseMapStore).Assembly]);
+        AddImplementationsByBaseType<IUseCaseHandlerBase>(services, [typeof(UserRoleUseCaseMapStore).Assembly]);
         services.AddTransient<IUseCaseHandlerResolver, ServiceProviderUseCaseHandlerResolver>();
     }
 
-    private static void AddUseCaseSubscribers(this IServiceCollection services)
+    private static void AddUseCaseSubscribers(IServiceCollection services)
     {
         var interfaceType = typeof(IUseCaseSubscriber<,,>);
         var assembliesToLookThrough = new Assembly[] { typeof(UserRoleUseCaseMapStore).Assembly, typeof(Program).Assembly };
@@ -111,7 +56,7 @@ public static class ContainerExtensions
         services.AddTransient<IUseCaseSubscriberResolver, ServiceProviderUseCaseSubscriberResolver>();
     }
 
-    private static void AddUserRoleUseCaseMapStore(this IServiceCollection services)
+    private static void AddUserRoleUseCaseMapStore(IServiceCollection services)
     {
         var allRoles = Enum.GetValues<UserRole>();
 
@@ -150,9 +95,8 @@ public static class ContainerExtensions
 
         services.AddSingleton(store);
     }
-    #endregion
 
-    private static void AddImplementationsByBaseType<T>(this IServiceCollection services, Assembly[] assemblies)
+    private static void AddImplementationsByBaseType<T>(IServiceCollection services, Assembly[] assemblies)
     {
         var type = typeof(T);
         var types = assemblies.SelectMany(s => s.GetTypes())
@@ -172,10 +116,5 @@ public static class ContainerExtensions
                 services.AddTransient(baseType, t);
             }
         }
-    }
-
-    private static void SetupLocalization(this IServiceCollection services)
-    {
-        services.AddScoped<ITranslator, JsonTranslator>();
     }
 }

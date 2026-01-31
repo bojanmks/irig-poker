@@ -1,45 +1,34 @@
-using FastEndpoints;
-using Microsoft.AspNetCore.SignalR;
-using WebApi.Api.Core.ErrorHandling.Middleware;
-using WebApi.Api.Core.Hubs.Filters;
-using WebApi.Api.Core.Reflection.Extensions;
-using WebApi.Api.Features.Games.Hubs;
+using WebApi.Api.Core;
+using WebApi.Application.Core.AppSettings;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddFastEndpoints();
+var appSettings = new AppSettings();
+builder.Configuration.Bind(appSettings);
 
-builder.SetupApplication();
+builder.Services.AddSingleton(appSettings);
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddCors(options =>
+var modules = typeof(Program).Assembly.GetTypes().Where(p =>
+    typeof(IModule).IsAssignableFrom(p)
+    && p.IsClass
+    && !p.IsAbstract
+)
+.Select(x => (IModule)Activator.CreateInstance(x)!)
+.OrderBy(x => x.Priority)
+.ToArray();
+
+foreach (var module in modules)
 {
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy
-            .WithOrigins("http://localhost:5173")
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials();
-    });
-});
-
-builder.Services.AddSignalR(options =>
-{
-    options.AddFilter<GlobalHubFilter>();
-});
+    module.RegisterServices(builder.Services);
+}
 
 var app = builder.Build();
 
-app.UseMiddleware<GlobalExceptionMiddleware>();
-
-app.UseCors("AllowAll");
-
-app.UseFastEndpoints(config =>
+foreach (var module in modules)
 {
-    config.Endpoints.AllowEmptyRequestDtos = true;
-    config.Endpoints.RoutePrefix = "api";
-});
-
-app.MapHub<GameHub>("/hubs/game");
+    module.UseServices(app);
+}
 
 app.Run();
