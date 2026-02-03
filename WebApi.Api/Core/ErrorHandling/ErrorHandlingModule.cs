@@ -1,6 +1,7 @@
 ﻿
 
 using WebApi.Api.Core.ErrorHandling.Middleware;
+using WebApi.Api.Core.Modules;
 
 namespace WebApi.Api.Core.ErrorHandling;
 

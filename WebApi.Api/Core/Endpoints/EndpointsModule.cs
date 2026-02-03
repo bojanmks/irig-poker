@@ -1,5 +1,6 @@
 ﻿
 using FastEndpoints;
+using WebApi.Api.Core.Modules;
 
 namespace WebApi.Api.Core.Endpoints;
 

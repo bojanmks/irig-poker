@@ -1,4 +1,4 @@
-﻿using WebApi.Api.Core;
+﻿using WebApi.Api.Core.Modules;
 using WebApi.Api.Features.Games.Hubs;
 using WebApi.Application.Features.Games.Services;
 using WebApi.Implementation.Features.Games.Services;

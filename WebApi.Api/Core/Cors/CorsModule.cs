@@ -1,5 +1,7 @@
 ﻿
 
+using WebApi.Api.Core.Modules;
+
 namespace WebApi.Api.Core.Cors;
 
 public class CorsModule : BaseModule

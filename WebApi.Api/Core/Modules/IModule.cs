@@ -1,4 +1,4 @@
-﻿namespace WebApi.Api.Core;
+﻿namespace WebApi.Api.Core.Modules;
 
 public interface IModule
 {

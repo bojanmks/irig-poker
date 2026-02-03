@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using System.Reflection;
+using WebApi.Api.Core.Modules;
 using WebApi.Api.Core.Reflection.Extensions;
 using WebApi.Application.Core.UseCases;
 using WebApi.Application.Core.Validation;

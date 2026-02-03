@@ -1,4 +1,4 @@
-using WebApi.Api.Core;
+using WebApi.Api.Core.Modules;
 using WebApi.Application.Core.AppSettings;
 
 var builder = WebApplication.CreateBuilder(args);

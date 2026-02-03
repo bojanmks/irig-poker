@@ -1,4 +1,5 @@
 ﻿
+using WebApi.Api.Core.Modules;
 using WebApi.Application.Core.Localization;
 using WebApi.Implementation.Core.Localization.Resolvers;
 using WebApi.Implementation.Core.Localization.Translators;

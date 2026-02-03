@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using WebApi.Api.Core.Hubs.Filters;
 using WebApi.Api.Core.Hubs.Registries;
+using WebApi.Api.Core.Modules;
 
 namespace WebApi.Api.Core.Hubs;
 

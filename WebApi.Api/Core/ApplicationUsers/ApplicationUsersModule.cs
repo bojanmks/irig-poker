@@ -1,4 +1,5 @@
 ﻿
+using WebApi.Api.Core.Modules;
 using WebApi.Application.Core.ApplicationUsers;
 using WebApi.Implementation.Core.ApplicationUsers.Models;
 
