@@ -13,6 +13,6 @@ public class DisconnectUseCaseHandler(
     public override async Task<Result<DisconnectResultDto>> HandleAsync(DisconnectUseCase useCase, CancellationToken cancellationToken = default)
     {
         var result = await _disconnectFromGameService.DisconnectAsync(useCase.Data, cancellationToken);
-        return Result<DisconnectResultDto>.Success(result);
+        return result;
     }
 }

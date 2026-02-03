@@ -12,6 +12,6 @@ public class CreateGameUseCaseHandler(
     public override async Task<Result<string>> HandleAsync(CreateGameUseCase useCase, CancellationToken cancellationToken = default)
     {
         string createdGameCode = await _createGameService.CreateAsync(cancellationToken);
-        return Result<string>.Success(createdGameCode);
+        return createdGameCode;
     }
 }

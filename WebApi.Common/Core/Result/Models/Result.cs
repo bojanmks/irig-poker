@@ -4,6 +4,8 @@ namespace WebApi.Common.Core.Result.Models;
 
 public class Result<T>
 {
+    public static implicit operator Result<T>(T source) => Result<T>.Success(source);
+
     private Result() { }
 
     public T? Data { get; private set; }

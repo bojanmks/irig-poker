@@ -1,7 +1,7 @@
 ﻿namespace WebApi.Common.Core.Result.Models;
 
-public class FieldErrors
+public record FieldErrors
 {
-    public string Field { get; set; }
-    public IEnumerable<string> Errors { get; set; }
+    public required string Field { get; init; }
+    public required IEnumerable<string> Errors { get; init; }
 }

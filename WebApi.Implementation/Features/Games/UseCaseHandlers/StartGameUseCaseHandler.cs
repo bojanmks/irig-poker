@@ -14,7 +14,7 @@ public class StartGameUseCaseHandler(
     public override async Task<Result<Empty>> HandleAsync(StartGameUseCase useCase, CancellationToken cancellationToken = default)
     {
         var applicationUser = await _applicationUserResolver.ResolveAsync(cancellationToken);
-        await _startGameService.StartAsync(applicationUser.GameCode, cancellationToken);
-        return Result<Empty>.Success(Empty.Value);
+        await _startGameService.StartAsync(applicationUser.GameCode!, cancellationToken);
+        return Empty.Value;
     }
 }

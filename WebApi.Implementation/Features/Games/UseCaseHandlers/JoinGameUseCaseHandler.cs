@@ -28,6 +28,6 @@ public class JoinGameUseCaseHandler(
             Players = game!.Players.ToDictionary()
         };
 
-        return Result<PublicGameStateDto>.Success(response);
+        return response;
     }
 }
