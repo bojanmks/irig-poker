@@ -1,5 +1,5 @@
-﻿using System.Text.Json;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
+using System.Text.Json;
 using WebApi.Application.Core.Localization;
 using WebApi.Implementation.Core.Localization.Constants;
 

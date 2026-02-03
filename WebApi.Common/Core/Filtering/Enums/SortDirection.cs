@@ -1,8 +1,7 @@
-﻿namespace WebApi.Common.Core.Filtering.Enums
+﻿namespace WebApi.Common.Core.Filtering.Enums;
+
+public enum SortDirection
 {
-    public enum SortDirection
-    {
-        Asc = 1,
-        Desc = 2
-    }
+    Asc = 1,
+    Desc = 2
 }

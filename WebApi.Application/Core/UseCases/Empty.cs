@@ -1,7 +1,6 @@
-﻿namespace WebApi.Application.Core.UseCases
+﻿namespace WebApi.Application.Core.UseCases;
+
+public class Empty
 {
-    public class Empty
-    {
-        public static Empty Value => new Empty();
-    }
+    public static Empty Value => new Empty();
 }

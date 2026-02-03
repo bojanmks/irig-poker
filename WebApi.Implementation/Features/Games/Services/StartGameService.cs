@@ -3,7 +3,7 @@
 namespace WebApi.Implementation.Features.Games.Services;
 
 public class StartGameService(
-    IGetGameService _getGameService    
+    IGetGameService _getGameService
 ) : IStartGameService
 {
     public async Task StartAsync(string gameCode, CancellationToken cancellationToken = default)

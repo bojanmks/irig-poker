@@ -1,10 +1,9 @@
-﻿namespace WebApi.Common.Core.Result.Enums
+﻿namespace WebApi.Common.Core.Result.Enums;
+
+public enum ResultStatus
 {
-    public enum ResultStatus
-    {
-        Success = 1,
-        Error = 2,
-        ValidationError = 3,
-        NotFound = 4
-    }
+    Success = 1,
+    Error = 2,
+    ValidationError = 3,
+    NotFound = 4
 }

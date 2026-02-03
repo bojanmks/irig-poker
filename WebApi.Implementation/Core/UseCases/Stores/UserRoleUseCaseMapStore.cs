@@ -1,24 +1,23 @@
 ﻿using WebApi.Common.Core.Auth.Enums;
 
-namespace WebApi.Implementation.Core.UseCases.Stores
+namespace WebApi.Implementation.Core.UseCases.Stores;
+
+public class UserRoleUseCaseMapStore
 {
-    public class UserRoleUseCaseMapStore
+    private Dictionary<UserRole, List<string>> _map = null;
+
+    public UserRoleUseCaseMapStore(Dictionary<UserRole, List<string>> map)
     {
-        private Dictionary<UserRole, List<string>> _map = null;
+        _map = map;
+    }
 
-        public UserRoleUseCaseMapStore(Dictionary<UserRole, List<string>> map)
+    public List<string> GetUseCases(UserRole role)
+    {
+        if (_map is null || !_map.ContainsKey(role))
         {
-            _map = map;
+            return new List<string>();
         }
 
-        public List<string> GetUseCases(UserRole role)
-        {
-            if (_map is null || !_map.ContainsKey(role))
-            {
-                return new List<string>();
-            }
-
-            return _map[role];
-        }
+        return _map[role];
     }
 }

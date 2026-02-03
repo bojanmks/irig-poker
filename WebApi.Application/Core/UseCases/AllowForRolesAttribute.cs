@@ -1,16 +1,15 @@
 ﻿using WebApi.Common.Core.Auth.Enums;
 
-namespace WebApi.Application.Core.UseCases
+namespace WebApi.Application.Core.UseCases;
+
+public class AllowForRolesAttribute : Attribute
 {
-    public class AllowForRolesAttribute : Attribute
+    private readonly UserRole[] _roles;
+
+    public AllowForRolesAttribute(params UserRole[] roles)
     {
-        private readonly UserRole[] _roles;
-
-        public AllowForRolesAttribute(params UserRole[] roles)
-        {
-            _roles = roles;
-        }
-
-        public UserRole[] Roles => _roles;
+        _roles = roles;
     }
+
+    public UserRole[] Roles => _roles;
 }

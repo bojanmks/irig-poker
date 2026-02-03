@@ -1,4 +1,4 @@
-﻿namespace WebApi.Common.DTO.Search;
+﻿namespace WebApi.Common.Core.Search.Models;
 
 public class PaginationSettings
 {

@@ -1,7 +1,6 @@
-﻿namespace WebApi.Application.Core.AppSettings
+﻿namespace WebApi.Application.Core.AppSettings;
+
+public class ConnectionStrings
 {
-    public class ConnectionStrings
-    {
-        public string Primary { get; set; }
-    }
+    public string Primary { get; set; }
 }

@@ -3,7 +3,7 @@
 namespace WebApi.Implementation.Features.Games.Services;
 
 public class GameExistsService(
-    GameStore _gameStore    
+    GameStore _gameStore
 ) : IGameExistsService
 {
     public Task<bool> ExistsAsync(string gameCode, CancellationToken cancellationToken = default)

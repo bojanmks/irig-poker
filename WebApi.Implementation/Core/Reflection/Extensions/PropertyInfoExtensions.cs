@@ -1,19 +1,18 @@
 ﻿using System.Reflection;
 
-namespace WebApi.Implementation.Core.Reflexion.Extensions
+namespace WebApi.Implementation.Core.Reflection.Extensions;
+
+public static class PropertyInfoExtensions
 {
-    public static class PropertyInfoExtensions
+    public static IEnumerable<TAttribute> GetAttributesOfType<TAttribute>(this PropertyInfo propertyInfo) where TAttribute : Attribute
     {
-        public static IEnumerable<TAttribute> GetAttributesOfType<TAttribute>(this PropertyInfo propertyInfo) where TAttribute : Attribute
-        {
-            return propertyInfo.GetCustomAttributes(true).OfType<TAttribute>();
-        }
+        return propertyInfo.GetCustomAttributes(true).OfType<TAttribute>();
+    }
 
-        public static bool HasAttributeOfType<TAttribute>(this PropertyInfo propertyInfo) where TAttribute : Attribute
-        {
-            var attributes = propertyInfo.GetAttributesOfType<TAttribute>();
+    public static bool HasAttributeOfType<TAttribute>(this PropertyInfo propertyInfo) where TAttribute : Attribute
+    {
+        var attributes = propertyInfo.GetAttributesOfType<TAttribute>();
 
-            return attributes.Any();
-        }
+        return attributes.Any();
     }
 }

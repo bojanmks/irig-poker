@@ -1,8 +1,7 @@
-﻿namespace WebApi.Common.Core.Reflection.Models
+﻿namespace WebApi.Common.Core.Reflection.Models;
+
+public class TypeData
 {
-    public class TypeData
-    {
-        public Type ImplementedInterface { get; set; }
-        public Type ImplementationType { get; set; }
-    }
+    public Type ImplementedInterface { get; set; }
+    public Type ImplementationType { get; set; }
 }

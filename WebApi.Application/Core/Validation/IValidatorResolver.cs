@@ -1,9 +1,8 @@
 ﻿using FluentValidation;
 
-namespace WebApi.Application.Core.Validation
+namespace WebApi.Application.Core.Validation;
+
+public interface IValidatorResolver
 {
-    public interface IValidatorResolver
-    {
-        AbstractValidator<T> Resolve<T>();
-    }
+    AbstractValidator<T> Resolve<T>();
 }

@@ -1,12 +1,11 @@
 ﻿using System.Reflection;
 
-namespace WebApi.Api.Core.Reflection.Extensions
+namespace WebApi.Api.Core.Reflection.Extensions;
+
+public static class AssemblyExtensions
 {
-    public static class AssemblyExtensions
+    public static IEnumerable<Type> GetImplementationsOfType<T>(this Assembly assembly)
     {
-        public static IEnumerable<Type> GetImplementationsOfType<T>(this Assembly assembly)
-        {
-            return assembly.GetTypes().Where(t => typeof(T).IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface);
-        }
+        return assembly.GetTypes().Where(t => typeof(T).IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface);
     }
 }

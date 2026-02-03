@@ -1,27 +1,26 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using WebApi.Application.Core.UseCases;
 
-namespace WebApi.Implementation.Core.UseCases.Resolvers
+namespace WebApi.Implementation.Core.UseCases.Resolvers;
+
+public class ServiceProviderUseCaseSubscriberResolver : IUseCaseSubscriberResolver
 {
-    public class ServiceProviderUseCaseSubscriberResolver : IUseCaseSubscriberResolver
+    private readonly IServiceProvider _serviceProvider;
+
+    public ServiceProviderUseCaseSubscriberResolver(IServiceProvider serviceProvider)
     {
-        private readonly IServiceProvider _serviceProvider;
+        _serviceProvider = serviceProvider;
+    }
 
-        public ServiceProviderUseCaseSubscriberResolver(IServiceProvider serviceProvider)
+    public IEnumerable<IUseCaseSubscriber<TUseCase, TData, TOut>> ResolveAll<TUseCase, TData, TOut>() where TUseCase : UseCase<TData, TOut>
+    {
+        var subscribers = _serviceProvider.GetService<IEnumerable<IUseCaseSubscriber<TUseCase, TData, TOut>>>();
+
+        if (subscribers is null)
         {
-            _serviceProvider = serviceProvider;
+            return Enumerable.Empty<IUseCaseSubscriber<TUseCase, TData, TOut>>();
         }
 
-        public IEnumerable<IUseCaseSubscriber<TUseCase, TData, TOut>> ResolveAll<TUseCase, TData, TOut>() where TUseCase : UseCase<TData, TOut>
-        {
-            var subscribers = _serviceProvider.GetService<IEnumerable<IUseCaseSubscriber<TUseCase, TData, TOut>>>();
-
-            if (subscribers is null)
-            {
-                return Enumerable.Empty<IUseCaseSubscriber<TUseCase, TData, TOut>>();
-            }
-
-            return subscribers;
-        }
+        return subscribers;
     }
 }

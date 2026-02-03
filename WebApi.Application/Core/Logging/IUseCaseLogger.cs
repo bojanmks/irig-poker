@@ -1,9 +1,8 @@
 ﻿using WebApi.Application.Core.Logging.LoggerData;
 
-namespace WebApi.Application.Core.Logging
+namespace WebApi.Application.Core.Logging;
+
+public interface IUseCaseLogger
 {
-    public interface IUseCaseLogger
-    {
-        Task Log(UseCaseLoggerData data);
-    }
+    Task Log(UseCaseLoggerData data);
 }

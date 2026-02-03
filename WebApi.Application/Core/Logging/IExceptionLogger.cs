@@ -1,7 +1,6 @@
-﻿namespace WebApi.Application.Core.Logging
+﻿namespace WebApi.Application.Core.Logging;
+
+public interface IExceptionLogger
 {
-    public interface IExceptionLogger
-    {
-        Task Log(Exception ex);
-    }
+    Task Log(Exception ex);
 }

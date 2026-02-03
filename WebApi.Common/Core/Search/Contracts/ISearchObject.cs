@@ -1,10 +1,9 @@
-﻿namespace WebApi.Common.Core.Search.Contracts
+﻿namespace WebApi.Common.Core.Search.Contracts;
+
+public interface ISearchObject
 {
-    public interface ISearchObject
-    {
-        public int Page { get; set; }
-        public int PerPage { get; set; }
-        public bool Paginate { get; set; }
-        public string SortBy { get; set; }
-    }
+    public int Page { get; set; }
+    public int PerPage { get; set; }
+    public bool Paginate { get; set; }
+    public string SortBy { get; set; }
 }

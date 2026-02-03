@@ -1,14 +1,13 @@
-﻿namespace WebApi.Application.Core.UseCases
+﻿namespace WebApi.Application.Core.UseCases;
+
+public abstract class UseCase<TData, TOut> : IUseCase<TData, TOut>
 {
-    public abstract class UseCase<TData, TOut> : IUseCase<TData, TOut>
+    public TData Data { get; }
+
+    protected UseCase(TData data)
     {
-        public TData Data { get; }
-
-        protected UseCase(TData data)
-        {
-            Data = data;
-        }
-
-        public abstract string Id { get; }
+        Data = data;
     }
+
+    public abstract string Id { get; }
 }

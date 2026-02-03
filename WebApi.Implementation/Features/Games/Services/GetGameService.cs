@@ -4,7 +4,7 @@ using WebApi.Common.Features.Games.Models;
 namespace WebApi.Implementation.Features.Games.Services;
 
 public class GetGameService(
-    GameStore _gameStore    
+    GameStore _gameStore
 ) : IGetGameService
 {
     public Task<GameDto?> GetAsync(string gameCode, CancellationToken cancellationToken = default)

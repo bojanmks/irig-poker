@@ -1,5 +1,5 @@
-﻿using System.Globalization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+using System.Globalization;
 using WebApi.Application.Core.Localization;
 using WebApi.Implementation.Core.Localization.Constants;
 

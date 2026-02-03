@@ -1,7 +1,6 @@
-﻿namespace WebApi.Application.Core.Localization
+﻿namespace WebApi.Application.Core.Localization;
+
+public interface ITranslator
 {
-    public interface ITranslator
-    {
-        string Translate(string key);
-    }
+    string Translate(string key);
 }

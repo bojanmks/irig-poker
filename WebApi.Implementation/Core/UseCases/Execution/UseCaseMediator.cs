@@ -5,49 +5,48 @@ using WebApi.Application.Core.Validation;
 using WebApi.Common.Core.Result.Models;
 using WebApi.Implementation.Core.UseCases.Exceptions;
 
-namespace WebApi.Implementation.Core.UseCases.Execution
+namespace WebApi.Implementation.Core.UseCases.Execution;
+
+public class UseCaseMediator
 {
-    public class UseCaseMediator
+    private readonly IApplicationUserResolver _applicationUserResolver;
+    private readonly IUseCaseLogger _useCaseLogger;
+    private readonly IUseCaseSubscriberResolver _subscriberResolver;
+    private readonly IValidatorResolver _validatorResolver;
+    private readonly IUseCaseHandlerResolver _useCaseHandlerResolver;
+
+    public UseCaseMediator(
+        IApplicationUserResolver applicationUserResolver,
+        IUseCaseLogger useCaseLogger,
+        IUseCaseSubscriberResolver subscriberResolver,
+        IValidatorResolver validatorResolver,
+        IUseCaseHandlerResolver useCaseHandlerResolver
+    )
     {
-        private readonly IApplicationUserResolver _applicationUserResolver;
-        private readonly IUseCaseLogger _useCaseLogger;
-        private readonly IUseCaseSubscriberResolver _subscriberResolver;
-        private readonly IValidatorResolver _validatorResolver;
-        private readonly IUseCaseHandlerResolver _useCaseHandlerResolver;
+        _applicationUserResolver = applicationUserResolver;
+        _useCaseLogger = useCaseLogger;
+        _subscriberResolver = subscriberResolver;
+        _validatorResolver = validatorResolver;
+        _useCaseHandlerResolver = useCaseHandlerResolver;
+    }
 
-        public UseCaseMediator(
-            IApplicationUserResolver applicationUserResolver,
-            IUseCaseLogger useCaseLogger,
-            IUseCaseSubscriberResolver subscriberResolver,
-            IValidatorResolver validatorResolver,
-            IUseCaseHandlerResolver useCaseHandlerResolver
-        )
+    public Task<Result<TOut>> Execute<TUseCase, TData, TOut>(TUseCase useCase, CancellationToken cancellationToken = default)
+        where TUseCase : UseCase<TData, TOut>
+    {
+        var handler = _useCaseHandlerResolver.Resolve<TUseCase, TData, TOut>();
+
+        if (handler is null)
         {
-            _applicationUserResolver = applicationUserResolver;
-            _useCaseLogger = useCaseLogger;
-            _subscriberResolver = subscriberResolver;
-            _validatorResolver = validatorResolver;
-            _useCaseHandlerResolver = useCaseHandlerResolver;
+            throw new HandlerNotFoundException();
         }
 
-        public Task<Result<TOut>> Execute<TUseCase, TData, TOut>(TUseCase useCase, CancellationToken cancellationToken = default)
-            where TUseCase : UseCase<TData, TOut>
-        {
-            var handler = _useCaseHandlerResolver.Resolve<TUseCase, TData, TOut>();
+        var executor = ConstructExecutor<TUseCase, TData, TOut>();
 
-            if (handler is null)
-            {
-                throw new HandlerNotFoundException();
-            }
+        return executor.ExecuteAsync(useCase, handler, cancellationToken);
+    }
 
-            var executor = ConstructExecutor<TUseCase, TData, TOut>();
-
-            return executor.ExecuteAsync(useCase, handler, cancellationToken);
-        }
-
-        private UseCaseExecutor<TUseCase, TData, TOut> ConstructExecutor<TUseCase, TData, TOut>() where TUseCase : UseCase<TData, TOut>
-        {
-            return new UseCaseExecutor<TUseCase, TData, TOut>(_applicationUserResolver, _useCaseLogger, _subscriberResolver, _validatorResolver);
-        }
+    private UseCaseExecutor<TUseCase, TData, TOut> ConstructExecutor<TUseCase, TData, TOut>() where TUseCase : UseCase<TData, TOut>
+    {
+        return new UseCaseExecutor<TUseCase, TData, TOut>(_applicationUserResolver, _useCaseLogger, _subscriberResolver, _validatorResolver);
     }
 }

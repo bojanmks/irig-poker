@@ -1,6 +1,5 @@
-﻿namespace WebApi.Implementation.Core.UseCases.Exceptions
+﻿namespace WebApi.Implementation.Core.UseCases.Exceptions;
+
+public class HandlerNotFoundException : Exception
 {
-    public class HandlerNotFoundException : Exception
-    {
-    }
 }
