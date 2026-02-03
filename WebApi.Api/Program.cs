@@ -7,7 +7,6 @@ var appSettings = new AppSettings();
 builder.Configuration.Bind(appSettings);
 
 builder.Services.AddSingleton(appSettings);
-builder.Services.AddMemoryCache();
 builder.Services.AddHttpContextAccessor();
 
 var modules = typeof(Program).Assembly.GetTypes().Where(p =>

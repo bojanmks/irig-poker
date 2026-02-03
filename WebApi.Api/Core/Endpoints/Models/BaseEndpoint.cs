@@ -5,7 +5,7 @@ using WebApi.Common.Core.Result.Models;
 
 namespace WebApi.Api.Core.Endpoints.Models
 {
-    public abstract class BaseEndpoint<TRequest, TResponse> : Endpoint<TRequest, EndpointResponse<TResponse>>
+    public abstract class BaseEndpoint<TRequest, TResponse> : Endpoint<TRequest, EndpointResponse<TResponse?>>
         where TRequest : notnull
     {
         public override void Configure()
@@ -16,7 +16,7 @@ namespace WebApi.Api.Core.Endpoints.Models
 
         protected abstract void ConfigureEndpoint();
 
-        protected async Task RespondFromResult(Result<TResponse> result, CancellationToken cancellationToken = default(CancellationToken))
+        protected async Task RespondFromResult(Result<TResponse> result, CancellationToken cancellationToken = default)
         {
             int statusCode = result.HttpStatusCode.HasValue
                 ? result.HttpStatusCode.Value
@@ -29,7 +29,7 @@ namespace WebApi.Api.Core.Endpoints.Models
                     _ => throw new ArgumentOutOfRangeException(nameof(result.Status), $"Unexpected result status value: {result.Status}")
                 };
 
-            var endpointResponse = new EndpointResponse<TResponse>
+            var endpointResponse = new EndpointResponse<TResponse?>
             {
                 Data = result.Data,
                 ErrorMessages = result.Errors ?? Enumerable.Empty<string>(),
@@ -37,7 +37,7 @@ namespace WebApi.Api.Core.Endpoints.Models
                 StatusCode = statusCode
             };
 
-            await SendAsync(
+            await Send.ResponseAsync(
                 endpointResponse,
                 statusCode: statusCode,
                 cancellation: cancellationToken
