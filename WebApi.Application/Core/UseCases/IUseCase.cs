@@ -1,11 +1,11 @@
 ﻿namespace WebApi.Application.Core.UseCases;
 
-public interface IUseCase<TData, TOut> : IUseCaseBase
+public interface IUseCase<TData, TOut> : IIdentifyable
 {
     TData Data { get; }
 }
 
-public interface IUseCaseBase
+public interface IIdentifyable
 {
     string Id { get; }
 }

@@ -31,7 +31,8 @@ public class UseCasesModule : BaseModule
     {
         var validatorTypes = typeof(ImplementationAssemblyMarker).Assembly
             .GetTypes()
-            .Where(p => typeof(IValidator).IsAssignableFrom(p) && p.IsClass && !p.IsAbstract && !p.Name.Contains("Generic"));
+            .Where(p => typeof(IValidator).IsAssignableFrom(p) && p.IsClass && !p.IsAbstract && !p.Name.Contains("Generic"))
+            .ToArray();
 
         RegisterAsBaseTypes(services, validatorTypes);
         services.AddTransient<IValidatorResolver, ServiceProviderValidatorResolver>();
@@ -90,7 +91,7 @@ public class UseCasesModule : BaseModule
             var constructorParameters = useCaseType.GetConstructors().OrderBy(x => x.GetParameters().Count()).FirstOrDefault()?.GetParameters();
             var constructorParametersDefaultValues = constructorParameters?.Select(x => x.GetType().GetDefault()).ToArray();
 
-            var useCaseInstance = (IUseCaseBase?)Activator.CreateInstance(useCaseType, constructorParametersDefaultValues);
+            var useCaseInstance = (IIdentifyable?)Activator.CreateInstance(useCaseType, constructorParametersDefaultValues);
 
             if (useCaseInstance is null)
             {
