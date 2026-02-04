@@ -16,18 +16,18 @@ public class GameHub(
 {
     public async Task<HubActionResponse<PublicGameStateDto>> JoinGame(HubActionRequest<JoinGameDto> request)
     {
-        var result = await _mediator.Execute<JoinGameUseCase, JoinGameDto, PublicGameStateDto>(new JoinGameUseCase(request.Data), Context.ConnectionAborted);
+        var result = await _mediator.ExecuteAsync<JoinGameUseCase, JoinGameDto, PublicGameStateDto>(new JoinGameUseCase(request.Data), Context.ConnectionAborted);
         return result.ToHubActionResponse();
     }
 
     public async Task<HubActionResponse<Empty>> StartGame(HubActionRequest<Empty> _)
     {
-        var result = await _mediator.Execute<StartGameUseCase, Empty, Empty>(new StartGameUseCase(Empty.Value), Context.ConnectionAborted);
+        var result = await _mediator.ExecuteAsync<StartGameUseCase, Empty, Empty>(new StartGameUseCase(Empty.Value), Context.ConnectionAborted);
         return result.ToHubActionResponse();
     }
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        await _mediator.Execute<DisconnectUseCase, string, DisconnectResultDto>(new DisconnectUseCase(Context.ConnectionId));
+        await _mediator.ExecuteAsync<DisconnectUseCase, string, DisconnectResultDto>(new DisconnectUseCase(Context.ConnectionId));
     }
 }

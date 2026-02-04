@@ -16,7 +16,7 @@ public class CreateGameEndpoint(
 
     public override async Task HandleAsync(Empty req, CancellationToken ct)
     {
-        var result = await _mediator.Execute<CreateGameUseCase, Empty, string>(new CreateGameUseCase(req));
+        var result = await _mediator.ExecuteAsync<CreateGameUseCase, Empty, string>(new CreateGameUseCase(req));
         await RespondFromResult(result, ct);
     }
 }

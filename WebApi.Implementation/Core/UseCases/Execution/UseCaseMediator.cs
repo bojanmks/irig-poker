@@ -30,7 +30,7 @@ public class UseCaseMediator
         _useCaseHandlerResolver = useCaseHandlerResolver;
     }
 
-    public Task<Result<TOut>> Execute<TUseCase, TData, TOut>(TUseCase useCase, CancellationToken cancellationToken = default)
+    public Task<Result<TOut>> ExecuteAsync<TUseCase, TData, TOut>(TUseCase useCase, CancellationToken cancellationToken = default)
         where TUseCase : UseCase<TData, TOut>
     {
         var handler = _useCaseHandlerResolver.Resolve<TUseCase, TData, TOut>();
