@@ -33,9 +33,9 @@ public class LocaleResolver : ILocaleResolver
         }
 
         var request = _accessor.HttpContext.Request;
-        var localeCode = request.Headers["Accept-Language"];
+        var localeCode = (string?)request.Headers["Accept-Language"];
 
-        if (LocaleConstants.SupportedLocales.Contains(localeCode))
+        if (localeCode is not null && LocaleConstants.SupportedLocales.Contains(localeCode))
         {
             return new CultureInfo(localeCode);
         }
