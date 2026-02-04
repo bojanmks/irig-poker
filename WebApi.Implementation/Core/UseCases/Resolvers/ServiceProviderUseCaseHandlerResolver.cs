@@ -12,7 +12,7 @@ public class ServiceProviderUseCaseHandlerResolver : IUseCaseHandlerResolver
         _serviceProvider = serviceProvider;
     }
 
-    public UseCaseHandler<TUseCase, TData, TOut> Resolve<TUseCase, TData, TOut>() where TUseCase : UseCase<TData, TOut>
+    public UseCaseHandler<TUseCase, TData, TOut>? Resolve<TUseCase, TData, TOut>() where TUseCase : UseCase<TData, TOut>
     {
         return _serviceProvider.GetService<UseCaseHandler<TUseCase, TData, TOut>>();
     }
