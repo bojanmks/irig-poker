@@ -4,10 +4,10 @@ namespace WebApi.Implementation.Core.Reflection.Extensions;
 
 public static class InterfaceImplementationExtensions
 {
-    public static IEnumerable<Type> GetImplementationsOfGenericType(this Assembly assembly, Type genericInterfaceType)
+    public static IEnumerable<Type> GetImplementationsOfGenericInterface(this Assembly assembly, Type genericInterfaceType)
     {
-        if (!genericInterfaceType.IsGenericType)
-            throw new ArgumentException("Provided type must be a generic type.", nameof(genericInterfaceType));
+        if (!genericInterfaceType.IsGenericType || !genericInterfaceType.IsInterface)
+            throw new ArgumentException("Provided type must be a generic interface type.", nameof(genericInterfaceType));
 
         return assembly.GetTypes()
             .Where(t => t.IsClass && !t.IsAbstract)

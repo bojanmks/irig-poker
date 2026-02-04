@@ -2,9 +2,11 @@
 using System.Reflection;
 using WebApi.Api.Core.Modules;
 using WebApi.Api.Core.Reflection.Extensions;
+using WebApi.Application;
 using WebApi.Application.Core.UseCases;
 using WebApi.Application.Core.Validation;
 using WebApi.Common.Core.Auth.Enums;
+using WebApi.Implementation;
 using WebApi.Implementation.Core.Reflection.Extensions;
 using WebApi.Implementation.Core.UseCases.Execution;
 using WebApi.Implementation.Core.UseCases.Resolvers;
@@ -27,20 +29,29 @@ public class UseCasesModule : BaseModule
 
     private static void AddUseCaseValidators(IServiceCollection services)
     {
-        AddImplementationsByBaseType<IValidator>(services, [typeof(UserRoleUseCaseMapStore).Assembly]);
+        var validatorTypes = typeof(ImplementationAssemblyMarker).Assembly
+            .GetTypes()
+            .Where(p => typeof(IValidator).IsAssignableFrom(p) && p.IsClass && !p.IsAbstract && !p.Name.Contains("Generic"));
+
+        RegisterAsBaseTypes(services, validatorTypes);
         services.AddTransient<IValidatorResolver, ServiceProviderValidatorResolver>();
     }
 
     private static void AddUseCaseHandlers(IServiceCollection services)
     {
-        AddImplementationsByBaseType<IUseCaseHandlerBase>(services, [typeof(UserRoleUseCaseMapStore).Assembly]);
+        var handlerTypes = typeof(ImplementationAssemblyMarker).Assembly
+            .GetInheritorsOfGenericClass(typeof(UseCaseHandler<,,>))
+            .Where(x => !x.Name.Contains("Generic"))
+            .ToArray();
+
+        RegisterAsBaseTypes(services, handlerTypes);
         services.AddTransient<IUseCaseHandlerResolver, ServiceProviderUseCaseHandlerResolver>();
     }
 
     private static void AddUseCaseSubscribers(IServiceCollection services)
     {
         var interfaceType = typeof(IUseCaseSubscriber<,,>);
-        var assembliesToLookThrough = new Assembly[] { typeof(UserRoleUseCaseMapStore).Assembly, typeof(Program).Assembly };
+        var assembliesToLookThrough = new Assembly[] { typeof(ImplementationAssemblyMarker).Assembly, typeof(ApiAssemblyMarker).Assembly };
 
         var useCaseSubscribersTypesData = interfaceType.GetGenericInterfaceImplementationTypes(assembliesToLookThrough);
 
@@ -68,7 +79,7 @@ public class UseCasesModule : BaseModule
             useCasesMap.Add(role, new List<string>());
         }
 
-        var useCaseTypes = typeof(UseCase<,>).Assembly.GetImplementationsOfGenericType(typeof(IUseCase<,>));
+        var useCaseTypes = typeof(ApplicationAssemblyMarker).Assembly.GetImplementationsOfGenericInterface(typeof(IUseCase<,>));
 
         foreach (var useCaseType in useCaseTypes)
         {
@@ -97,12 +108,8 @@ public class UseCasesModule : BaseModule
         services.AddSingleton(store);
     }
 
-    private static void AddImplementationsByBaseType<T>(IServiceCollection services, Assembly[] assemblies)
+    private static void RegisterAsBaseTypes(IServiceCollection services, IEnumerable<Type> types)
     {
-        var type = typeof(T);
-        var types = assemblies.SelectMany(s => s.GetTypes())
-                              .Where(p => type.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract && !p.Name.Contains("Generic"));
-
         foreach (var t in types)
         {
             var baseType = t.BaseType;
