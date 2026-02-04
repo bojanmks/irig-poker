@@ -9,12 +9,12 @@ namespace WebApi.Api.Features.Games.UseCaseSubscribers;
 
 public class StartGameUseCaseSubscriber(
     IApplicationUserResolver _applicationUserResolver,
-    HubCallerContextRegistry _hubCallerContextRegistry
+    IHubCallerContextAccessor _hubCallerContextAccessor
 ) : IUseCaseSubscriber<StartGameUseCase, Empty, Empty>
 {
     public async Task ExecuteAsync(UseCaseSubscriberData<Empty, Empty> data, CancellationToken cancellationToken = default)
     {
-        var callerContextClients = _hubCallerContextRegistry.Clients;
+        var callerContextClients = _hubCallerContextAccessor.Clients;
 
         var applicationUser = await _applicationUserResolver.ResolveAsync(cancellationToken);
 

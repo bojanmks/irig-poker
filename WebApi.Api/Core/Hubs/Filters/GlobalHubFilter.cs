@@ -7,8 +7,8 @@ using WebApi.Common.Core.Localization.Contracts;
 
 namespace WebApi.Api.Core.Hubs.Filters;
 
-public class GlobalHubFilter(
-    HubCallerContextRegistry _hubContextRegistry,
+internal class GlobalHubFilter(
+    IHubCallerContextSetter _hubCallerContextSetter,
     ILocaleResolver _localeResolver,
     IApplicationUserResolver _applicationUserResolver
 ) : IHubFilter
@@ -18,8 +18,8 @@ public class GlobalHubFilter(
         Func<HubInvocationContext, ValueTask<object?>> next
     )
     {
-        _hubContextRegistry.SetContext(invocationContext.Context);
-        _hubContextRegistry.SetClients(invocationContext.Hub.Clients);
+        _hubCallerContextSetter.SetContext(invocationContext.Context);
+        _hubCallerContextSetter.SetClients(invocationContext.Hub.Clients);
 
         _applicationUserResolver.SetConnectionId(invocationContext.Context.ConnectionId);
 
@@ -31,7 +31,14 @@ public class GlobalHubFilter(
             }
         }
 
-        return await next(invocationContext);
+        try
+        {
+            return await next(invocationContext);
+        }
+        finally
+        {
+            _hubCallerContextSetter.Clear();
+        }
     }
 
     public async Task OnDisconnectedAsync(
@@ -40,11 +47,18 @@ public class GlobalHubFilter(
         Func<HubLifetimeContext, Exception?, Task> next
     )
     {
-        _hubContextRegistry.SetContext(context.Context);
-        _hubContextRegistry.SetClients(context.Hub.Clients);
+        _hubCallerContextSetter.SetContext(context.Context);
+        _hubCallerContextSetter.SetClients(context.Hub.Clients);
 
         _applicationUserResolver.SetConnectionId(context.Context.ConnectionId);
 
-        await next(context, exception);
+        try
+        {
+            await next(context, exception);
+        }
+        finally
+        {
+            _hubCallerContextSetter.Clear();
+        }
     }
 }

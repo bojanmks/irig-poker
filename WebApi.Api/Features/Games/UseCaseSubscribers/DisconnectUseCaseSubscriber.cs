@@ -10,13 +10,13 @@ namespace WebApi.Api.Features.Games.UseCaseSubscribers;
 
 public class DisconnectUseCaseSubscriber(
     IHubContext<GameHub> _hubContext,
-    HubCallerContextRegistry _hubCallerContextRegistry
+    IHubCallerContextAccessor _hubCallerContextAccessor
 ) : IUseCaseSubscriber<DisconnectUseCase, string, DisconnectResultDto>
 {
     public async Task ExecuteAsync(UseCaseSubscriberData<string, DisconnectResultDto> data, CancellationToken cancellationToken = default)
     {
         string? gameCode = data.UseCaseResult.Data!.GameCode;
-        var callerContextClients = _hubCallerContextRegistry.Clients;
+        var callerContextClients = _hubCallerContextAccessor.Clients;
 
         if (!string.IsNullOrEmpty(gameCode) && _hubContext?.Groups is not null)
         {

@@ -11,13 +11,13 @@ namespace WebApi.Api.Features.Games.UseCaseSubscribers;
 
 public class JoinGameUseCaseSubscriber(
     IHubContext<GameHub> _hubContext,
-    HubCallerContextRegistry _hubCallerContextRegistry
+    IHubCallerContextAccessor _hubCallerContextAccessor
 ) : IUseCaseSubscriber<JoinGameUseCase, JoinGameDto, PublicGameStateDto>
 {
     public async Task ExecuteAsync(UseCaseSubscriberData<JoinGameDto, PublicGameStateDto> data, CancellationToken cancellationToken)
     {
-        var callerContext = _hubCallerContextRegistry.Context;
-        var callerContextClients = _hubCallerContextRegistry.Clients;
+        var callerContext = _hubCallerContextAccessor.Context;
+        var callerContextClients = _hubCallerContextAccessor.Clients;
 
         await _hubContext.Groups.AddToGroupAsync(callerContext.ConnectionId, data.UseCaseData.GameCode, cancellationToken);
 

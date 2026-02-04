@@ -9,7 +9,8 @@ public class HubsModule : BaseModule
 {
     public override void RegisterServices(IServiceCollection services)
     {
-        services.AddScoped<HubCallerContextRegistry>();
+        services.AddSingleton<IHubCallerContextSetter, HubCallerContextRegistry>();
+        services.AddSingleton<IHubCallerContextAccessor, HubCallerContextRegistry>();
 
         services.AddSignalR(options =>
         {
