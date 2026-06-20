@@ -41,7 +41,7 @@ public class GlobalExceptionMiddleware
         var responseBody = new EndpointResponse<Empty>
         {
             Data = Empty.Value,
-            ErrorMessages = new string[] { translator.Translate("common.anErrorOccurred") },
+            ErrorMessages = [translator.Translate("common.anErrorOccurred")],
             StatusCode = statusCode
         };
 

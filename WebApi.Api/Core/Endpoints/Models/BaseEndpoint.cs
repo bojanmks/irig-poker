@@ -5,7 +5,7 @@ using WebApi.Common.Core.Result.Models;
 
 namespace WebApi.Api.Core.Endpoints.Models;
 
-public abstract class BaseEndpoint<TRequest, TResponse> : Endpoint<TRequest, EndpointResponse<TResponse?>>
+public abstract class BaseEndpoint<TRequest, TResponse> : Endpoint<TRequest, EndpointResponse<TResponse>>
     where TRequest : notnull
 {
     public override void Configure()
@@ -29,11 +29,11 @@ public abstract class BaseEndpoint<TRequest, TResponse> : Endpoint<TRequest, End
                 _ => throw new ArgumentOutOfRangeException(nameof(result.Status), $"Unexpected result status value: {result.Status}")
             };
 
-        var endpointResponse = new EndpointResponse<TResponse?>
+        var endpointResponse = new EndpointResponse<TResponse>
         {
             Data = result.Data,
-            ErrorMessages = result.Errors ?? Enumerable.Empty<string>(),
-            FieldErrors = result.FieldErrors ?? Enumerable.Empty<FieldErrors>(),
+            ErrorMessages = result.Errors ?? [],
+            FieldErrors = result.FieldErrors ?? [],
             StatusCode = statusCode
         };
 

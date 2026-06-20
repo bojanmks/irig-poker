@@ -2,8 +2,8 @@
 
 namespace WebApi.Api.Core.Hubs.Models;
 
-public class HubActionRequest<T> : IHasLocaleInfo
+public record HubActionRequest<T> : IHasLocaleInfo
 {
-    public T Data { get; set; }
-    public string LanguageCode { get; set; }
+    public required T Data { get; init; }
+    public required string LanguageCode { get; init; }
 }

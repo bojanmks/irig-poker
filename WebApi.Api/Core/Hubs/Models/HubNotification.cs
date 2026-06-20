@@ -2,8 +2,8 @@
 
 public class HubNotification<T>
 {
-    public T Data { get; set; }
-    public DateTimeOffset Timestamp { get; set; } = DateTimeOffset.UtcNow;
+    public required T Data { get; init; }
+    public DateTimeOffset Timestamp { get; init; } = DateTimeOffset.UtcNow;
 }
 
 public static class HubNotification
