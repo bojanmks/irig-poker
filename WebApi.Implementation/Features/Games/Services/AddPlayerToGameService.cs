@@ -18,11 +18,17 @@ public class AddPlayerToGameService(
 
         var game = await _getGameService.GetAsync(data.GameCode, cancellationToken);
 
-        bool addToGameResult = game!.Players.TryAdd(applicationUser.ConnectionId, new PlayerDto
+        var player = new PlayerDto
         {
-            Username = data.Username,
-            IsAdmin = !game.Players.Any()
-        });
+            Username = data.Username
+        };
+
+        if (!game.Players.Any())
+        {
+            player.SetIsAdmin(true);
+        }
+
+        bool addToGameResult = game!.Players.TryAdd(applicationUser.ConnectionId, player);
 
         if (!addToGameResult)
         {

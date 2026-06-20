@@ -23,11 +23,10 @@ public class GameHub(
 
             await Clients
                 .GroupExcept(request.Data.GameCode, Context.ConnectionId)
-                .SendAsync("PlayerJoined", HubNotification.From(new PlayerJoinNotification
-                {
-                    ConnectionId = Context.ConnectionId,
-                    Player = result.Data.Players[Context.ConnectionId]
-                }), Context.ConnectionAborted);
+                .SendAsync("PlayerJoined", HubNotification.From(new PlayerJoinNotification(
+                    Context.ConnectionId,
+                    result.Data.Players[Context.ConnectionId]
+                )), Context.ConnectionAborted);
         }
 
         return result.ToHubActionResponse();

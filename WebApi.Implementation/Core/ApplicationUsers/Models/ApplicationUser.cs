@@ -6,8 +6,8 @@ namespace WebApi.Implementation.Core.ApplicationUsers.Models;
 
 public class ApplicationUser : IApplicationUser
 {
-    public virtual UserRole Role { get; set; }
-    public CultureInfo Locale { get; set; }
-    public string? ConnectionId { get; set; }
-    public string? GameCode { get; set; }
+    public required UserRole Role { get; init; }
+    public required CultureInfo Locale { get; init; }
+    public required string? ConnectionId { get; init; }
+    public required string? GameCode { get; init; }
 }

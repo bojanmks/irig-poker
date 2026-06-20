@@ -27,11 +27,11 @@ public class Result<T>
         };
     }
 
-    public static Result<T> Error(IEnumerable<string>? errors = null)
+    public static Result<T> Error(params ReadOnlySpan<string> errors)
     {
         return new Result<T>
         {
-            Errors = errors ?? Enumerable.Empty<string>(),
+            Errors = [..errors],
             Status = ResultStatus.Error
         };
     }

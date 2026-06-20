@@ -5,8 +5,8 @@ namespace WebApi.Application.Core.ApplicationUsers;
 
 public interface IApplicationUser
 {
-    public UserRole Role { get; set; }
-    public CultureInfo Locale { get; set; }
-    public string? ConnectionId { get; set; }
-    public string? GameCode { get; set; }
+    public UserRole Role { get; }
+    public CultureInfo Locale { get; }
+    public string? ConnectionId { get; }
+    public string? GameCode { get; }
 }
