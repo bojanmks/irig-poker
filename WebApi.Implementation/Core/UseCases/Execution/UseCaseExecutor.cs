@@ -13,19 +13,16 @@ public class UseCaseExecutor<TUseCase, TData, TOut> where TUseCase : UseCase<TDa
 {
     private readonly IApplicationUserResolver _applicationUserResolver;
     private readonly IUseCaseLogger _useCaseLogger;
-    private readonly IUseCaseSubscriberResolver _subscriberResolver;
     private readonly IValidatorResolver _validatorResolver;
 
     public UseCaseExecutor(
         IApplicationUserResolver applicationUserResolver,
         IUseCaseLogger useCaseLogger,
-        IUseCaseSubscriberResolver subscriberResolver,
         IValidatorResolver validatorResolver
     )
     {
         _applicationUserResolver = applicationUserResolver;
         _useCaseLogger = useCaseLogger;
-        _subscriberResolver = subscriberResolver;
         _validatorResolver = validatorResolver;
     }
 
@@ -39,11 +36,6 @@ public class UseCaseExecutor<TUseCase, TData, TOut> where TUseCase : UseCase<TDa
         }
 
         var response = await handler.HandleAsync(useCase, cancellationToken);
-
-        if (response.IsSuccess)
-        {
-            await ExecuteUseCaseSubscribers(useCase, response, cancellationToken);
-        }
 
         return response;
     }
@@ -93,26 +85,5 @@ public class UseCaseExecutor<TUseCase, TData, TOut> where TUseCase : UseCase<TDa
         }
 
         return Result<TOut>.Success();
-    }
-
-    private async Task ExecuteUseCaseSubscribers(TUseCase useCase, Result<TOut> useCaseResponse, CancellationToken cancellationToken = default)
-    {
-        var subscribers = _subscriberResolver.ResolveAll<TUseCase, TData, TOut>();
-
-        if (subscribers is null)
-        {
-            return;
-        }
-
-        var subscriberData = new UseCaseSubscriberData<TData, TOut>
-        {
-            UseCaseData = useCase.Data,
-            UseCaseResult = useCaseResponse
-        };
-
-        foreach (var subscriber in subscribers)
-        {
-            await subscriber.ExecuteAsync(subscriberData, cancellationToken);
-        }
     }
 }

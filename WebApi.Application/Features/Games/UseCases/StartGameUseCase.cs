@@ -4,7 +4,7 @@ using WebApi.Common.Core.Auth.Enums;
 namespace WebApi.Application.Features.Games.UseCases;
 
 [AllowForRoles(UserRole.RoomOwner)]
-public class StartGameUseCase : UseCase<Empty, Empty>
+public class StartGameUseCase : UseCase<Empty, string>
 {
     public StartGameUseCase(Empty data) : base(data)
     {

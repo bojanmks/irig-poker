@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using System.Reflection;
 using WebApi.Api.Core.Modules;
 using WebApi.Api.Core.Reflection.Extensions;
 using WebApi.Application;
@@ -23,7 +22,6 @@ public class UseCasesModule : BaseModule
 
         AddUseCaseHandlers(services);
         AddUseCaseValidators(services);
-        AddUseCaseSubscribers(services);
         AddUserRoleUseCaseMapStore(services);
     }
 
@@ -47,26 +45,6 @@ public class UseCasesModule : BaseModule
 
         RegisterAsBaseTypes(services, handlerTypes);
         services.AddTransient<IUseCaseHandlerResolver, ServiceProviderUseCaseHandlerResolver>();
-    }
-
-    private static void AddUseCaseSubscribers(IServiceCollection services)
-    {
-        var interfaceType = typeof(IUseCaseSubscriber<,,>);
-        var assembliesToLookThrough = new Assembly[] { typeof(ImplementationAssemblyMarker).Assembly, typeof(ApiAssemblyMarker).Assembly };
-
-        var useCaseSubscribersTypesData = interfaceType.GetGenericInterfaceImplementationTypes(assembliesToLookThrough);
-
-        var groupedUseCaseSubscribersTypesData = useCaseSubscribersTypesData.GroupBy(x => x.ImplementedInterface).Select(x => x.AsEnumerable());
-
-        foreach (var typesGroup in groupedUseCaseSubscribersTypesData)
-        {
-            foreach (var typeData in typesGroup)
-            {
-                services.AddTransient(typeData.ImplementedInterface, typeData.ImplementationType);
-            }
-        }
-
-        services.AddTransient<IUseCaseSubscriberResolver, ServiceProviderUseCaseSubscriberResolver>();
     }
 
     private static void AddUserRoleUseCaseMapStore(IServiceCollection services)

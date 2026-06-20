@@ -1,4 +1,5 @@
-﻿using WebApi.Common.Core.Result.Enums;
+﻿using System.Diagnostics.CodeAnalysis;
+using WebApi.Common.Core.Result.Enums;
 
 namespace WebApi.Common.Core.Result.Models;
 
@@ -14,9 +15,10 @@ public class Result<T>
     public ResultStatus Status { get; private set; }
     public int? HttpStatusCode { get; private set; }
 
+    [MemberNotNullWhen(true, nameof(Data))]
     public bool IsSuccess => Status == ResultStatus.Success;
 
-    public static Result<T> Success(T? data = default(T))
+    public static Result<T> Success(T? data = default)
     {
         return new Result<T>
         {

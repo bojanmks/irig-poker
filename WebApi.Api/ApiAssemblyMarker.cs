@@ -1,3 +1,3 @@
 ﻿namespace WebApi.Api;
 
-public class ApiAssemblyMarker {}
+public class ApiAssemblyMarker { }

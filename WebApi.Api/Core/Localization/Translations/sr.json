@@ -13,5 +13,8 @@
     "isFull": "Igra je puna",
     "notEnoughPlayers": "Nema dovoljno igrača u igri",
     "tooManyPlayers": "Previše igrača je u igri"
+  },
+  "user": {
+    "notInGame": "Korisnik nije u igri"
   }
 }

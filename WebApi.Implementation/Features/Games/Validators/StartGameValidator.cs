@@ -21,6 +21,13 @@ public class StartGameValidator : BaseValidator<StartGameUseCase>
             .CustomAsync(async (_, context, ct) =>
             {
                 var applicationUser = await applicationUserResolver.ResolveAsync(ct);
+
+                if (string.IsNullOrWhiteSpace(applicationUser.GameCode))
+                {
+                    context.AddFailure(T("user.notInGame"));
+                    return;
+                }
+
                 var game = await getGameService.GetAsync(applicationUser.GameCode, ct);
 
                 if (game is null)

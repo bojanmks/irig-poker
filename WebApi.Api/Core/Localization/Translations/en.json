@@ -13,5 +13,8 @@
     "isFull": "Game is full",
     "notEnoughPlayers": "Not enough players in the game",
     "tooManyPlayers": "Too many players in the game"
+  },
+  "user": {
+    "notInGame": "User is not in a game"
   }
 }

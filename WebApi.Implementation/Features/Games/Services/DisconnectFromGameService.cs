@@ -14,7 +14,7 @@ public class DisconnectFromGameService(
     {
         var result = new DisconnectResultDto();
 
-        if (!_playersGamesMap.Map.TryRemove(connectionId, out string gameCode))
+        if (!_playersGamesMap.Map.TryRemove(connectionId, out string? gameCode))
         {
             return result;
         }

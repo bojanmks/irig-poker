@@ -11,21 +11,18 @@ public class UseCaseMediator
 {
     private readonly IApplicationUserResolver _applicationUserResolver;
     private readonly IUseCaseLogger _useCaseLogger;
-    private readonly IUseCaseSubscriberResolver _subscriberResolver;
     private readonly IValidatorResolver _validatorResolver;
     private readonly IUseCaseHandlerResolver _useCaseHandlerResolver;
 
     public UseCaseMediator(
         IApplicationUserResolver applicationUserResolver,
         IUseCaseLogger useCaseLogger,
-        IUseCaseSubscriberResolver subscriberResolver,
         IValidatorResolver validatorResolver,
         IUseCaseHandlerResolver useCaseHandlerResolver
     )
     {
         _applicationUserResolver = applicationUserResolver;
         _useCaseLogger = useCaseLogger;
-        _subscriberResolver = subscriberResolver;
         _validatorResolver = validatorResolver;
         _useCaseHandlerResolver = useCaseHandlerResolver;
     }
@@ -47,6 +44,6 @@ public class UseCaseMediator
 
     private UseCaseExecutor<TUseCase, TData, TOut> ConstructExecutor<TUseCase, TData, TOut>() where TUseCase : UseCase<TData, TOut>
     {
-        return new UseCaseExecutor<TUseCase, TData, TOut>(_applicationUserResolver, _useCaseLogger, _subscriberResolver, _validatorResolver);
+        return new UseCaseExecutor<TUseCase, TData, TOut>(_applicationUserResolver, _useCaseLogger, _validatorResolver);
     }
 }
