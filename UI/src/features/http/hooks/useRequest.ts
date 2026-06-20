@@ -1,13 +1,12 @@
 import { AxiosError, type AxiosRequestConfig, type AxiosResponse } from "axios";
 import axiosClient from "../clients/axiosClient";
 import type { EndpointResponse } from "../models/EndpointResponse";
-import { useAppToast } from "@/features/shared/contexts/ToastContext";
+import { showError } from "@/features/shared/utils/toast";
 import { useTranslation } from "react-i18next";
 import type { FieldErrors } from "../models/FieldError";
 
 export function useRequest() {
   const { i18n, t } = useTranslation();
-  const { showError } = useAppToast();
 
   const send = async<TBody = any, TResponse = any> (config: AxiosRequestConfig<TBody>): Promise<EndpointResponse<TResponse>> => {
     try {

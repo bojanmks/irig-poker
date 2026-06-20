@@ -1,10 +1,10 @@
-import { useTheme } from "@/features/themes/components/ThemeProvider"
+import { useAppSelector } from "@/features/store/hooks"
 import { Toaster as Sonner } from "sonner"
 
 type ToasterProps = React.ComponentProps<typeof Sonner>
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = "system" } = useTheme()
+  const theme = useAppSelector((state) => state.theme.theme)
 
   return (
     <Sonner

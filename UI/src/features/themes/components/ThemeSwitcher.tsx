@@ -1,7 +1,4 @@
 import { Moon, Sun } from "lucide-react"
-
-
-import { useTheme } from "./ThemeProvider"
 import { Button } from "@/features/shared/components/Button"
 import {
   DropdownMenu,
@@ -11,9 +8,12 @@ import {
 } from "@/features/shared/components/DropdownMenu"
 import { useTranslation } from "react-i18next"
 
+import { useAppDispatch } from "@/features/store/hooks"
+import { setTheme } from "@/features/themes/store/themeSlice"
+
 const ThemeSwitcher = () => {
   const { t } = useTranslation();
-  const { setTheme } = useTheme()
+  const dispatch = useAppDispatch()
 
   return (
     <DropdownMenu>
@@ -24,13 +24,13 @@ const ThemeSwitcher = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
+        <DropdownMenuItem onClick={() => dispatch(setTheme("light"))}>
           { t('theme.light') }
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
+        <DropdownMenuItem onClick={() => dispatch(setTheme("dark"))}>
           { t('theme.dark') }
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
+        <DropdownMenuItem onClick={() => dispatch(setTheme("system"))}>
           { t('theme.system') }
         </DropdownMenuItem>
       </DropdownMenuContent>

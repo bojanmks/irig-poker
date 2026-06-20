@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { GameLobby } from "../components/GameLobby";
 import { GamePageState } from "../consts/GamePageState";
 import { useUsernameFromRoute } from "../hooks/useUsernameFromRoute";
@@ -12,16 +12,24 @@ import { useHub } from "@/features/http/hooks/useHub";
 import { GamePageLoading } from "../components/GamePageLoading";
 import { useGamePageInitialization } from "../hooks/useGamePageInitialization";
 import type { PublicGameState } from "../models/PublicGameState";
-import { GameStateContext, useGameState } from "../contexts/GameStateContext";
+import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
+import { setGameState, resetGameState } from "@/features/game/store/gameStateSlice";
 
-const GamePageContent = () => {
+const GamePage = () => {
   const hub = useHub();
   const { gameCode } = useParams();
   const { username, setUsername, initialized } = useUsernameFromRoute();
   const [pageState, setPageState] = useState<GamePageState>(GamePageState.None);
-  const { gameState, setGameState } = useGameState();
+  const dispatch = useAppDispatch();
+  const gameState = useAppSelector((state) => state.gameState.gameState);
 
   useGamePageWrapperClass(pageState);
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetGameState());
+    };
+  }, [dispatch]);
 
   useJoinGame({
     hub,
@@ -32,8 +40,8 @@ const GamePageContent = () => {
         setPageState(GamePageState.Ready)
       }
       
-      setGameState(gameState);
-    }, [pageState, setPageState, setGameState])
+      dispatch(setGameState(gameState));
+    }, [pageState, setPageState, dispatch])
   });
 
   useDiconnectOnPageLeave(hub.disconnect);
@@ -59,16 +67,6 @@ const GamePageContent = () => {
     <>
       { gameState?.hasStarted ? <ActualGame /> : <GameLobby /> }
     </>
-  );
-};
-
-const GamePage = () => {
-  const [gameState, setGameState] = useState<PublicGameState | null>(null);
-
-  return (
-    <GameStateContext.Provider value={{ gameState, setGameState }}>
-      <GamePageContent />
-    </GameStateContext.Provider>
   );
 };
 

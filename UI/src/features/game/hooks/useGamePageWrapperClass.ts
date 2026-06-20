@@ -1,13 +1,13 @@
-import { useWrapperClass } from "@/features/shared/contexts/WrapperClassContext";
 import { useEffect } from "react";
 import { GamePageState } from "../consts/GamePageState";
-import { useGameState } from "../contexts/GameStateContext";
+import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
+import { setAdditionalClass } from "@/features/shared/store/wrapperClassSlice";
 
 export function useGamePageWrapperClass(
     gamePageState: GamePageState
 ) {
-    const { setAdditionalClass } = useWrapperClass()
-    const { gameState } = useGameState();
+    const dispatch = useAppDispatch()
+    const gameState = useAppSelector((state) => state.gameState.gameState);
     
     useEffect(() => {
         const additionalClass = {
@@ -16,10 +16,10 @@ export function useGamePageWrapperClass(
             [GamePageState.Ready]: gameState?.hasStarted ? 'max-w-xl' : 'max-w-md',
         }[gamePageState] || '';
 
-    setAdditionalClass(additionalClass)
+    dispatch(setAdditionalClass(additionalClass))
 
     return () => {
-        setAdditionalClass("")
+        dispatch(setAdditionalClass(""))
     }
-    }, [setAdditionalClass, gamePageState, gameState?.hasStarted])
+    }, [dispatch, gamePageState, gameState?.hasStarted])
 }

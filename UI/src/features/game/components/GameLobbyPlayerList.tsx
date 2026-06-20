@@ -1,10 +1,10 @@
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
 import { UsersIcon } from "lucide-react";
-import { useGameState } from "../contexts/GameStateContext";
 import { useTranslation } from "react-i18next";
+import { useAppSelector } from "@/features/store/hooks";
 
 export const GameLobbyPlayerList = () => {
-    const { gameState } = useGameState();
+    const gameState = useAppSelector((state) => state.gameState.gameState);
     const { t } = useTranslation();
 
     return (

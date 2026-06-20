@@ -3,12 +3,12 @@ import LanguageSwitcher from "@/features/localization/components/LanguageSwitche
 import ThemeSwitcher from "@/features/themes/components/ThemeSwitcher"
 import { Outlet } from "react-router-dom"
 import clsx from "clsx"
-import { useWrapperClass, WrapperClassProvider } from "../contexts/WrapperClassContext"
 import { useMemo } from "react"
 import { GitBranch } from "lucide-react"
+import { useAppSelector } from "@/features/store/hooks"
 
-const LayoutContent = () => {
-  const { additionalClass } = useWrapperClass()
+const BaseLayout = () => {
+  const additionalClass = useAppSelector((state) => state.wrapperClass.additionalClass)
 
   const baseClass = useMemo(() => "mx-auto p-6 border rounded-2xl shadow-lg bg-background", []);
   const finalClass = useMemo(() => clsx(baseClass, additionalClass), [baseClass, additionalClass]);
@@ -36,11 +36,5 @@ const LayoutContent = () => {
     </div>
   )
 }
-
-const BaseLayout = () => (
-  <WrapperClassProvider>
-    <LayoutContent />
-  </WrapperClassProvider>
-)
 
 export default BaseLayout

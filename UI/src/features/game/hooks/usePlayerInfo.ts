@@ -1,9 +1,9 @@
 import connection from "@/features/http/clients/hubClient";
-import { useGameState } from "../contexts/GameStateContext";
 import { useMemo } from "react";
+import { useAppSelector } from "@/features/store/hooks";
 
 export function usePlayerInfo() {
-    const { gameState } = useGameState();
+    const gameState = useAppSelector((state) => state.gameState.gameState);
 
     const isAdmin = useMemo(() => {
         if (!connection?.connectionId) {

@@ -1,21 +1,13 @@
-import { useGameState } from "../contexts/GameStateContext";
 import { useCallback } from "react";
+import { useAppDispatch } from "@/features/store/hooks";
+import { gameStarted } from "@/features/game/store/gameStateSlice";
 
 export function useGameStartListeners() {
-    const { setGameState } = useGameState();
+    const dispatch = useAppDispatch();
 
     const onGameStarted = useCallback(() => {
-        setGameState(oldState => {
-            if (!oldState) {
-                return oldState;
-            }
-
-            return {
-                ...oldState,
-                hasStarted: true
-            };
-        });
-    }, [setGameState]);
+        dispatch(gameStarted());
+    }, [dispatch]);
 
     return { onGameStarted };
 }

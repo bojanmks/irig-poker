@@ -1,41 +1,19 @@
 import type { Player } from "../models/Player";
-import { useGameState } from "../contexts/GameStateContext";
 import { useCallback } from "react";
 import type { HubNotification } from "@/features/http/models/HubNotification";
+import { useAppDispatch } from "@/features/store/hooks";
+import { playerJoined, playerLeft } from "@/features/game/store/gameStateSlice";
 
 export function usePlayerConnectionChangeListeners() {
-    const { setGameState } = useGameState();
+    const dispatch = useAppDispatch();
 
     const onPlayerJoined = useCallback((notification: HubNotification<{ connectionId: string, player: Player }>) => {
-        setGameState(currentGameState => {
-            if (!currentGameState) {
-                return currentGameState;
-            }
-
-            return {
-                ...currentGameState,
-                players: {
-                    ...currentGameState.players,
-                    [notification.data.connectionId]: notification.data.player
-                }
-            };
-        });
-    }, [setGameState]);
+        dispatch(playerJoined({ connectionId: notification.data.connectionId, player: notification.data.player }));
+    }, [dispatch]);
 
     const onPlayerLeft = useCallback((notification: HubNotification<string>) => {
-        setGameState(currentGameState => {
-            if (!currentGameState) {
-                return currentGameState;
-            }
-            
-            const { [notification.data]: removedPlayer, ...remainingPlayers } = currentGameState.players;
-
-            return {
-                ...currentGameState,
-                players: remainingPlayers
-            };
-        });
-    }, [setGameState]);
+        dispatch(playerLeft(notification.data));
+    }, [dispatch]);
 
     return {
         onPlayerJoined,

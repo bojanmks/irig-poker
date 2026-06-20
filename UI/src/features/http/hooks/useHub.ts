@@ -2,10 +2,10 @@ import { useCallback, useEffect, useState } from "react";
 import * as signalR from "@microsoft/signalr";
 import connection from "../clients/hubClient";
 import type { HubConnection } from "@microsoft/signalr";
-import { useGameState } from "@/features/game/contexts/GameStateContext";
+import { useAppSelector } from "@/features/store/hooks";
 import type { HubNotification } from "../models/HubNotification";
 import { addHangingNotification, clearHangingNotifications, hangingNotifications } from "./useHangingNotifications";
-import { useAppToast } from "@/features/shared/contexts/ToastContext";
+import { showError } from "@/features/shared/utils/toast";
 import type { HubActionResponse } from "../models/HubActionResponse";
 import { useTranslation } from "react-i18next";
 import type { HubActionRequest } from "../models/HubActionRequest";
@@ -20,8 +20,7 @@ export type HubMethods = {
 
 export function useHub(): HubMethods {
   const [connected, setConnected] = useState(false);
-  const { gameState } = useGameState();
-  const { showError } = useAppToast();
+  const gameState = useAppSelector((state) => state.gameState.gameState);
   const { t } = useTranslation();
   const { i18n } = useTranslation();
 
@@ -99,7 +98,7 @@ export function useHub(): HubMethods {
       showError(t('common.anErrorOccurred'));
       throw error;
     }
-  }, [showError]);
+  }, []);
 
   useEffect(() => {
     if (!gameState || !hangingNotifications.length) {

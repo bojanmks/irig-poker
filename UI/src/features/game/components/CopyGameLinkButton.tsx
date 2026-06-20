@@ -1,12 +1,11 @@
 import { Button } from "@/features/shared/components/Button";
-import { useAppToast } from "@/features/shared/contexts/ToastContext";
+import { showSuccess } from "@/features/shared/utils/toast";
 import { CopyIcon } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export const CopyGameLinkButton = () => {
   const [isHovered, setIsHovered] = useState(false);
-  const { showSuccess } = useAppToast();
   const { t } = useTranslation();
 
   const gameUrl = window.location.href;

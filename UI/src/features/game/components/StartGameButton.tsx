@@ -3,13 +3,13 @@ import { usePlayerInfo } from "../hooks/usePlayerInfo";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/features/shared/components/Button";
 import { useCallback, useMemo, useState } from "react";
-import { useGameState } from "../contexts/GameStateContext";
+import { useAppSelector } from "@/features/store/hooks";
 
 export function StartGameButton() {
     const { t } = useTranslation();
     const { isAdmin } = usePlayerInfo();
     const { invoke } = useHub();
-    const { gameState } = useGameState();
+    const gameState = useAppSelector((state) => state.gameState.gameState);
     const [showLoading, setShowLoading] = useState(false);
 
     const currentPlayerCount = useMemo(() => {

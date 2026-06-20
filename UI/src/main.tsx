@@ -5,8 +5,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom';
 import AppRoutes from './features/routing/components/AppRoutes.tsx';
-import { ThemeProvider } from './features/themes/components/ThemeProvider.tsx';
-import { ToastProvider } from './features/shared/contexts/ToastContext.tsx';
+import { Provider } from 'react-redux';
+import { store } from './features/store';
+import { ThemeSync } from './features/store/ThemeSync';
 import { Toaster } from './features/shared/components/Sonner.tsx';
 
 const router = createBrowserRouter(
@@ -14,12 +15,12 @@ const router = createBrowserRouter(
     <Route
       path='/'
       element={
-        <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-          <ToastProvider>
+        <Provider store={store}>
+          <ThemeSync>
             <Toaster />
             <App />
-          </ToastProvider>
-        </ThemeProvider>
+          </ThemeSync>
+        </Provider>
       }
     >
       {AppRoutes}

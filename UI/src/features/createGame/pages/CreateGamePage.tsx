@@ -3,8 +3,9 @@ import { useRequest } from "@/features/http/hooks/useRequest"
 import { DynamicForm, type FieldConfig } from "@/features/form/components/DynamicForm"
 import { usernameValidation } from "@/features/game/gameValidationRules";
 import { useCallback, useEffect } from "react";
-import { useWrapperClass } from "@/features/shared/contexts/WrapperClassContext";
 import { FieldType } from "@/features/form/consts/FieldType";
+import { useAppDispatch } from "@/features/store/hooks";
+import { setAdditionalClass } from "@/features/shared/store/wrapperClassSlice";
 
 const formFields: FieldConfig[] = [
   {
@@ -18,15 +19,15 @@ const formFields: FieldConfig[] = [
 export function CreateGamePage() {
   const navigate = useNavigate();
   const { send } = useRequest();
-  const { setAdditionalClass } = useWrapperClass();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    setAdditionalClass("max-w-md")
+    dispatch(setAdditionalClass("max-w-md"))
 
     return () => {
-      setAdditionalClass("")
+      dispatch(setAdditionalClass(""))
     }
-  }, [setAdditionalClass])
+  }, [dispatch])
 
   const handleSubmit = useCallback(async (data: { username: string }) => {
     const result = await send<void, string>({
