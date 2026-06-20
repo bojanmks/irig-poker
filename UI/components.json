@@ -13,9 +13,9 @@
   "aliases": {
     "components": "@/features/shared/components",
     "utils": "@/lib/utils",
-    "ui": "@/features/shared/components",
-    "lib": "@/lib",
-    "hooks": "@/hooks"
+    "ui": "@/features/shared/components/shadcn",
+    "lib": "@/lib"
   },
-  "iconLibrary": "lucide"
+  "iconLibrary": "lucide",
+  "pascalCase": true
 }
