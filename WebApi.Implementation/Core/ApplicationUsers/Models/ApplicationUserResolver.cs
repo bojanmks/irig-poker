@@ -10,18 +10,16 @@ namespace WebApi.Implementation.Core.ApplicationUsers.Models;
 public class ApplicationUserResolver(
     ILocaleResolver _localeGetter,
     PlayersGamesMap _playersGamesMap,
-    IGetGameService _getGameService
+    IGetGameService _getGameService,
+    IHubConnectionIdProvider _hubConnectionIdProvider
 ) : IApplicationUserResolver
 {
-    private string? _connectionId = null;
-
-    private static ApplicationUser GetNotPlayingUser(string? connectionId, CultureInfo locale)
+    private static ApplicationUser GetNotPlayingUser(CultureInfo locale)
     {
         return new ApplicationUser
         {
             Locale = locale,
             Role = UserRole.NotPlaying,
-            ConnectionId = connectionId,
             GameCode = null
         };
     }
@@ -30,31 +28,25 @@ public class ApplicationUserResolver(
     {
         var locale = _localeGetter.Resolve();
 
-        if (string.IsNullOrWhiteSpace(_connectionId) || !_playersGamesMap.Map.TryGetValue(_connectionId, out string? gameCode))
+        if (!_hubConnectionIdProvider.TryGetConnectionId(out var connectionId) || !_playersGamesMap.Map.TryGetValue(connectionId, out string? gameCode))
         {
-            return GetNotPlayingUser(_connectionId, locale);
+            return GetNotPlayingUser(locale);
         }
 
         var game = await _getGameService.GetAsync(gameCode, cancellationToken);
 
         if (game is null)
         {
-            return GetNotPlayingUser(_connectionId, locale);
+            return GetNotPlayingUser(locale);
         }
 
-        var userRole = game.Players[_connectionId].IsAdmin ? UserRole.RoomOwner : UserRole.Player;
+        var userRole = game.Players[connectionId].IsAdmin ? UserRole.RoomOwner : UserRole.Player;
 
         return new ApplicationUser
         {
             Locale = locale,
-            ConnectionId = _connectionId,
             GameCode = gameCode,
             Role = userRole
         };
-    }
-
-    public void SetConnectionId(string connectionId)
-    {
-        _connectionId = connectionId;
     }
 }

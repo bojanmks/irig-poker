@@ -7,6 +7,5 @@ public interface IApplicationUser
 {
     public UserRole Role { get; }
     public CultureInfo Locale { get; }
-    public string? ConnectionId { get; }
     public string? GameCode { get; }
 }

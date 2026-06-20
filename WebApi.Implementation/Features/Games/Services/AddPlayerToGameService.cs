@@ -9,12 +9,15 @@ namespace WebApi.Implementation.Features.Games.Services;
 public class AddPlayerToGameService(
     IGetGameService _getGameService,
     PlayersGamesMap _playersGamesMap,
-    IApplicationUserResolver _applicationUserResolver
+    IHubConnectionIdProvider _hubConnectionIdProvider
 ) : IAddPlayerToGameService
 {
     public async Task<bool> AddAsync(JoinGameDto data, CancellationToken cancellationToken = default)
     {
-        var applicationUser = await _applicationUserResolver.ResolveAsync(cancellationToken);
+        if (!_hubConnectionIdProvider.TryGetConnectionId(out var connectionId))
+        {
+            return false;
+        }
 
         var game = await _getGameService.GetAsync(data.GameCode, cancellationToken);
 
@@ -33,18 +36,18 @@ public class AddPlayerToGameService(
             player.SetIsAdmin(true);
         }
 
-        bool addToGameResult = game!.Players.TryAdd(applicationUser.ConnectionId, player);
+        bool addToGameResult = game.Players.TryAdd(connectionId, player);
 
         if (!addToGameResult)
         {
             return false;
         }
 
-        bool addToMapResult = _playersGamesMap.Map.TryAdd(applicationUser.ConnectionId, data.GameCode);
+        bool addToMapResult = _playersGamesMap.Map.TryAdd(connectionId, data.GameCode);
 
         if (!addToMapResult)
         {
-            game!.Players.Remove(applicationUser.ConnectionId, out _);
+            game!.Players.Remove(connectionId, out _);
             return false;
         }
 

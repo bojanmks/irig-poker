@@ -8,7 +8,7 @@ namespace WebApi.Api.Core.Hubs.Filters;
 
 internal class GlobalHubFilter(
     ILocaleResolver _localeResolver,
-    IApplicationUserResolver _applicationUserResolver
+    IHubConnectionIdSetter _hubConnectionIdSetter
 ) : IHubFilter
 {
     public async ValueTask<object?> InvokeMethodAsync(
@@ -16,7 +16,7 @@ internal class GlobalHubFilter(
         Func<HubInvocationContext, ValueTask<object?>> next
     )
     {
-        _applicationUserResolver.SetConnectionId(invocationContext.Context.ConnectionId);
+        _hubConnectionIdSetter.SetConnectionId(invocationContext.Context.ConnectionId);
 
         foreach (var argument in invocationContext.HubMethodArguments)
         {
@@ -35,7 +35,7 @@ internal class GlobalHubFilter(
         Func<HubLifetimeContext, Exception?, Task> next
     )
     {
-        _applicationUserResolver.SetConnectionId(context.Context.ConnectionId);
+        _hubConnectionIdSetter.SetConnectionId(context.Context.ConnectionId);
 
         await next(context, exception);
     }
