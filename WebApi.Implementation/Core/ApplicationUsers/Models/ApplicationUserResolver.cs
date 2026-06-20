@@ -1,4 +1,5 @@
-﻿using WebApi.Application.Core.ApplicationUsers;
+﻿using System.Globalization;
+using WebApi.Application.Core.ApplicationUsers;
 using WebApi.Application.Core.Localization;
 using WebApi.Application.Features.Games.Services;
 using WebApi.Common.Core.Auth.Enums;
@@ -14,27 +15,31 @@ public class ApplicationUserResolver(
 {
     private string? _connectionId = null;
 
+    private static ApplicationUser GetNotPlayingUser(string? connectionId, CultureInfo locale)
+    {
+        return new ApplicationUser
+        {
+            Locale = locale,
+            Role = UserRole.NotPlaying,
+            ConnectionId = connectionId,
+            GameCode = null
+        };
+    }
+
     public async Task<IApplicationUser> ResolveAsync(CancellationToken cancellationToken = default)
     {
         var locale = _localeGetter.Resolve();
 
-        var notPlayingUser = new ApplicationUser
-        {
-            Locale = locale,
-            Role = UserRole.NotPlaying,
-            ConnectionId = _connectionId
-        };
-
         if (string.IsNullOrWhiteSpace(_connectionId) || !_playersGamesMap.Map.TryGetValue(_connectionId, out string? gameCode))
         {
-            return notPlayingUser;
+            return GetNotPlayingUser(_connectionId, locale);
         }
 
         var game = await _getGameService.GetAsync(gameCode, cancellationToken);
 
         if (game is null)
         {
-            return notPlayingUser;
+            return GetNotPlayingUser(_connectionId, locale);
         }
 
         var userRole = game.Players[_connectionId].IsAdmin ? UserRole.RoomOwner : UserRole.Player;

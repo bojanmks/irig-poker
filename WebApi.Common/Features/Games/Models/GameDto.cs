@@ -5,7 +5,7 @@ namespace WebApi.Common.Features.Games.Models;
 
 public class GameDto
 {
-    public string GameCode { get; set; }
-    public bool HasStarted { get; set; }
+    public required string GameCode { get; set; }
+    public bool HasStarted { get; set; } = false;
     public ConcurrentDictionary<string, PlayerDto> Players { get; set; } = new();
 }

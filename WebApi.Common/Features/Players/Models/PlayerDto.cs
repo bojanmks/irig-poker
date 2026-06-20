@@ -2,6 +2,11 @@
 
 public class PlayerDto
 {
-    public required string Username { get; set; }
-    public bool IsAdmin { get; set; }
+    public required string Username { get; init; }
+    public bool IsAdmin { get; private set; }
+
+    public void SetIsAdmin(bool value)
+    {
+        IsAdmin = value;
+    }
 }

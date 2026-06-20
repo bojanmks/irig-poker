@@ -1,4 +1,6 @@
 using MediatR;
+using System.Collections.Frozen;
+using WebApi.Application.Core.Localization;
 using WebApi.Application.Features.Games.Commands;
 using WebApi.Application.Features.Games.Services;
 using WebApi.Common.Core.Result.Models;
@@ -8,7 +10,8 @@ namespace WebApi.Implementation.Features.Games.CommandHandlers;
 
 public class JoinGameCommandHandler(
     IAddPlayerToGameService _addPlayerToGameService,
-    IGetGameService _getGameService
+    IGetGameService _getGameService,
+    ITranslator _translator
 ) : IRequestHandler<JoinGameCommand, Result<PublicGameStateDto>>
 {
     public async Task<Result<PublicGameStateDto>> Handle(JoinGameCommand command, CancellationToken cancellationToken)
@@ -22,10 +25,12 @@ public class JoinGameCommandHandler(
 
         var game = await _getGameService.GetAsync(command.Data.GameCode, cancellationToken);
 
-        var response = new PublicGameStateDto
+        if (game is null)
         {
-            Players = game!.Players.ToDictionary()
-        };
+            return Result<PublicGameStateDto>.Error(_translator.Translate("game.notFound"));
+        }
+
+        var response = new PublicGameStateDto(game.HasStarted, game.Players.ToFrozenDictionary());
 
         return response;
     }

@@ -2,6 +2,6 @@
 
 public class AppSettings
 {
-    public int MinPlayersPerGame { get; set; }
-    public int MaxPlayersPerGame { get; set; }
+    public int MinPlayersPerGame { get; init; }
+    public int MaxPlayersPerGame { get; init; }
 }

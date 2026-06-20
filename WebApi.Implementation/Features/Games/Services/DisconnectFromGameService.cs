@@ -47,7 +47,7 @@ public class DisconnectFromGameService(
             return result;
         }
 
-        player.IsAdmin = false;
+        player.SetIsAdmin(false);
         var newAdmin = game.Players.FirstOrDefault(x => x.Key != connectionId);
 
         if (newAdmin.Value is null)
@@ -57,7 +57,7 @@ public class DisconnectFromGameService(
             return result;
         }
 
-        newAdmin.Value.IsAdmin = true;
+        newAdmin.Value.SetIsAdmin(true);
         result.ChangedAdminTo = newAdmin.Key;
 
         return result;
