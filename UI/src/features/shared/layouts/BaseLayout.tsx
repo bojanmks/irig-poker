@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom"
 import clsx from "clsx"
 import { useWrapperClass, WrapperClassProvider } from "../contexts/WrapperClassContext"
 import { useMemo } from "react"
-import { Github } from "lucide-react"
+import { GitBranch } from "lucide-react"
 
 const LayoutContent = () => {
   const { additionalClass } = useWrapperClass()
@@ -22,7 +22,7 @@ const LayoutContent = () => {
           rel="noopener noreferrer"
           className="flex items-center justify-center w-8 h-8 rounded-md border border-border hover:bg-accent transition-colors"
         >
-          <Github size={16} />
+          <GitBranch size={16} />
         </a>
         <ThemeSwitcher />
         <LanguageSwitcher />
