@@ -1,0 +1,23 @@
+{
+    "form": {
+        "required": "Field is required",
+        "tooLong": "Text is too long"
+    },
+    "game": {
+        "enterYourName": "Enter your name",
+        "createPrivateGame": "Create private game",
+        "joinGame": "Join game",
+        "copyLink": "Click to copy game link",
+        "linkCopied": "Link copied to clipboard",
+        "players": "Players",
+        "start": "Start game"
+    },
+    "theme": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+    },
+    "common": {
+        "anErrorOccurred": "An error occurred"
+    }
+}

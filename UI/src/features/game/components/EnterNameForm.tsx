@@ -1,0 +1,32 @@
+import { DynamicForm, type FieldConfig } from "@/features/form/components/DynamicForm";
+import { usernameValidation } from "../gameValidationRules";
+import { useCallback, useState } from "react";
+import { FieldType } from "@/features/form/consts/FieldType";
+
+const formFields: FieldConfig[] = [
+    {
+      name: "username",
+      type: FieldType.Text,
+      label: "game.enterYourName",
+      validation: usernameValidation
+    }
+];
+
+export function EnterNameForm({ onSubmit }: { onSubmit: (username: string) => void }) {
+  const [showFormLoading, setShowFormLoading] = useState(false);
+
+  const handleSubmit = useCallback((data: { username: string }) => {
+    setShowFormLoading(true);
+    onSubmit(data.username);
+  }, []);
+
+  return (
+      <DynamicForm
+        fields={formFields}
+        onSubmit={handleSubmit}
+        submitLabel="game.joinGame"
+        autoFocusFieldName="username"
+        showLoading={showFormLoading}
+      />
+    )
+}

@@ -1,0 +1,23 @@
+{
+    "form": {
+        "required": "Polje je obavezno",
+        "tooLong": "Tekst je predugačak"
+    },
+    "game": {
+        "enterYourName": "Unesi svoje ime",
+        "createPrivateGame": "Kreiraj privatnu igru",
+        "joinGame": "Uđi u igru",
+        "copyLink": "Klikni da kopiraš link igre",
+        "linkCopied": "Link je kopiran",
+        "players": "Igrači",
+        "start": "Započni igru"
+    },
+    "theme": {
+        "light": "Svetla",
+        "dark": "Tamna",
+        "system": "Sistem"
+    },
+    "common": {
+        "anErrorOccurred": "Došlo je do greške"
+    }
+}
