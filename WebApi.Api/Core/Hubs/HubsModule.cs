@@ -8,6 +8,7 @@ public class HubsModule : BaseModule
 {
     public override void RegisterServices(IServiceCollection services)
     {
+        services.AddSingleton(TimeProvider.System);
         services.AddSignalR(options =>
         {
             options.AddFilter<GlobalHubFilter>();

@@ -10,7 +10,8 @@ using WebApi.Common.Features.Games.Models;
 namespace WebApi.Api.Features.Games.Hubs;
 
 public class GameHub(
-    IMediator _mediator
+    IMediator _mediator,
+    TimeProvider _timeProvider
 ) : Hub
 {
     public async Task<HubActionResponse<PublicGameStateDto>> JoinGame(HubActionRequest<JoinGameDto> request)
@@ -26,7 +27,7 @@ public class GameHub(
                 .SendAsync("PlayerJoined", HubNotification.From(new PlayerJoinNotification(
                     Context.ConnectionId,
                     result.Data.Players[Context.ConnectionId]
-                )), Context.ConnectionAborted);
+                ), _timeProvider), Context.ConnectionAborted);
         }
 
         return result.ToHubActionResponse();
@@ -40,7 +41,7 @@ public class GameHub(
         {
             await Clients
                 .Group(result.Data)
-                .SendAsync("GameStarted", HubNotification.From(Empty.Value), Context.ConnectionAborted);
+                .SendAsync("GameStarted", HubNotification.From(Empty.Value, _timeProvider), Context.ConnectionAborted);
         }
 
         return result.ToHubActionResponse();
@@ -55,7 +56,7 @@ public class GameHub(
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, result.Data.GameCode);
             await Clients
                 .GroupExcept(result.Data.GameCode, Context.ConnectionId)
-                .SendAsync("PlayerLeft", HubNotification.From(Context.ConnectionId));
+                .SendAsync("PlayerLeft", HubNotification.From(Context.ConnectionId, _timeProvider));
         }
     }
 }
