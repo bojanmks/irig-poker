@@ -18,6 +18,11 @@ public class AddPlayerToGameService(
 
         var game = await _getGameService.GetAsync(data.GameCode, cancellationToken);
 
+        if (game is null)
+        {
+            return false;
+        }
+
         var player = new PlayerDto
         {
             Username = data.Username
