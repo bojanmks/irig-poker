@@ -14,12 +14,14 @@ public class DisconnectFromGameService(
     {
         var result = new DisconnectResultDto();
 
-        if (!_playersGamesMap.Map.TryRemove(connectionId, out string? gameCode))
+        if (!_playersGamesMap.Map.TryRemove(connectionId, out var entry))
         {
             return result;
         }
 
-        var game = await _getGameService.GetAsync(gameCode, cancellationToken);
+        result.PlayerId = entry.PlayerId;
+
+        var game = await _getGameService.GetAsync(entry.GameCode, cancellationToken);
 
         if (game is null)
         {
@@ -28,16 +30,16 @@ public class DisconnectFromGameService(
 
         result.GameCode = game.GameCode;
 
-        if (!game.Players.TryGetValue(connectionId, out var player))
+        if (!game.Players.TryGetValue(entry.PlayerId, out var player))
         {
             return result;
         }
 
-        game.Players.Remove(connectionId, out _);
+        game.Players.Remove(entry.PlayerId, out _);
 
         if (game.HasStarted && game.Players.Count() <= 1)
         {
-            await _deleteGameService.DeleteAsync(gameCode, cancellationToken);
+            await _deleteGameService.DeleteAsync(entry.GameCode, cancellationToken);
             result.HasGameEnded = true;
             return result;
         }
@@ -48,11 +50,11 @@ public class DisconnectFromGameService(
         }
 
         player.SetIsAdmin(false);
-        var newAdmin = game.Players.FirstOrDefault(x => x.Key != connectionId);
+        var newAdmin = game.Players.FirstOrDefault(x => x.Key != entry.PlayerId);
 
         if (newAdmin.Value is null)
         {
-            await _deleteGameService.DeleteAsync(gameCode, cancellationToken);
+            await _deleteGameService.DeleteAsync(entry.GameCode, cancellationToken);
             result.HasGameEnded = true;
             return result;
         }

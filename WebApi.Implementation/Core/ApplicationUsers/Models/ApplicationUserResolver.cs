@@ -28,24 +28,24 @@ public class ApplicationUserResolver(
     {
         var locale = _localeGetter.Resolve();
 
-        if (!_hubConnectionIdProvider.TryGetConnectionId(out var connectionId) || !_playersGamesMap.Map.TryGetValue(connectionId, out string? gameCode))
+        if (!_hubConnectionIdProvider.TryGetConnectionId(out var connectionId) || !_playersGamesMap.Map.TryGetValue(connectionId, out var entry))
         {
             return GetNotPlayingUser(locale);
         }
 
-        var game = await _getGameService.GetAsync(gameCode, cancellationToken);
+        var game = await _getGameService.GetAsync(entry.GameCode, cancellationToken);
 
         if (game is null)
         {
             return GetNotPlayingUser(locale);
         }
 
-        var userRole = game.Players[connectionId].IsAdmin ? UserRole.RoomOwner : UserRole.Player;
+        var userRole = game.Players[entry.PlayerId].IsAdmin ? UserRole.RoomOwner : UserRole.Player;
 
         return new ApplicationUser
         {
             Locale = locale,
-            GameCode = gameCode,
+            GameCode = entry.GameCode,
             Role = userRole
         };
     }

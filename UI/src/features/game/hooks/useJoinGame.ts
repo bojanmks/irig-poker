@@ -8,11 +8,16 @@ import type { PublicGameState } from "../models/PublicGameState";
 import { useGameStartListeners } from "./useGameStartListeners";
 import { usePlayerConnectionChangeListeners } from "./usePlayerConnectionChangeListeners";
 
+type JoinGameResponse = {
+  playerId: string;
+  gameState: PublicGameState;
+};
+
 type UseJoinGameParams = {
   hub: HubMethods,
   gameCode: string,
   username: string | null,
-  onJoined?: (gameState: PublicGameState) => void
+  onJoined?: (response: JoinGameResponse) => void
 }
 
 export function useJoinGame({
@@ -46,7 +51,7 @@ export function useJoinGame({
     if (hasJoinedGame.current || !hubConnected || !username) return;
 
     (async () => {
-      const response = await hubInvoke<PublicGameState>("JoinGame", { gameCode, username });
+      const response = await hubInvoke<JoinGameResponse>("JoinGame", { gameCode, username });
 
       if (!response.isSuccess) {
         navigate('/');

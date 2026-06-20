@@ -4,5 +4,5 @@ namespace WebApi.Application.Features.Games.Services;
 
 public interface IAddPlayerToGameService
 {
-    Task<bool> AddAsync(JoinGameDto data, CancellationToken cancellationToken = default);
+    Task<string?> AddAsync(JoinGameDto data, CancellationToken cancellationToken = default);
 }

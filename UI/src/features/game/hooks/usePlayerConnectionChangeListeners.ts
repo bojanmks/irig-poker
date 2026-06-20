@@ -9,8 +9,8 @@ import type { Player } from "../models/Player";
 export function usePlayerConnectionChangeListeners() {
     const dispatch = useAppDispatch();
 
-    const onPlayerJoined = useCallback((notification: HubNotification<{ connectionId: string, player: Player }>) => {
-        dispatch(playerJoined({ connectionId: notification.data.connectionId, player: notification.data.player }));
+    const onPlayerJoined = useCallback((notification: HubNotification<{ playerId: string, player: Player }>) => {
+        dispatch(playerJoined({ playerId: notification.data.playerId, player: notification.data.player }));
     }, [dispatch]);
 
     const onPlayerLeft = useCallback((notification: HubNotification<string>) => {

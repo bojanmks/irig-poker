@@ -12,22 +12,25 @@ public class AddPlayerToGameService(
     IHubConnectionIdProvider _hubConnectionIdProvider
 ) : IAddPlayerToGameService
 {
-    public async Task<bool> AddAsync(JoinGameDto data, CancellationToken cancellationToken = default)
+    public async Task<string?> AddAsync(JoinGameDto data, CancellationToken cancellationToken = default)
     {
         if (!_hubConnectionIdProvider.TryGetConnectionId(out var connectionId))
         {
-            return false;
+            return null;
         }
 
         var game = await _getGameService.GetAsync(data.GameCode, cancellationToken);
 
         if (game is null)
         {
-            return false;
+            return null;
         }
+
+        var playerId = Guid.NewGuid().ToString("N");
 
         var player = new PlayerDto
         {
+            PlayerId = playerId,
             Username = data.Username
         };
 
@@ -36,21 +39,21 @@ public class AddPlayerToGameService(
             player.SetIsAdmin(true);
         }
 
-        bool addToGameResult = game.Players.TryAdd(connectionId, player);
+        bool addToGameResult = game.Players.TryAdd(playerId, player);
 
         if (!addToGameResult)
         {
-            return false;
+            return null;
         }
 
-        bool addToMapResult = _playersGamesMap.Map.TryAdd(connectionId, data.GameCode);
+        bool addToMapResult = _playersGamesMap.Map.TryAdd(connectionId, (playerId, data.GameCode));
 
         if (!addToMapResult)
         {
-            game!.Players.Remove(connectionId, out _);
-            return false;
+            game!.Players.Remove(playerId, out _);
+            return null;
         }
 
-        return true;
+        return playerId;
     }
 }

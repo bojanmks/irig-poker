@@ -1,18 +1,18 @@
 import { useMemo } from "react";
 
-import connection from "@/features/http/clients/hubClient";
 import { useAppSelector } from "@/features/store/hooks";
 
 export function usePlayerInfo() {
     const gameState = useAppSelector((state) => state.gameState.gameState);
+    const playerId = useAppSelector((state) => state.gameState.playerId);
 
     const isAdmin = useMemo(() => {
-        if (!connection?.connectionId) {
+        if (!playerId) {
             return false;
         }
 
-        return gameState?.players[connection.connectionId]?.isAdmin ?? false;
-    }, [gameState?.players]);
+        return gameState?.players[playerId]?.isAdmin ?? false;
+    }, [gameState?.players, playerId]);
 
     return {
         isAdmin

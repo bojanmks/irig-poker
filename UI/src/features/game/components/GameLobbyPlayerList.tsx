@@ -17,11 +17,11 @@ export const GameLobbyPlayerList = () => {
             </div>
             <div className="space-y-2">
                 {gameState?.players &&
-                    Object.keys(gameState.players).map((playerConnectionId) => {
-                        const player = gameState.players[playerConnectionId];
+                    Object.keys(gameState.players).map((playerId) => {
+                        const player = gameState.players[playerId];
                         return (
                             <div
-                                key={playerConnectionId}
+                                key={playerId}
                                 className="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted transition-colors"
                             >
                                 <Avatar>

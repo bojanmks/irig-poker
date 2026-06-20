@@ -15,7 +15,6 @@ import { useGamePageInitialization } from "../hooks/useGamePageInitialization";
 import { useGamePageWrapperClass } from "../hooks/useGamePageWrapperClass";
 import { useJoinGame } from "../hooks/useJoinGame";
 import { useUsernameFromRoute } from "../hooks/useUsernameFromRoute";
-import type { PublicGameState } from "../models/PublicGameState";
 
 const GamePage = () => {
   const hub = useHub();
@@ -37,12 +36,12 @@ const GamePage = () => {
     hub,
     gameCode: gameCode!,
     username: username,
-    onJoined: useCallback((gameState: PublicGameState) => {
+    onJoined: useCallback(({ gameState, playerId: yourPlayerId }) => {
       if (([GamePageState.None, GamePageState.EnterNameToJoin] as GamePageState[]).includes(pageState)) {
         setPageState(GamePageState.Ready)
       }
       
-      dispatch(setGameState(gameState));
+      dispatch(setGameState({ gameState, playerId: yourPlayerId }));
     }, [pageState, setPageState, dispatch])
   });
 

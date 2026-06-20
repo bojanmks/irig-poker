@@ -26,7 +26,7 @@ export function StartGameButton() {
         setShowLoading(true);
 
         try {
-            await invoke<void>("StartGame");
+            await invoke<void>("StartGame", {});
         }
         finally {
             setShowLoading(false);

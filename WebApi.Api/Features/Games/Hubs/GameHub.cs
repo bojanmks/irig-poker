@@ -14,7 +14,7 @@ public class GameHub(
     TimeProvider _timeProvider
 ) : Hub
 {
-    public async Task<HubActionResponse<PublicGameStateDto>> JoinGame(HubActionRequest<JoinGameDto> request)
+    public async Task<HubActionResponse<JoinGameResultDto>> JoinGame(HubActionRequest<JoinGameDto> request)
     {
         var result = await _mediator.Send(new JoinGameCommand(request.Data), Context.ConnectionAborted);
 
@@ -22,11 +22,13 @@ public class GameHub(
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, request.Data.GameCode, Context.ConnectionAborted);
 
+            var player = result.Data.GameState.Players[result.Data.PlayerId];
+
             await Clients
                 .GroupExcept(request.Data.GameCode, Context.ConnectionId)
                 .SendAsync("PlayerJoined", HubNotification.From(new PlayerJoinNotification(
-                    Context.ConnectionId,
-                    result.Data.Players[Context.ConnectionId]
+                    result.Data.PlayerId,
+                    player
                 ), _timeProvider), Context.ConnectionAborted);
         }
 
@@ -56,7 +58,7 @@ public class GameHub(
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, result.Data.GameCode);
             await Clients
                 .GroupExcept(result.Data.GameCode, Context.ConnectionId)
-                .SendAsync("PlayerLeft", HubNotification.From(Context.ConnectionId, _timeProvider));
+                .SendAsync("PlayerLeft", HubNotification.From(result.Data.PlayerId!, _timeProvider));
         }
     }
 }
