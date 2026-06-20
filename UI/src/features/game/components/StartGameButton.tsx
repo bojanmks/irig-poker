@@ -1,7 +1,7 @@
 import { useHub } from "@/features/http/hooks/useHub";
 import { usePlayerInfo } from "../hooks/usePlayerInfo";
 import { useTranslation } from "react-i18next";
-import { Button } from "@/features/shared/components/Button";
+import { Button } from "@/features/shared/components/shadcn/Button";
 import { useCallback, useMemo, useState } from "react";
 import { useAppSelector } from "@/features/store/hooks";
 

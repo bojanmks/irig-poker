@@ -5,7 +5,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-} from "@/features/shared/components/Select";
+} from "@/features/shared/components/shadcn/Select";
 
 const LanguageSwitcher = () => {
   const { i18n, t } = useTranslation();

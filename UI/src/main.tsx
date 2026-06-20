@@ -8,7 +8,7 @@ import AppRoutes from './features/routing/components/AppRoutes.tsx';
 import { Provider } from 'react-redux';
 import { store } from './features/store';
 import { ThemeSync } from './features/store/ThemeSync';
-import { Toaster } from './features/shared/components/Sonner.tsx';
+import { Toaster } from './features/shared/components/shadcn/Sonner.tsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(

@@ -1,4 +1,4 @@
-import { Button } from "@/features/shared/components/Button";
+import { Button } from "@/features/shared/components/shadcn/Button";
 import { showSuccess } from "@/features/shared/utils/toast";
 import { CopyIcon } from "lucide-react";
 import { useState } from "react";

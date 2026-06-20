@@ -1,11 +1,11 @@
 import { Moon, Sun } from "lucide-react"
-import { Button } from "@/features/shared/components/Button"
+import { Button } from "@/features/shared/components/shadcn/Button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/features/shared/components/DropdownMenu"
+} from "@/features/shared/components/shadcn/DropdownMenu"
 import { useTranslation } from "react-i18next"
 
 import { useAppDispatch } from "@/features/store/hooks"
