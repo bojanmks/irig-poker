@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form"
+import { useForm, type FieldValues, type Path, type SubmitHandler } from "react-hook-form"
 import { z, ZodType } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useTranslation } from "react-i18next"
@@ -14,15 +14,15 @@ export type FieldConfig = {
   validation: ZodType
 }
 
-type DynamicFormProps = {
+type DynamicFormProps<TFormData extends Record<string, unknown>> = {
   fields: FieldConfig[]
-  onSubmit: (data: Record<string, unknown>) => void
+  onSubmit: (data: TFormData) => void
   submitLabel: string
   autoFocusFieldName?: string
   showLoading?: boolean
 }
 
-export function DynamicForm({ fields, onSubmit, submitLabel, autoFocusFieldName, showLoading = false }: DynamicFormProps) {
+export function DynamicForm<TFormData extends Record<string, unknown> = Record<string, unknown>>({ fields, onSubmit, submitLabel, autoFocusFieldName, showLoading = false }: DynamicFormProps<TFormData>) {
   const { t } = useTranslation()
 
   const schema = z.object(
@@ -55,10 +55,10 @@ export function DynamicForm({ fields, onSubmit, submitLabel, autoFocusFieldName,
           <div key={field.name} className="space-y-1">
             <Input
               placeholder={t(field.label)}
-              {...register(field.name)}
+              {...register(field.name as Path<FieldValues>)}
               ref={(el) => {
-                register(field.name).ref(el) // for react-hook-form
-                inputRefs.current[field.name] = el // for our manual focus
+                register(field.name as Path<FieldValues>).ref(el)
+                inputRefs.current[field.name] = el
               }}
             />
             {errors[field.name]?.message && (
@@ -74,7 +74,7 @@ export function DynamicForm({ fields, onSubmit, submitLabel, autoFocusFieldName,
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit as SubmitHandler<FieldValues>)} className="space-y-4">
       {fields.map(renderField)}
       <Button type="submit" loading={isSubmitting || showLoading} className="w-full">
         {t(submitLabel)}

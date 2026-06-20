@@ -41,7 +41,7 @@ export function CreateGamePage() {
   },[navigate, send]);
 
   return (
-    <DynamicForm
+    <DynamicForm<{ username: string }>
       fields={formFields}
       onSubmit={handleSubmit}
       submitLabel="game.createPrivateGame"

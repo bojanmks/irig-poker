@@ -12,16 +12,18 @@ const formFields: FieldConfig[] = [
     }
 ];
 
+type HandleSubmitData = { username: string };
+
 export function EnterNameForm({ onSubmit }: { onSubmit: (username: string) => void }) {
   const [showFormLoading, setShowFormLoading] = useState(false);
 
-  const handleSubmit = useCallback((data: { username: string }) => {
+  const handleSubmit = useCallback((data: HandleSubmitData) => {
     setShowFormLoading(true);
     onSubmit(data.username);
   }, [onSubmit]);
 
   return (
-      <DynamicForm
+      <DynamicForm<HandleSubmitData>
         fields={formFields}
         onSubmit={handleSubmit}
         submitLabel="game.joinGame"
