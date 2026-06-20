@@ -1,7 +1,9 @@
-import { DynamicForm, type FieldConfig } from "@/features/form/components/DynamicForm";
-import { usernameValidation } from "../gameValidationRules";
 import { useCallback, useState } from "react";
+
+import { DynamicForm, type FieldConfig } from "@/features/form/components/DynamicForm";
 import { FieldType } from "@/features/form/consts/FieldType";
+
+import { usernameValidation } from "../gameValidationRules";
 
 const formFields: FieldConfig[] = [
     {

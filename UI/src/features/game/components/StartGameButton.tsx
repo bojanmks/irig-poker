@@ -1,9 +1,11 @@
-import { useHub } from "@/features/http/hooks/useHub";
-import { usePlayerInfo } from "../hooks/usePlayerInfo";
-import { useTranslation } from "react-i18next";
-import { Button } from "@/features/shared/components/shadcn/Button";
 import { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+
+import { useHub } from "@/features/http/hooks/useHub";
+import { Button } from "@/features/shared/components/shadcn/Button";
 import { useAppSelector } from "@/features/store/hooks";
+
+import { usePlayerInfo } from "../hooks/usePlayerInfo";
 
 export function StartGameButton() {
     const { t } = useTranslation();

@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+cd UI
+npx --no-install lint-staged

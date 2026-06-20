@@ -1,8 +1,10 @@
-import { Button } from "@/features/shared/components/shadcn/Button";
-import { showSuccess } from "@/features/shared/utils/toast";
-import { CopyIcon } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+
+import { CopyIcon } from "lucide-react";
+
+import { Button } from "@/features/shared/components/shadcn/Button";
+import { showSuccess } from "@/features/shared/utils/toast";
 
 export const CopyGameLinkButton = () => {
   const [isHovered, setIsHovered] = useState(false);

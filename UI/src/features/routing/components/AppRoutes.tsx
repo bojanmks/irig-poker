@@ -1,8 +1,10 @@
 import { Navigate, Route } from "react-router-dom";
-import type { AppRoute } from "../models/AppRoute";
-import BaseLayout from "@/features/shared/layouts/BaseLayout";
+
 import { CreateGamePage } from "@/features/createGame/pages/CreateGamePage";
 import GamePage from "@/features/game/pages/GamePage";
+import BaseLayout from "@/features/shared/layouts/BaseLayout";
+
+import type { AppRoute } from "../models/AppRoute";
 
 const routes: AppRoute[] = [
     {

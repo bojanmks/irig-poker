@@ -1,6 +1,7 @@
 import { useCallback } from "react";
-import { useAppDispatch } from "@/features/store/hooks";
+
 import { gameStarted } from "@/features/game/store/gameStateSlice";
+import { useAppDispatch } from "@/features/store/hooks";
 
 export function useGameStartListeners() {
     const dispatch = useAppDispatch();

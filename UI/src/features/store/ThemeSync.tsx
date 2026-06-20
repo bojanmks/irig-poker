@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+
 import { useAppSelector } from "./hooks";
 
 export function ThemeSync({ children }: { children: React.ReactNode }) {

@@ -1,10 +1,13 @@
-import { useForm, type FieldValues, type Path, type SubmitHandler } from "react-hook-form"
-import { z, ZodType } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useTranslation } from "react-i18next"
-import { Input } from "@/features/shared/components/shadcn/Input"
-import { Button } from "@/features/shared/components/shadcn/Button"
 import { useEffect, useRef } from "react"
+import { type FieldValues, type Path, type SubmitHandler,useForm } from "react-hook-form"
+import { useTranslation } from "react-i18next"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z, ZodType } from "zod"
+
+import { Button } from "@/features/shared/components/shadcn/Button"
+import { Input } from "@/features/shared/components/shadcn/Input"
+
 import { FieldType } from "../consts/FieldType"
 
 export type FieldConfig = {

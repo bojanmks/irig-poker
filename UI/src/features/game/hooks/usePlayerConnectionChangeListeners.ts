@@ -1,8 +1,10 @@
-import type { Player } from "../models/Player";
 import { useCallback } from "react";
+
+import { playerJoined, playerLeft } from "@/features/game/store/gameStateSlice";
 import type { HubNotification } from "@/features/http/models/HubNotification";
 import { useAppDispatch } from "@/features/store/hooks";
-import { playerJoined, playerLeft } from "@/features/game/store/gameStateSlice";
+
+import type { Player } from "../models/Player";
 
 export function usePlayerConnectionChangeListeners() {
     const dispatch = useAppDispatch();

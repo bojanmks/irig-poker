@@ -1,4 +1,5 @@
-import { useEffect, useRef, type SetStateAction } from "react";
+import { type SetStateAction,useEffect, useRef } from "react";
+
 import { GamePageState } from "../consts/GamePageState";
 
 export function useGamePageInitialization({

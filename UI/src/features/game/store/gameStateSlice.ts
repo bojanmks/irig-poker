@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { PublicGameState } from '@/features/game/models/PublicGameState';
+
 import type { Player } from '@/features/game/models/Player';
+import type { PublicGameState } from '@/features/game/models/PublicGameState';
 
 type GameStateState = {
   gameState: PublicGameState | null;

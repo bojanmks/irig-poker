@@ -1,19 +1,21 @@
-import { useParams } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
-import { GameLobby } from "../components/GameLobby";
-import { GamePageState } from "../consts/GamePageState";
-import { useUsernameFromRoute } from "../hooks/useUsernameFromRoute";
-import { useJoinGame } from "../hooks/useJoinGame";
-import { EnterNameForm } from "../components/EnterNameForm";
-import ActualGame from "../components/ActualGame";
-import { useGamePageWrapperClass } from "../hooks/useGamePageWrapperClass";
-import { useDiconnectOnPageLeave } from "../hooks/useDisconnectOnPageLeave";
+import { useParams } from "react-router-dom";
+
+import { resetGameState,setGameState } from "@/features/game/store/gameStateSlice";
 import { useHub } from "@/features/http/hooks/useHub";
-import { GamePageLoading } from "../components/GamePageLoading";
-import { useGamePageInitialization } from "../hooks/useGamePageInitialization";
-import type { PublicGameState } from "../models/PublicGameState";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
-import { setGameState, resetGameState } from "@/features/game/store/gameStateSlice";
+
+import ActualGame from "../components/ActualGame";
+import { EnterNameForm } from "../components/EnterNameForm";
+import { GameLobby } from "../components/GameLobby";
+import { GamePageLoading } from "../components/GamePageLoading";
+import { GamePageState } from "../consts/GamePageState";
+import { useDiconnectOnPageLeave } from "../hooks/useDisconnectOnPageLeave";
+import { useGamePageInitialization } from "../hooks/useGamePageInitialization";
+import { useGamePageWrapperClass } from "../hooks/useGamePageWrapperClass";
+import { useJoinGame } from "../hooks/useJoinGame";
+import { useUsernameFromRoute } from "../hooks/useUsernameFromRoute";
+import type { PublicGameState } from "../models/PublicGameState";
 
 const GamePage = () => {
   const hub = useHub();

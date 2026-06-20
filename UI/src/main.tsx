@@ -1,14 +1,16 @@
 import './index.css'
 import "./lib/i18n.ts";
-import App from './App.tsx'
+
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom';
-import AppRoutes from './features/routing/components/AppRoutes.tsx';
 import { Provider } from 'react-redux';
+import { createBrowserRouter, createRoutesFromElements, Route,RouterProvider } from 'react-router-dom';
+import ReactDOM from 'react-dom/client';
+
+import App from './App.tsx'
+import AppRoutes from './features/routing/components/AppRoutes.tsx';
+import { Toaster } from './features/shared/components/shadcn/Sonner.tsx';
 import { store } from './features/store';
 import { ThemeSync } from './features/store/ThemeSync';
-import { Toaster } from './features/shared/components/shadcn/Sonner.tsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(

@@ -1,7 +1,9 @@
 import { useEffect } from "react";
-import { GamePageState } from "../consts/GamePageState";
-import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
+
 import { setAdditionalClass } from "@/features/shared/store/wrapperClassSlice";
+import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
+
+import { GamePageState } from "../consts/GamePageState";
 
 export function useGamePageWrapperClass(
     gamePageState: GamePageState

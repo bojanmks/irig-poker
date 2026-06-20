@@ -1,5 +1,6 @@
-import connection from "@/features/http/clients/hubClient";
 import { useMemo } from "react";
+
+import connection from "@/features/http/clients/hubClient";
 import { useAppSelector } from "@/features/store/hooks";
 
 export function usePlayerInfo() {

@@ -1,7 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import themeReducer from '@/features/themes/store/themeSlice';
-import wrapperClassReducer from '@/features/shared/store/wrapperClassSlice';
+
 import gameStateReducer from '@/features/game/store/gameStateSlice';
+import wrapperClassReducer from '@/features/shared/store/wrapperClassSlice';
+import themeReducer from '@/features/themes/store/themeSlice';
 
 export const store = configureStore({
   reducer: {

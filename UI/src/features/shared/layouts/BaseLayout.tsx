@@ -1,11 +1,13 @@
 // BaseLayout.tsx
-import LanguageSwitcher from "@/features/localization/components/LanguageSwitcher"
-import ThemeSwitcher from "@/features/themes/components/ThemeSwitcher"
-import { Outlet } from "react-router-dom"
-import clsx from "clsx"
 import { useMemo } from "react"
+import { Outlet } from "react-router-dom"
+
+import clsx from "clsx"
 import { GitBranch } from "lucide-react"
+
+import LanguageSwitcher from "@/features/localization/components/LanguageSwitcher"
 import { useAppSelector } from "@/features/store/hooks"
+import ThemeSwitcher from "@/features/themes/components/ThemeSwitcher"
 
 const BaseLayout = () => {
   const additionalClass = useAppSelector((state) => state.wrapperClass.additionalClass)

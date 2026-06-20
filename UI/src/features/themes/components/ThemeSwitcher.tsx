@@ -1,4 +1,7 @@
+import { useTranslation } from "react-i18next"
+
 import { Moon, Sun } from "lucide-react"
+
 import { Button } from "@/features/shared/components/shadcn/Button"
 import {
   DropdownMenu,
@@ -6,8 +9,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/features/shared/components/shadcn/DropdownMenu"
-import { useTranslation } from "react-i18next"
-
 import { useAppDispatch } from "@/features/store/hooks"
 import { setTheme } from "@/features/themes/store/themeSlice"
 

@@ -1,11 +1,12 @@
-import { useNavigate } from "react-router-dom"
-import { useRequest } from "@/features/http/hooks/useRequest"
-import { DynamicForm, type FieldConfig } from "@/features/form/components/DynamicForm"
-import { usernameValidation } from "@/features/game/gameValidationRules";
 import { useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom"
+
+import { DynamicForm, type FieldConfig } from "@/features/form/components/DynamicForm"
 import { FieldType } from "@/features/form/consts/FieldType";
-import { useAppDispatch } from "@/features/store/hooks";
+import { usernameValidation } from "@/features/game/gameValidationRules";
+import { useRequest } from "@/features/http/hooks/useRequest"
 import { setAdditionalClass } from "@/features/shared/store/wrapperClassSlice";
+import { useAppDispatch } from "@/features/store/hooks";
 
 const formFields: FieldConfig[] = [
   {

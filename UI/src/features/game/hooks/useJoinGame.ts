@@ -1,9 +1,12 @@
 import { useEffect, useRef } from "react";
-import { type HubMethods } from "@/features/http/hooks/useHub";
 import { useNavigate } from "react-router-dom";
+
+import { type HubMethods } from "@/features/http/hooks/useHub";
+
 import type { PublicGameState } from "../models/PublicGameState";
-import { usePlayerConnectionChangeListeners } from "./usePlayerConnectionChangeListeners";
+
 import { useGameStartListeners } from "./useGameStartListeners";
+import { usePlayerConnectionChangeListeners } from "./usePlayerConnectionChangeListeners";
 
 type UseJoinGameParams = {
   hub: HubMethods,

@@ -1,14 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
-import * as signalR from "@microsoft/signalr";
-import connection from "../clients/hubClient";
-import type { HubConnection } from "@microsoft/signalr";
-import { useAppSelector } from "@/features/store/hooks";
-import type { HubNotification } from "../models/HubNotification";
-import { addHangingNotification, clearHangingNotifications, hangingNotifications } from "./useHangingNotifications";
-import { showError } from "@/features/shared/utils/toast";
-import type { HubActionResponse } from "../models/HubActionResponse";
 import { useTranslation } from "react-i18next";
+
+import type { HubConnection } from "@microsoft/signalr";
+import * as signalR from "@microsoft/signalr";
+
+import { showError } from "@/features/shared/utils/toast";
+import { useAppSelector } from "@/features/store/hooks";
+
+import connection from "../clients/hubClient";
 import type { HubActionRequest } from "../models/HubActionRequest";
+import type { HubActionResponse } from "../models/HubActionResponse";
+import type { HubNotification } from "../models/HubNotification";
+
+import { addHangingNotification, clearHangingNotifications, hangingNotifications } from "./useHangingNotifications";
 
 export type HubMethods = {
   connected: boolean;

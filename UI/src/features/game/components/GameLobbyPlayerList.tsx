@@ -1,6 +1,8 @@
-import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
-import { UsersIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
+
+import { UsersIcon } from "lucide-react";
+
 import { useAppSelector } from "@/features/store/hooks";
 
 export const GameLobbyPlayerList = () => {
