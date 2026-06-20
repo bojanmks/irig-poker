@@ -14,7 +14,7 @@ export type HubMethods = {
   connected: boolean;
   on: HubConnection["on"];
   off: HubConnection["off"];
-  invoke: <T = any>(methodName: string, ...args: any[]) => Promise<HubActionResponse<T>>;
+  invoke: <T = unknown>(methodName: string, arg: unknown) => Promise<HubActionResponse<T>>;
   disconnect: () => Promise<void>;
 };
 
@@ -27,7 +27,7 @@ export function useHub(): HubMethods {
   useEffect(() => {
     const start = async () => {
       if (connection.state === signalR.HubConnectionState.Connected) {
-        !connected && setConnected(true);
+        if (!connected) setConnected(true);
         return;
       }
 
@@ -55,7 +55,7 @@ export function useHub(): HubMethods {
   const on = useCallback((...args: Parameters<HubConnection["on"]>): ReturnType<HubConnection["on"]> => {
     const [methodName, originalHandler] = args;
 
-    const wrappedHandler = (notification: HubNotification<any>) => {
+    const wrappedHandler = (notification: HubNotification<unknown>) => {
       if (!gameState) {
         addHangingNotification({ handler: originalHandler, notification });
         return;
@@ -67,9 +67,9 @@ export function useHub(): HubMethods {
     return connection.on(methodName, wrappedHandler);
   }, [gameState]);
 
-  const invoke = useCallback(async <T = any>(methodName: string, arg: any) => {
+  const invoke = useCallback(async <T = unknown>(methodName: string, arg: unknown) => {
     try {
-      const request: HubActionRequest<any> = {
+      const request: HubActionRequest<unknown> = {
         data: arg,
         languageCode: i18n.language
       };
@@ -98,7 +98,7 @@ export function useHub(): HubMethods {
       showError(t('common.anErrorOccurred'));
       throw error;
     }
-  }, []);
+  }, [i18n, t]);
 
   useEffect(() => {
     if (!gameState || !hangingNotifications.length) {

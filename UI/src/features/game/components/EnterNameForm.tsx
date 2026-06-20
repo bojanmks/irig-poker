@@ -18,7 +18,7 @@ export function EnterNameForm({ onSubmit }: { onSubmit: (username: string) => vo
   const handleSubmit = useCallback((data: { username: string }) => {
     setShowFormLoading(true);
     onSubmit(data.username);
-  }, []);
+  }, [onSubmit]);
 
   return (
       <DynamicForm

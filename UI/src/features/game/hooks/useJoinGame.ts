@@ -21,28 +21,29 @@ export function useJoinGame({
   const navigate = useNavigate();
   const { onPlayerJoined, onPlayerLeft } = usePlayerConnectionChangeListeners();
   const { onGameStarted } = useGameStartListeners();
+  const { connected: hubConnected, on: hubOn, off: hubOff, invoke: hubInvoke } = hub;
 
   const hasJoinedGame = useRef(false);
 
   useEffect(() => {
-    if (hub.connected) {
-      hub.on("PlayerJoined", onPlayerJoined);
-      hub.on("PlayerLeft", onPlayerLeft);
-      hub.on("GameStarted", onGameStarted);
+    if (hubConnected) {
+      hubOn("PlayerJoined", onPlayerJoined);
+      hubOn("PlayerLeft", onPlayerLeft);
+      hubOn("GameStarted", onGameStarted);
     }
 
     return () => {
-      hub.off("PlayerJoined");
-      hub.off("PlayerLeft");
-      hub.off("GameStarted");
+      hubOff("PlayerJoined");
+      hubOff("PlayerLeft");
+      hubOff("GameStarted");
     }
-  }, [hub.connected, hub.on, hub.off, onPlayerJoined, onPlayerLeft, onGameStarted]);
+  }, [hubConnected, hubOn, hubOff, onPlayerJoined, onPlayerLeft, onGameStarted]);
 
   useEffect(() => {
-    if (hasJoinedGame.current || !hub.connected || !username) return;
+    if (hasJoinedGame.current || !hubConnected || !username) return;
 
     (async () => {
-      const response = await hub.invoke<PublicGameState>("JoinGame", { gameCode, username });
+      const response = await hubInvoke<PublicGameState>("JoinGame", { gameCode, username });
 
       if (!response.isSuccess) {
         navigate('/');
@@ -52,5 +53,5 @@ export function useJoinGame({
       hasJoinedGame.current = true;
       onJoined?.(response.data!);
     })();
-  }, [hasJoinedGame.current, hub.connected, gameCode, username, onJoined, navigate]);
+  }, [hubConnected, hubInvoke, gameCode, username, onJoined, navigate]);
 }

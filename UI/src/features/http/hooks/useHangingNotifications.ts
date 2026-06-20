@@ -1,6 +1,6 @@
 import type { HubNotification } from "../models/HubNotification";
 
-type HangingNotification = { handler: Function; notification: HubNotification<any> };
+type HangingNotification = { handler: (...args: unknown[]) => unknown; notification: HubNotification<unknown> };
 
 export let hangingNotifications: HangingNotification[] = [];
 

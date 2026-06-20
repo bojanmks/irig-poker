@@ -8,7 +8,7 @@ import type { FieldErrors } from "../models/FieldError";
 export function useRequest() {
   const { i18n, t } = useTranslation();
 
-  const send = async<TBody = any, TResponse = any> (config: AxiosRequestConfig<TBody>): Promise<EndpointResponse<TResponse>> => {
+  const send = async<TBody = unknown, TResponse = unknown> (config: AxiosRequestConfig<TBody>): Promise<EndpointResponse<TResponse>> => {
     try {
       config.data ??= config.data = {} as TBody;
       config.headers ??= {};

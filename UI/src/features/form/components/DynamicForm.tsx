@@ -16,7 +16,7 @@ export type FieldConfig = {
 
 type DynamicFormProps = {
   fields: FieldConfig[]
-  onSubmit: (data: any) => void
+  onSubmit: (data: Record<string, unknown>) => void
   submitLabel: string
   autoFocusFieldName?: string
   showLoading?: boolean

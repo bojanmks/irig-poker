@@ -1,4 +1,4 @@
-import { useEffect, useState, type SetStateAction } from "react";
+import { useEffect, useRef, type SetStateAction } from "react";
 import { GamePageState } from "../consts/GamePageState";
 
 export function useGamePageInitialization({
@@ -12,10 +12,10 @@ export function useGamePageInitialization({
     pageState: GamePageState,
     setPageState: (value: SetStateAction<GamePageState>) => void;
 }) {
-    const [gamePageInitialized, setGamePageInitialized] = useState(false);
+    const initialized = useRef(false);
 
     useEffect(() => {
-        if (gamePageInitialized || !usernameInitialized) {
+        if (initialized.current || !usernameInitialized) {
             return;
         }
 
@@ -23,6 +23,6 @@ export function useGamePageInitialization({
             setPageState(GamePageState.EnterNameToJoin);
         }
 
-        setGamePageInitialized(true);
-    }, [gamePageInitialized, setGamePageInitialized, usernameInitialized, username]);
+        initialized.current = true;
+    }, [usernameInitialized, username, pageState, setPageState]);
 }

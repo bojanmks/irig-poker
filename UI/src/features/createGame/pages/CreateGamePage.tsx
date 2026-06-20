@@ -38,7 +38,7 @@ export function CreateGamePage() {
     navigate(`/${result.data}`, {
       state: { username: data.username }
     })
-  },[]);
+  },[navigate, send]);
 
   return (
     <DynamicForm
