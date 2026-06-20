@@ -2,13 +2,13 @@
 using WebApi.Application.Core.ApplicationUsers;
 using WebApi.Application.Core.AppSettings;
 using WebApi.Application.Core.Localization;
+using WebApi.Application.Features.Games.Commands;
 using WebApi.Application.Features.Games.Services;
-using WebApi.Application.Features.Games.UseCases;
 using WebApi.Implementation.Core.Validation.Models;
 
 namespace WebApi.Implementation.Features.Games.Validators;
 
-public class StartGameValidator : BaseValidator<StartGameUseCase>
+public class StartGameValidator : BaseValidator<StartGameCommand>
 {
     public StartGameValidator(
         ITranslator translator,
@@ -17,7 +17,7 @@ public class StartGameValidator : BaseValidator<StartGameUseCase>
         AppSettings appSettings
     ) : base(translator)
     {
-        RuleFor(x => x.Data)
+        RuleFor(x => x)
             .CustomAsync(async (_, context, ct) =>
             {
                 var applicationUser = await applicationUserResolver.ResolveAsync(ct);

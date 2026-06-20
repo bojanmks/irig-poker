@@ -1,22 +1,21 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using WebApi.Api.Core.Hubs.Models;
 using WebApi.Api.Core.Result.Extensions;
-using WebApi.Application.Core.UseCases;
-using WebApi.Application.Features.Games.UseCases;
-using WebApi.Common.Features.Games.Disconnecting.Models;
+using WebApi.Application.Features.Games.Commands;
+using WebApi.Common.Core.Cqrs;
 using WebApi.Common.Features.Games.Joining.Models;
 using WebApi.Common.Features.Games.Models;
-using WebApi.Implementation.Core.UseCases.Execution;
 
 namespace WebApi.Api.Features.Games.Hubs;
 
 public class GameHub(
-    UseCaseMediator _mediator
+    IMediator _mediator
 ) : Hub
 {
     public async Task<HubActionResponse<PublicGameStateDto>> JoinGame(HubActionRequest<JoinGameDto> request)
     {
-        var result = await _mediator.ExecuteAsync<JoinGameUseCase, JoinGameDto, PublicGameStateDto>(new JoinGameUseCase(request.Data), Context.ConnectionAborted);
+        var result = await _mediator.Send(new JoinGameCommand(request.Data), Context.ConnectionAborted);
 
         if (result.IsSuccess)
         {
@@ -36,7 +35,7 @@ public class GameHub(
 
     public async Task<HubActionResponse<string>> StartGame(HubActionRequest<Empty> _)
     {
-        var result = await _mediator.ExecuteAsync<StartGameUseCase, Empty, string>(new StartGameUseCase(Empty.Value), Context.ConnectionAborted);
+        var result = await _mediator.Send(new StartGameCommand(), Context.ConnectionAborted);
 
         if (result.IsSuccess)
         {
@@ -50,7 +49,7 @@ public class GameHub(
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        var result = await _mediator.ExecuteAsync<DisconnectUseCase, string, DisconnectResultDto>(new DisconnectUseCase(Context.ConnectionId));
+        var result = await _mediator.Send(new DisconnectCommand(Context.ConnectionId));
 
         if (result.IsSuccess && !string.IsNullOrWhiteSpace(result.Data.GameCode))
         {
@@ -59,6 +58,5 @@ public class GameHub(
                 .GroupExcept(result.Data.GameCode, Context.ConnectionId)
                 .SendAsync("PlayerLeft", HubNotification.From(Context.ConnectionId));
         }
-
     }
 }

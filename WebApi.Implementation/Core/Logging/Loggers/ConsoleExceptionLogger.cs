@@ -1,4 +1,4 @@
-﻿using WebApi.Application.Core.Logging;
+using WebApi.Application.Core.Logging;
 
 namespace WebApi.Implementation.Core.Logging.Loggers;
 

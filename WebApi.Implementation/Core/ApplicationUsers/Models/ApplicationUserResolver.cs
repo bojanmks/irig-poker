@@ -2,14 +2,12 @@
 using WebApi.Application.Core.Localization;
 using WebApi.Application.Features.Games.Services;
 using WebApi.Common.Core.Auth.Enums;
-using WebApi.Implementation.Core.UseCases.Stores;
 using WebApi.Implementation.Features.Games.Stores;
 
 namespace WebApi.Implementation.Core.ApplicationUsers.Models;
 
 public class ApplicationUserResolver(
     ILocaleResolver _localeGetter,
-    UserRoleUseCaseMapStore _userRoleUseCaseMapStore,
     PlayersGamesMap _playersGamesMap,
     IGetGameService _getGameService
 ) : IApplicationUserResolver
@@ -24,7 +22,6 @@ public class ApplicationUserResolver(
         {
             Locale = locale,
             Role = UserRole.NotPlaying,
-            AllowedUseCases = _userRoleUseCaseMapStore.GetUseCases(UserRole.NotPlaying),
             ConnectionId = _connectionId
         };
 
@@ -47,8 +44,7 @@ public class ApplicationUserResolver(
             Locale = locale,
             ConnectionId = _connectionId,
             GameCode = gameCode,
-            Role = userRole,
-            AllowedUseCases = _userRoleUseCaseMapStore.GetUseCases(userRole)
+            Role = userRole
         };
     }
 

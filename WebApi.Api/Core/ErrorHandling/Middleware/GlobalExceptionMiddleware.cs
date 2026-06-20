@@ -4,7 +4,7 @@ using System.Net;
 using WebApi.Api.Core.Endpoints.Models;
 using WebApi.Application.Core.Localization;
 using WebApi.Application.Core.Logging;
-using WebApi.Application.Core.UseCases;
+using WebApi.Common.Core.Cqrs;
 
 namespace WebApi.Api.Core.ErrorHandling.Middleware;
 

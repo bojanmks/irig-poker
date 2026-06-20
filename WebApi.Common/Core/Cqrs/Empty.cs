@@ -1,4 +1,4 @@
-﻿namespace WebApi.Application.Core.UseCases;
+namespace WebApi.Common.Core.Cqrs;
 
 public class Empty
 {

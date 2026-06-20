@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 using WebApi.Application.Core.AppSettings;
 using WebApi.Application.Core.Localization;
+using WebApi.Application.Features.Games.Commands;
 using WebApi.Application.Features.Games.Services;
-using WebApi.Application.Features.Games.UseCases;
 using WebApi.Implementation.Core.Validation.Models;
 
 namespace WebApi.Implementation.Features.Games.Validators;
 
-public class JoinGameValidator : BaseValidator<JoinGameUseCase>
+public class JoinGameValidator : BaseValidator<JoinGameCommand>
 {
     public JoinGameValidator(
         ITranslator translator,

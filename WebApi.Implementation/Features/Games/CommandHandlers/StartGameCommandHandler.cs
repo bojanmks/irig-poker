@@ -1,17 +1,17 @@
-﻿using WebApi.Application.Core.ApplicationUsers;
-using WebApi.Application.Core.UseCases;
+using MediatR;
+using WebApi.Application.Core.ApplicationUsers;
+using WebApi.Application.Features.Games.Commands;
 using WebApi.Application.Features.Games.Services;
-using WebApi.Application.Features.Games.UseCases;
 using WebApi.Common.Core.Result.Models;
 
-namespace WebApi.Implementation.Features.Games.UseCaseHandlers;
+namespace WebApi.Implementation.Features.Games.CommandHandlers;
 
-public class StartGameUseCaseHandler(
+public class StartGameCommandHandler(
     IApplicationUserResolver _applicationUserResolver,
     IStartGameService _startGameService
-) : UseCaseHandler<StartGameUseCase, Empty, string>
+) : IRequestHandler<StartGameCommand, Result<string>>
 {
-    public override async Task<Result<string>> HandleAsync(StartGameUseCase useCase, CancellationToken cancellationToken = default)
+    public async Task<Result<string>> Handle(StartGameCommand command, CancellationToken cancellationToken)
     {
         var applicationUser = await _applicationUserResolver.ResolveAsync(cancellationToken);
 

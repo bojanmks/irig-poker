@@ -9,7 +9,6 @@ public class LoggingModule : BaseModule
 {
     public override void RegisterServices(IServiceCollection services)
     {
-        services.AddTransient<IUseCaseLogger, ConsoleUseCaseLogger>();
         services.AddTransient<IExceptionLogger, ConsoleExceptionLogger>();
     }
 }

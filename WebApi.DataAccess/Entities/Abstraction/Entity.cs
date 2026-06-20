@@ -1,4 +1,4 @@
-﻿using WebApi.Common;
+﻿using WebApi.Common.Core.Cqrs;
 
 namespace WebApi.DataAccess.Entities.Abstraction
 {
