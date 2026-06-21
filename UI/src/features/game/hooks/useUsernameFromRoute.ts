@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 
 export function useUsernameFromRoute() {
   const location = useLocation();
-  const [username, setUsername] = useState<string | null>(location.state?.username ?? null);
+  const [username, setUsername] = useState<string | undefined>(location.state?.username);
 
-  return { username, setUsername, initialized: true };
+  return { username, setUsername };
 }

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { type Dispatch, type SetStateAction,useCallback } from "react";
 
 import { DynamicForm, type FieldConfig } from "@/features/form/components/DynamicForm";
 import { FieldType } from "@/features/form/consts/FieldType";
@@ -16,13 +16,16 @@ const formFields: FieldConfig[] = [
 
 type HandleSubmitData = { username: string };
 
-export function EnterNameForm({ onSubmit }: { onSubmit: (username: string) => void }) {
-  const [showFormLoading, setShowFormLoading] = useState(false);
+type EnterNameFormParams = {
+  setUsername: Dispatch<SetStateAction<string | undefined>>
+};
+
+export function EnterNameForm(params: EnterNameFormParams) {
+  const { setUsername } = params;
 
   const handleSubmit = useCallback((data: HandleSubmitData) => {
-    setShowFormLoading(true);
-    onSubmit(data.username);
-  }, [onSubmit]);
+    setUsername(data.username);
+  }, [setUsername]);
 
   return (
       <DynamicForm<HandleSubmitData>
@@ -30,7 +33,6 @@ export function EnterNameForm({ onSubmit }: { onSubmit: (username: string) => vo
         onSubmit={handleSubmit}
         submitLabel="game.joinGame"
         autoFocusFieldName="username"
-        showLoading={showFormLoading}
       />
     )
 }

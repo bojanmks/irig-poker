@@ -12,7 +12,8 @@
     "alreadyStarted": "Game has already started",
     "isFull": "Game is full",
     "notEnoughPlayers": "Not enough players in the game",
-    "tooManyPlayers": "Too many players in the game"
+    "tooManyPlayers": "Too many players in the game",
+    "failedToJoin": "Failed to join the game"
   },
   "user": {
     "notInGame": "User is not in a game"

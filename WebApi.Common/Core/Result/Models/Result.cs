@@ -29,6 +29,11 @@ public class Result<T>
 
     public static Result<T> Error(params ReadOnlySpan<string> errors)
     {
+        if (errors.IsEmpty)
+        {
+            throw new ArgumentException("Errors cannot be empty.");
+        }
+
         return new Result<T>
         {
             Errors = [..errors],
@@ -38,6 +43,11 @@ public class Result<T>
 
     public static Result<T> ValidationError(IEnumerable<string>? errors = null, IEnumerable<FieldErrors>? fieldErrors = null)
     {
+        if (errors?.Any() == false  && fieldErrors?.Any() == false)
+        {
+            throw new ArgumentException("At least one error must be provided.");
+        }
+
         return new Result<T>
         {
             Errors = errors ?? Enumerable.Empty<string>(),

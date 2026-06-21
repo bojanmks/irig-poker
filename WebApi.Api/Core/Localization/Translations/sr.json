@@ -12,7 +12,8 @@
     "alreadyStarted": "Igra je već počela",
     "isFull": "Igra je puna",
     "notEnoughPlayers": "Nema dovoljno igrača u igri",
-    "tooManyPlayers": "Previše igrača je u igri"
+    "tooManyPlayers": "Previše igrača je u igri",
+    "failedToJoin": "Nije uspelo pridruživanje igri"
   },
   "user": {
     "notInGame": "Korisnik nije u igri"

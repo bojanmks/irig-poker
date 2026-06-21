@@ -21,7 +21,7 @@ public class JoinGameCommandHandler(
 
         if (playerId is null)
         {
-            return Result<JoinGameResultDto>.Error();
+            return Result<JoinGameResultDto>.Error(_translator.Translate("game.failedToJoin"));
         }
 
         var game = await _getGameService.GetAsync(command.Data.GameCode, cancellationToken);

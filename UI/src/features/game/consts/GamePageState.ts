@@ -1,7 +1,6 @@
 export const GamePageState = {
-    None: 1,
-    EnterNameToJoin: 2,
-    Ready: 3
+    Joining: 'Joining',
+    Ready: 'Ready'
 } as const;
 
 export type GamePageState = (typeof GamePageState)[keyof typeof GamePageState];
