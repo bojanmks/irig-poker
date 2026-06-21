@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { CrownIcon, UsersIcon } from "lucide-react";
@@ -17,12 +18,9 @@ export const GameLobbyPlayerList = () => {
     const playerId = useAppSelector((state) => state.gameState.playerId);
     const { t } = useTranslation();
 
-    const playerOrder = gameState?.playerOrder ?? [];
-    const players = playerOrder.length > 0
-        ? playerOrder.map(id => gameState!.players[id]).filter(Boolean)
-        : gameState?.players
-            ? Object.values(gameState.players)
-            : [];
+    const players = useMemo(() => {
+        return gameState ? Object.values(gameState.players) : [];
+    }, [gameState]);
 
     return (
         <>

@@ -5,7 +5,8 @@ namespace WebApi.Implementation.Features.Games.Services;
 
 public class DeleteGameService(
     GameStore _gameStore,
-    PlayersGamesMap _playersGamesMap
+    PlayersGamesMap _playersGamesMap,
+    IGameLockService _gameLockService
 ) : IDeleteGameService
 {
     public Task DeleteAsync(string gameCode, CancellationToken cancellationToken = default)
@@ -19,6 +20,8 @@ public class DeleteGameService(
         {
             _playersGamesMap.Map.TryRemove(player.Key, out _);
         }
+
+        _gameLockService.RemoveLock(gameCode);
 
         return Task.CompletedTask;
     }

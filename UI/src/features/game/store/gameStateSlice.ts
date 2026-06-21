@@ -29,12 +29,6 @@ const gameStateSlice = createSlice({
     playerJoined(state, action: PayloadAction<{ playerId: string; player: Player }>) {
       if (state.gameState) {
         state.gameState.players[action.payload.playerId] = action.payload.player;
-        if (!state.gameState.playerOrder.includes(action.payload.playerId)) {
-          state.gameState.playerOrder.push(action.payload.playerId);
-          if (!state.gameState.hasStarted) {
-            state.gameState.playerOrder.sort();
-          }
-        }
       }
     },
     playerLeft(state, action: PayloadAction<string>) {

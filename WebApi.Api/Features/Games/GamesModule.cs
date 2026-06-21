@@ -12,6 +12,7 @@ public class GamesModule : BaseModule
     {
         services.AddSingleton<GameStore>();
         services.AddSingleton<PlayersGamesMap>();
+        services.AddSingleton<IGameLockService, GameLockService>();
         services.AddTransient<ICreateGameService, CreateGameService>();
         services.AddTransient<IGetGameService, GetGameService>();
         services.AddTransient<IDeleteGameService, DeleteGameService>();

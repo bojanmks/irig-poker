@@ -6,7 +6,8 @@ using WebApi.Common.Features.Games.Models;
 namespace WebApi.Implementation.Features.Games.Services;
 
 public class CreateGameService(
-    GameStore _gameStore
+    GameStore _gameStore,
+    IGameLockService _gameLockService
 ) : ICreateGameService
 {
     public Task<string> CreateAsync(CancellationToken cancellationToken = default)
@@ -23,6 +24,8 @@ public class CreateGameService(
             gameCode = MakeGameCode();
             gameState.GameCode = gameCode;
         }
+
+        _gameLockService.CreateLock(gameCode);
 
         return Task.FromResult(gameCode);
     }

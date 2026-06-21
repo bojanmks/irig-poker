@@ -1,6 +1,8 @@
 using MediatR;
 using System.Collections.Frozen;
 using WebApi.Application.Core.ApplicationUsers;
+using WebApi.Application.Core.AppSettings;
+using WebApi.Application.Core.Localization;
 using WebApi.Application.Features.Games.Commands;
 using WebApi.Application.Features.Games.Services;
 using WebApi.Common.Core.Result.Models;
@@ -11,26 +13,58 @@ namespace WebApi.Implementation.Features.Games.CommandHandlers;
 public class StartGameCommandHandler(
     IApplicationUserResolver _applicationUserResolver,
     IStartGameService _startGameService,
-    IGetGameService _getGameService
+    IGetGameService _getGameService,
+    IGameLockService _gameLockService,
+    ITranslator _translator,
+    AppSettings _appSettings
 ) : IRequestHandler<StartGameCommand, Result<PublicGameStateDto>>
 {
     public async Task<Result<PublicGameStateDto>> Handle(StartGameCommand command, CancellationToken cancellationToken)
     {
         var applicationUser = await _applicationUserResolver.ResolveAsync(cancellationToken);
 
-        string gameCode = applicationUser.GameCode!;
-        await _startGameService.StartAsync(gameCode, cancellationToken);
+        if (string.IsNullOrWhiteSpace(applicationUser.GameCode))
+        {
+            return Result<PublicGameStateDto>.Error(_translator.Translate("user.notInGame"));
+        }
 
-        var game = await _getGameService.GetAsync(gameCode, cancellationToken);
+        string gameCode = applicationUser.GameCode;
 
-        var gameState = new PublicGameStateDto(
-            game!.GameCode,
-            game.HasStarted,
-            game.Players.ToFrozenDictionary(),
-            game.PlayerOrder.AsReadOnly(),
-            game.CurrentTurnPlayerId
-        );
+        using (await _gameLockService.AcquireLockAsync(gameCode, cancellationToken))
+        {
+            var game = await _getGameService.GetAsync(gameCode, cancellationToken);
 
-        return gameState;
+            if (game is null)
+            {
+                return Result<PublicGameStateDto>.Error(_translator.Translate("game.notFound"));
+            }
+
+            if (game.HasStarted)
+            {
+                return Result<PublicGameStateDto>.Error(_translator.Translate("game.alreadyStarted"));
+            }
+
+            if (game.Players.Count < _appSettings.MinPlayersPerGame)
+            {
+                return Result<PublicGameStateDto>.Error(_translator.Translate("game.notEnoughPlayers"));
+            }
+
+            if (game.Players.Count > _appSettings.MaxPlayersPerGame)
+            {
+                return Result<PublicGameStateDto>.Error(_translator.Translate("game.tooManyPlayers"));
+            }
+
+            await _startGameService.StartAsync(gameCode, cancellationToken);
+
+            var gameState = new PublicGameStateDto(
+                game!.GameCode,
+                game.HasStarted,
+                game.Players.ToFrozenDictionary(),
+                game.PlayerOrder.AsReadOnly(),
+                game.CurrentTurnPlayerId
+            );
+
+            return gameState;
+        }
     }
 }
