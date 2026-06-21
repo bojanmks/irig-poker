@@ -1,5 +1,6 @@
 using FluentValidation;
 using WebApi.Api.Core.Modules;
+using WebApi.Application;
 using WebApi.Implementation;
 using WebApi.Implementation.Core.Cqrs.Pipeline;
 
@@ -12,6 +13,7 @@ public class CqrsModule : BaseModule
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(typeof(ImplementationAssemblyMarker).Assembly);
+            cfg.RegisterServicesFromAssembly(typeof(ApplicationAssemblyMarker).Assembly);
 
             cfg.AddOpenBehavior(typeof(RequestLoggingBehavior<,>));
             cfg.AddOpenBehavior(typeof(RequestAuthorizationBehavior<,>));
@@ -35,7 +37,7 @@ public class CqrsModule : BaseModule
             foreach (var iface in type.GetInterfaces().Where(i =>
                 i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IValidator<>)))
             {
-                services.AddTransient(iface, type);
+                services.AddScoped(iface, type);
             }
         }
     }
