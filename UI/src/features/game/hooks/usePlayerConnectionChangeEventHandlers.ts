@@ -1,12 +1,12 @@
 import { useCallback } from "react";
 
-import { playerJoined, playerLeft } from "@/features/game/store/gameStateSlice";
+import { adminChanged, playerJoined, playerLeft } from "@/features/game/store/gameStateSlice";
 import type { HubNotification } from "@/features/http/models/HubNotification";
 import { useAppDispatch } from "@/features/store/hooks";
 
 import type { Player } from "../models/Player";
 
-export function usePlayerConnectionChangeListeners() {
+export function usePlayerConnectionChangeEventHandlers() {
     const dispatch = useAppDispatch();
 
     const onPlayerJoined = useCallback((notification: HubNotification<{ playerId: string, player: Player }>) => {
@@ -17,8 +17,13 @@ export function usePlayerConnectionChangeListeners() {
         dispatch(playerLeft(notification.data));
     }, [dispatch]);
 
+    const onAdminChanged = useCallback((notification: HubNotification<string>) => {
+        dispatch(adminChanged(notification.data));
+    }, [dispatch]);
+
     return {
         onPlayerJoined,
-        onPlayerLeft
+        onPlayerLeft,
+        onAdminChanged,
     }
 }

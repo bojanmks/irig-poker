@@ -7,5 +7,5 @@ public class GameDto
 {
     public required string GameCode { get; set; }
     public bool HasStarted { get; set; } = false;
-    public ConcurrentDictionary<string, PlayerDto> Players { get; set; } = new();
+    public ConcurrentDictionary<string, PlayerDto> Players { get; } = new();
 }

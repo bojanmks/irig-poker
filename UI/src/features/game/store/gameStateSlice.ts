@@ -36,6 +36,14 @@ const gameStateSlice = createSlice({
         delete state.gameState.players[action.payload];
       }
     },
+    adminChanged(state, action: PayloadAction<string>) {
+      if (state.gameState) {
+        const player = state.gameState.players[action.payload];
+        if (player) {
+          player.isAdmin = true;
+        }
+      }
+    },
     gameStarted(state) {
       if (state.gameState) {
         state.gameState.hasStarted = true;
@@ -48,5 +56,5 @@ const gameStateSlice = createSlice({
   },
 });
 
-export const { setGameState, playerJoined, playerLeft, gameStarted, resetGameState } = gameStateSlice.actions;
+export const { setGameState, playerJoined, playerLeft, adminChanged, gameStarted, resetGameState } = gameStateSlice.actions;
 export default gameStateSlice.reducer;

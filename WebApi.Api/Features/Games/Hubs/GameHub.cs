@@ -56,9 +56,24 @@ public class GameHub(
         if (result.IsSuccess && !string.IsNullOrWhiteSpace(result.Data.GameCode))
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, result.Data.GameCode);
-            await Clients
-                .GroupExcept(result.Data.GameCode, Context.ConnectionId)
-                .SendAsync("PlayerLeft", HubNotification.From(result.Data.PlayerId!, _timeProvider));
+
+            var tasks = new List<Task>
+            {
+                Clients
+                    .GroupExcept(result.Data.GameCode, Context.ConnectionId)
+                    .SendAsync("PlayerLeft", HubNotification.From(result.Data.PlayerId!, _timeProvider))
+            };
+
+            if (!string.IsNullOrWhiteSpace(result.Data.ChangedAdminTo))
+            {
+                tasks.Add(
+                    Clients
+                        .Group(result.Data.GameCode)
+                        .SendAsync("AdminChanged", HubNotification.From(result.Data.ChangedAdminTo, _timeProvider))
+                );
+            }
+
+            await Task.WhenAll(tasks);
         }
     }
 }
