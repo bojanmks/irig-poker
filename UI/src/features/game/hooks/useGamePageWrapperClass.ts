@@ -13,6 +13,7 @@ export function useGamePageWrapperClass(
     
     useEffect(() => {
         const additionalClass = {
+            [GamePageState.Connecting]: 'max-w-md',
             [GamePageState.Joining]: 'max-w-md',
             [GamePageState.EnterNameToJoin]: 'max-w-md',
             [GamePageState.Ready]: gameState?.hasStarted ? 'max-w-xl' : 'max-w-md',

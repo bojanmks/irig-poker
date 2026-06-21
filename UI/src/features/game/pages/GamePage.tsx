@@ -38,19 +38,18 @@ const GamePage = () => {
   useDiconnectOnPageLeave(hub.disconnect);
 
   if (!hub.connected) {
-    return <ConnectingToServer />
+    return <ConnectingToServer setPageState={setPageState} />
   }
 
   if (!username) {
-    return <EnterNameForm setUsername={setUsername} />;
+    return <EnterNameForm setUsername={setUsername} setPageState={setPageState} />;
   }
 
-  return (
-    <>
-      { pageState === GamePageState.Joining && <JoiningGame hub={hub} gameCode={gameCode!} username={username} setPageState={setPageState} /> }
-      { pageState === GamePageState.Ready && (gameState?.hasStarted ? <ActualGame /> : <GameLobby />) }
-    </>
-  );
+  if (pageState === GamePageState.Joining) {
+    return <JoiningGame hub={hub} gameCode={gameCode!} username={username} setPageState={setPageState} />;
+  }
+
+  return gameState?.hasStarted ? <ActualGame /> : <GameLobby />;
 };
 
 export default GamePage;
