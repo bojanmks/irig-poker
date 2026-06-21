@@ -6,11 +6,13 @@
     "game": {
         "enterYourName": "Unesi svoje ime",
         "createPrivateGame": "Kreiraj privatnu igru",
-        "joinGame": "Uđi u igru",
+        "joinGame": "Pridruži se igri",
         "copyLink": "Klikni da kopiraš link igre",
         "linkCopied": "Link je kopiran",
         "players": "Igrači",
-        "start": "Započni igru"
+        "start": "Započni igru",
+        "connecting": "Povezivanje sa serverom...",
+        "joining": "Pridruživanje igri..."
     },
     "theme": {
         "light": "Svetla",

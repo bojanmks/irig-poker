@@ -10,7 +10,9 @@
         "copyLink": "Click to copy game link",
         "linkCopied": "Link copied to clipboard",
         "players": "Players",
-        "start": "Start game"
+        "start": "Start game",
+        "connecting": "Connecting to server...",
+        "joining": "Joining game..."
     },
     "theme": {
         "light": "Light",

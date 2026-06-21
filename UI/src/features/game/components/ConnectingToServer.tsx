@@ -1,4 +1,7 @@
-import { type Dispatch, type SetStateAction,useEffect } from "react";
+import { type Dispatch, type SetStateAction, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+
+import { Loader2 } from "lucide-react";
 
 import { GamePageState } from "../consts/GamePageState";
 
@@ -7,7 +10,8 @@ type ConnectingToServerParams = {
 }
 
 export function ConnectingToServer(params: ConnectingToServerParams) {
-    const {setPageState } = params;
+    const { setPageState } = params;
+    const { t } = useTranslation();
 
     useEffect(() => {
         setPageState(GamePageState.Connecting);
@@ -18,6 +22,9 @@ export function ConnectingToServer(params: ConnectingToServerParams) {
     }, [setPageState]);
 
     return (
-        <>Connecting</>
+        <div className="flex flex-col items-center justify-center gap-3 py-12">
+            <Loader2 className="h-8 w-8 animate-spin" />
+            <p>{t("game.connecting")}</p>
+        </div>
     )
 }

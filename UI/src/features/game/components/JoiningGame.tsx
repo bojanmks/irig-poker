@@ -1,10 +1,13 @@
-import { type Dispatch, type SetStateAction,useCallback } from "react";
+import { type Dispatch, type SetStateAction, useCallback } from "react";
+import { useTranslation } from "react-i18next";
+
+import { Loader2 } from "lucide-react";
 
 import { type HubMethods } from "@/features/http/hooks/useHub";
 import { useAppDispatch } from "@/features/store/hooks";
 
 import { GamePageState } from "../consts/GamePageState";
-import { type JoinGameResponse,useJoinGame } from "../hooks/useJoinGame";
+import { type JoinGameResponse, useJoinGame } from "../hooks/useJoinGame";
 import { setGameState } from "../store/gameStateSlice";
 
 type JoiningGameParams = {
@@ -21,7 +24,8 @@ export function JoiningGame(params: JoiningGameParams) {
         username,
         setPageState
     } = params;
-    
+
+    const { t } = useTranslation();
     const dispatch = useAppDispatch();
 
     const onJoined = useCallback(({ gameState, playerId }: JoinGameResponse) => {
@@ -37,6 +41,9 @@ export function JoiningGame(params: JoiningGameParams) {
     });
 
     return (
-        <>Joining</>
+        <div className="flex flex-col items-center justify-center gap-3 py-12">
+            <Loader2 className="h-8 w-8 animate-spin" />
+            <p>{t("game.joining")}</p>
+        </div>
     )
 }
