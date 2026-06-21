@@ -5,7 +5,6 @@ using WebApi.Api.Core.Result.Extensions;
 using WebApi.Application.Features.Games.Commands;
 using WebApi.Common.Core.Cqrs;
 using WebApi.Common.Features.Games.Joining.Models;
-using WebApi.Common.Features.Games.Models;
 
 namespace WebApi.Api.Features.Games.Hubs;
 

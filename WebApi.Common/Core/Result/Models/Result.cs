@@ -36,14 +36,14 @@ public class Result<T>
 
         return new Result<T>
         {
-            Errors = [..errors],
+            Errors = [.. errors],
             Status = ResultStatus.Error
         };
     }
 
     public static Result<T> ValidationError(IEnumerable<string>? errors = null, IEnumerable<FieldErrors>? fieldErrors = null)
     {
-        if (errors?.Any() == false  && fieldErrors?.Any() == false)
+        if (errors?.Any() == false && fieldErrors?.Any() == false)
         {
             throw new ArgumentException("At least one error must be provided.");
         }
