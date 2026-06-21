@@ -14,7 +14,8 @@
         "currentTurn": "Na potezu",
         "you": "Ti",
         "connecting": "Povezivanje sa serverom...",
-        "joining": "Pridruživanje igri..."
+        "joining": "Pridruživanje igri...",
+        "disconnected": "Izgubio si konekciju"
     },
     "theme": {
         "light": "Svetla",

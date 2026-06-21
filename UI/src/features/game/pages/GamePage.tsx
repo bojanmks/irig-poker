@@ -12,12 +12,15 @@ import { GameLobby } from "../components/GameLobby";
 import { JoiningGame } from "../components/JoiningGame";
 import { GamePageState } from "../consts/GamePageState";
 import { useDiconnectOnPageLeave } from "../hooks/useDisconnectOnPageLeave";
+import { useGameHubDisconnectHandler } from "../hooks/useGameHubDisconnectHandler";
 import { useGamePageEventListeners } from "../hooks/useGamePageEventListeners";
 import { useGamePageWrapperClass } from "../hooks/useGamePageWrapperClass";
 import { useUsernameFromRoute } from "../hooks/useUsernameFromRoute";
 
 const GamePage = () => {
-  const hub = useHub();
+  const { onDisconnected } = useGameHubDisconnectHandler();
+
+  const hub = useHub({ onDisconnected });
   const dispatch = useAppDispatch();
   const gameState = useAppSelector((state) => state.gameState.gameState);
 

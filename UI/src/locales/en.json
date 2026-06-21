@@ -14,7 +14,8 @@
         "currentTurn": "Current turn",
         "you": "You",
         "connecting": "Connecting to server...",
-        "joining": "Joining game..."
+        "joining": "Joining game...",
+        "disconnected": "You were disconnected"
     },
     "theme": {
         "light": "Light",

@@ -22,7 +22,13 @@ export type HubMethods = {
   disconnect: () => Promise<void>;
 };
 
-export function useHub(): HubMethods {
+type UseHubParams = {
+  onDisconnected?: () => void;
+} | undefined;
+
+export function useHub(params: UseHubParams): HubMethods {
+  const { onDisconnected } = params || {};
+
   const [connected, setConnected] = useState(false);
   const gameState = useAppSelector((state) => state.gameState.gameState);
   const { t } = useTranslation();
@@ -43,10 +49,21 @@ export function useHub(): HubMethods {
       setConnected(true);
     };
 
-    connection.onclose(() => setConnected(false));
-
     start();
   }, [connected, setConnected]);
+
+  useEffect(() => {
+    const handler = () => {
+      setConnected(false);
+      onDisconnected?.();
+    };
+
+    connection.onclose(handler);
+
+    return () => {
+      connection['_closedCallbacks'] = connection['_closedCallbacks'].filter((x: unknown) => x !== handler);
+    };
+  }, [setConnected, onDisconnected]);
 
   const disconnect = useCallback(async () => {
     if (connection.state === signalR.HubConnectionState.Connected) {
