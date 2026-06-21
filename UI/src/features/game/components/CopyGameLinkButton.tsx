@@ -28,7 +28,7 @@ export const CopyGameLinkButton = () => {
       {isHovered ? (
         <>
           <span className="truncate">{gameUrl}</span>
-          <CopyIcon className="w-4 h-4 flex-shrink-0" />
+          <CopyIcon className="w-4 h-4 shrink-0" />
         </>
       ) : (
         <>
