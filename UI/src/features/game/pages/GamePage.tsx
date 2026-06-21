@@ -6,6 +6,7 @@ import { useHub } from "@/features/http/hooks/useHub";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 
 import ActualGame from "../components/ActualGame";
+import { ConnectingToServer } from "../components/ConnectingToServer";
 import { EnterNameForm } from "../components/EnterNameForm";
 import { GameLobby } from "../components/GameLobby";
 import { JoiningGame } from "../components/JoiningGame";
@@ -35,6 +36,10 @@ const GamePage = () => {
   }, [dispatch]);
 
   useDiconnectOnPageLeave(hub.disconnect);
+
+  if (!hub.connected) {
+    return <ConnectingToServer />
+  }
 
   if (!username) {
     return <EnterNameForm setUsername={setUsername} />;

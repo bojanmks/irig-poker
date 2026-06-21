@@ -24,11 +24,11 @@ export function useJoinGame({
   onJoined
 }: UseJoinGameParams) {
   const navigate = useNavigate();
-  const { connected: hubConnected, invoke: hubInvoke } = hub;
+  const { invoke: hubInvoke } = hub;
   const invoked = useRef(false);
 
   useEffect(() => {
-    if (!hubConnected || invoked.current) return;
+    if (invoked.current) return;
     invoked.current = true;
 
     (async () => {
@@ -41,5 +41,5 @@ export function useJoinGame({
 
       onJoined?.(response.data!);
     })();
-  }, [hubConnected, hubInvoke, gameCode, username, onJoined, navigate]);
+  }, [hubInvoke, gameCode, username, onJoined, navigate]);
 }
