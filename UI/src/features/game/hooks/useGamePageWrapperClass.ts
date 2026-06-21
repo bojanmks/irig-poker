@@ -16,13 +16,13 @@ export function useGamePageWrapperClass(
             [GamePageState.Connecting]: 'max-w-md',
             [GamePageState.Joining]: 'max-w-md',
             [GamePageState.EnterNameToJoin]: 'max-w-md',
-            [GamePageState.Ready]: gameState?.hasStarted ? 'max-w-xl' : 'max-w-md',
+            [GamePageState.Ready]: gameState?.hasStarted ? 'w-full' : 'max-w-md',
         }[gamePageState] || '';
 
-    dispatch(setAdditionalClass(additionalClass))
+        dispatch(setAdditionalClass(additionalClass))
 
-    return () => {
-        dispatch(setAdditionalClass(""))
-    }
+        return () => {
+            dispatch(setAdditionalClass(""))
+        }
     }, [dispatch, gamePageState, gameState?.hasStarted])
 }

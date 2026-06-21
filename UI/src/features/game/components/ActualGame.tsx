@@ -1,6 +1,10 @@
+import { GamePlayerList } from "./GamePlayerList";
+
 const ActualGame = () => {
     return (
-        <>Actual game</>
+        <div className="space-y-6">
+            <GamePlayerList />
+        </div>
     )
 }
 
