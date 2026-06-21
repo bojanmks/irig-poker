@@ -43,7 +43,6 @@ export function useHub(): HubMethods {
       setConnected(true);
     };
 
-    connection.onreconnected(() => setConnected(true));
     connection.onclose(() => setConnected(false));
 
     start();
