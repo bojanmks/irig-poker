@@ -19,7 +19,7 @@ const router = createBrowserRouter(
       element={
         <Provider store={store}>
           <ThemeSync>
-            <Toaster />
+            <Toaster position='top-center' />
             <App />
           </ThemeSync>
         </Provider>
