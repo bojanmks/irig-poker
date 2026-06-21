@@ -1,6 +1,8 @@
 using FluentValidation;
+using System.Reflection;
 using WebApi.Api.Core.Modules;
 using WebApi.Application;
+using WebApi.Application.Core.Cqrs;
 using WebApi.Implementation;
 using WebApi.Implementation.Core.Cqrs.Pipeline;
 
@@ -21,6 +23,36 @@ public class CqrsModule : BaseModule
         });
 
         AddValidators(services);
+
+        services.AddSingleton<IRequestAuthorizationCache>(_ =>
+        {
+            var cache = new RequestAuthorizationCache();
+            PopulateAuthorizationCache(cache);
+            return cache;
+        });
+    }
+
+    private static void PopulateAuthorizationCache(RequestAuthorizationCache cache)
+    {
+        var assemblies = new[]
+        {
+            typeof(ImplementationAssemblyMarker).Assembly,
+            typeof(ApplicationAssemblyMarker).Assembly
+        };
+
+        foreach (var assembly in assemblies)
+        {
+            foreach (var type in assembly.GetTypes())
+            {
+                if (!type.IsClass || type.IsAbstract) continue;
+
+                var attribute = type.GetCustomAttribute<AllowForRolesAttribute>();
+                if (attribute is not null)
+                {
+                    cache.SetRoles(type, attribute.Roles);
+                }
+            }
+        }
     }
 
     private static void AddValidators(IServiceCollection services)
