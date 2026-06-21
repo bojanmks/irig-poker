@@ -29,11 +29,18 @@ const gameStateSlice = createSlice({
     playerJoined(state, action: PayloadAction<{ playerId: string; player: Player }>) {
       if (state.gameState) {
         state.gameState.players[action.payload.playerId] = action.payload.player;
+        if (!state.gameState.playerOrder.includes(action.payload.playerId)) {
+          state.gameState.playerOrder.push(action.payload.playerId);
+          if (!state.gameState.hasStarted) {
+            state.gameState.playerOrder.sort();
+          }
+        }
       }
     },
     playerLeft(state, action: PayloadAction<string>) {
       if (state.gameState) {
         delete state.gameState.players[action.payload];
+        state.gameState.playerOrder = state.gameState.playerOrder.filter(id => id !== action.payload);
       }
     },
     adminChanged(state, action: PayloadAction<string>) {
@@ -44,10 +51,8 @@ const gameStateSlice = createSlice({
         }
       }
     },
-    gameStarted(state) {
-      if (state.gameState) {
-        state.gameState.hasStarted = true;
-      }
+    gameStarted(state, action: PayloadAction<PublicGameState>) {
+      state.gameState = action.payload;
     },
     resetGameState(state) {
       state.gameState = null;

@@ -17,9 +17,12 @@ export const GameLobbyPlayerList = () => {
     const playerId = useAppSelector((state) => state.gameState.playerId);
     const { t } = useTranslation();
 
-    const players = gameState?.players
-        ? Object.values(gameState.players)
-        : [];
+    const playerOrder = gameState?.playerOrder ?? [];
+    const players = playerOrder.length > 0
+        ? playerOrder.map(id => gameState!.players[id]).filter(Boolean)
+        : gameState?.players
+            ? Object.values(gameState.players)
+            : [];
 
     return (
         <>

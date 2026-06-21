@@ -11,6 +11,8 @@
         "linkCopied": "Link copied to clipboard",
         "players": "Players",
         "start": "Start game",
+        "currentTurn": "Current turn",
+        "you": "You",
         "connecting": "Connecting to server...",
         "joining": "Joining game..."
     },

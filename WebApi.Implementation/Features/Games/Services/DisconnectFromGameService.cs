@@ -36,6 +36,7 @@ public class DisconnectFromGameService(
         }
 
         game.Players.Remove(entry.PlayerId, out _);
+        game.PlayerOrder.Remove(entry.PlayerId);
 
         if (game.HasStarted && game.Players.Count() <= 1)
         {

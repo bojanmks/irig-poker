@@ -5,6 +5,7 @@ using WebApi.Api.Core.Result.Extensions;
 using WebApi.Application.Features.Games.Commands;
 using WebApi.Common.Core.Cqrs;
 using WebApi.Common.Features.Games.Joining.Models;
+using WebApi.Common.Features.Games.Models;
 
 namespace WebApi.Api.Features.Games.Hubs;
 
@@ -34,15 +35,15 @@ public class GameHub(
         return result.ToHubActionResponse();
     }
 
-    public async Task<HubActionResponse<string>> StartGame(HubActionRequest<Empty> _)
+    public async Task<HubActionResponse<PublicGameStateDto>> StartGame(HubActionRequest<Empty> _)
     {
         var result = await _mediator.Send(new StartGameCommand(), Context.ConnectionAborted);
 
         if (result.IsSuccess)
         {
             await Clients
-                .Group(result.Data)
-                .SendAsync("GameStarted", HubNotification.From(Empty.Value, _timeProvider), Context.ConnectionAborted);
+                .Group(result.Data.GameCode)
+                .SendAsync("GameStarted", HubNotification.From(result.Data, _timeProvider), Context.ConnectionAborted);
         }
 
         return result.ToHubActionResponse();

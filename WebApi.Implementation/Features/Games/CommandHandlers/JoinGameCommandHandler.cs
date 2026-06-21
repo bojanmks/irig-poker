@@ -31,7 +31,13 @@ public class JoinGameCommandHandler(
             return Result<JoinGameResultDto>.Error(_translator.Translate("game.notFound"));
         }
 
-        var gameState = new PublicGameStateDto(game.HasStarted, game.Players.ToFrozenDictionary());
+        var gameState = new PublicGameStateDto(
+            game.GameCode,
+            game.HasStarted,
+            game.Players.ToFrozenDictionary(),
+            game.PlayerOrder.AsReadOnly(),
+            game.CurrentTurnPlayerId
+        );
 
         return new JoinGameResultDto(playerId, gameState);
     }

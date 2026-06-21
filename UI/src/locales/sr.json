@@ -11,6 +11,8 @@
         "linkCopied": "Link je kopiran",
         "players": "Igrači",
         "start": "Započni igru",
+        "currentTurn": "Na potezu",
+        "you": "Ti",
         "connecting": "Povezivanje sa serverom...",
         "joining": "Pridruživanje igri..."
     },

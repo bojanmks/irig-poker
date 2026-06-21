@@ -2,4 +2,10 @@
 
 namespace WebApi.Common.Features.Games.Models;
 
-public record PublicGameStateDto(bool HasStarted, IReadOnlyDictionary<string, PlayerDto> Players);
+public record PublicGameStateDto(
+    string GameCode,
+    bool HasStarted,
+    IReadOnlyDictionary<string, PlayerDto> Players,
+    IReadOnlyList<string> PlayerOrder,
+    string? CurrentTurnPlayerId
+);
