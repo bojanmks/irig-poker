@@ -19,7 +19,7 @@ public class GameState
     {
         var playerIds = PlayerOrder.ToArray();
         Random.Shared.Shuffle(playerIds);
-        PlayerOrder = [..playerIds];
+        PlayerOrder = [.. playerIds];
     }
 
     public string? CurrentTurnPlayerId { get; set; }
