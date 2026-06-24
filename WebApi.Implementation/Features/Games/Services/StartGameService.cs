@@ -8,12 +8,10 @@ public class StartGameService(
 {
     public async Task StartAsync(string gameCode, CancellationToken cancellationToken = default)
     {
-        var game = await _getGameService.GetAsync(gameCode, cancellationToken);
-        game!.HasStarted = true;
+        var game = await _getGameService.GetAsync(gameCode, cancellationToken) ?? throw new InvalidOperationException("Game not found");
+        game.Start();
 
-        var playerIds = game.Players.Keys.ToArray();
-        Random.Shared.Shuffle(playerIds);
-        game.PlayerOrder = [.. playerIds];
-        game.CurrentTurnPlayerId = playerIds[0];
+        game.ShufflePlayerOrder();
+        game.NextTurn();
     }
 }

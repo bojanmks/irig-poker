@@ -12,22 +12,20 @@ public class CreateGameService(
 {
     public Task<string> CreateAsync(CancellationToken cancellationToken = default)
     {
-        string gameCode = MakeGameCode();
+        GameState gameState;
 
-        var gameState = new GameState
+        do
         {
-            GameCode = gameCode
-        };
-
-        while (!_gameStore.Games.TryAdd(gameCode, gameState))
-        {
-            gameCode = MakeGameCode();
-            gameState.GameCode = gameCode;
+            gameState = new GameState
+            {
+                GameCode = MakeGameCode()
+            };
         }
+        while (!_gameStore.Games.TryAdd(gameState.GameCode, gameState));
 
-        _gameLockService.CreateLock(gameCode);
+        _gameLockService.CreateLock(gameState.GameCode);
 
-        return Task.FromResult(gameCode);
+        return Task.FromResult(gameState.GameCode);
     }
 
     private string MakeGameCode()
