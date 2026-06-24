@@ -11,9 +11,9 @@ public class DisconnectFromGameService(
     IGameLockService _gameLockService
 ) : IDisconnectFromGameService
 {
-    public async Task<DisconnectResultDto> DisconnectAsync(string connectionId, CancellationToken cancellationToken = default)
+    public async Task<DisconnectResult> DisconnectAsync(string connectionId, CancellationToken cancellationToken = default)
     {
-        var result = new DisconnectResultDto();
+        var result = new DisconnectResult();
 
         if (!_playersGamesMap.Map.TryRemove(connectionId, out var entry))
         {

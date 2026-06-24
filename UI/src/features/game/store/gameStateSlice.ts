@@ -26,9 +26,10 @@ const gameStateSlice = createSlice({
         state.playerId = action.payload.playerId;
       }
     },
-    playerJoined(state, action: PayloadAction<{ playerId: string; player: Player }>) {
+    playerJoined(state, action: PayloadAction<{ player: Player, playerOrder: string[] }>) {
       if (state.gameState) {
-        state.gameState.players[action.payload.playerId] = action.payload.player;
+        state.gameState.players[action.payload.player.playerId] = action.payload.player;
+        state.gameState.playerOrder = action.payload.playerOrder;
       }
     },
     playerLeft(state, action: PayloadAction<string>) {

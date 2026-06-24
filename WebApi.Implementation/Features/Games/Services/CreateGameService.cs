@@ -14,7 +14,7 @@ public class CreateGameService(
     {
         string gameCode = MakeGameCode();
 
-        var gameState = new GameDto
+        var gameState = new GameState
         {
             GameCode = gameCode
         };

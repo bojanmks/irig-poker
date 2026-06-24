@@ -7,4 +7,4 @@ using WebApi.Common.Features.Games.Models;
 namespace WebApi.Application.Features.Games.Commands;
 
 [AllowForRoles(UserRole.RoomOwner)]
-public record StartGameCommand() : IRequest<Result<PublicGameStateDto>>;
+public record StartGameCommand() : IRequest<Result<PublicGameState>>;

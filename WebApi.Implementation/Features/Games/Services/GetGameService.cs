@@ -7,7 +7,7 @@ public class GetGameService(
     GameStore _gameStore
 ) : IGetGameService
 {
-    public Task<GameDto?> GetAsync(string gameCode, CancellationToken cancellationToken = default)
+    public Task<GameState?> GetAsync(string gameCode, CancellationToken cancellationToken = default)
     {
         var gameState = _gameStore.Games.GetValueOrDefault(gameCode);
         return Task.FromResult(gameState);

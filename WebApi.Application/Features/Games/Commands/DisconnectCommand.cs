@@ -4,4 +4,4 @@ using WebApi.Common.Features.Games.Disconnecting.Models;
 
 namespace WebApi.Application.Features.Games.Commands;
 
-public record DisconnectCommand(string ConnectionId) : IRequest<Result<DisconnectResultDto>>;
+public record DisconnectCommand(string ConnectionId) : IRequest<Result<DisconnectResult>>;

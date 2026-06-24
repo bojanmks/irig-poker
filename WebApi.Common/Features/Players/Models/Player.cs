@@ -1,6 +1,6 @@
 ﻿namespace WebApi.Common.Features.Players.Models;
 
-public class PlayerDto
+public class Player
 {
     public required string PlayerId { get; init; }
     public required string Username { get; init; }

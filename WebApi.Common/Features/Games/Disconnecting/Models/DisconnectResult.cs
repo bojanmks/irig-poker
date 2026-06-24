@@ -1,6 +1,6 @@
 ﻿namespace WebApi.Common.Features.Games.Disconnecting.Models;
 
-public class DisconnectResultDto
+public class DisconnectResult
 {
     public string? GameCode { get; set; }
     public string? PlayerId { get; set; }

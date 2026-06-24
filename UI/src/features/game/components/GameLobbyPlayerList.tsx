@@ -13,7 +13,11 @@ export const GameLobbyPlayerList = () => {
     const { t } = useTranslation();
 
     const players = useMemo(() => {
-        return gameState ? Object.values(gameState.players) : [];
+        if (!gameState) {
+            return [];
+        }
+
+        return gameState.playerOrder.map(po => gameState.players[po]);
     }, [gameState]);
 
     return (

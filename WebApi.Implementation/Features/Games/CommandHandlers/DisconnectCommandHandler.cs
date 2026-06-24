@@ -8,9 +8,9 @@ namespace WebApi.Implementation.Features.Games.CommandHandlers;
 
 public class DisconnectCommandHandler(
     IDisconnectFromGameService _disconnectFromGameService
-) : IRequestHandler<DisconnectCommand, Result<DisconnectResultDto>>
+) : IRequestHandler<DisconnectCommand, Result<DisconnectResult>>
 {
-    public async Task<Result<DisconnectResultDto>> Handle(DisconnectCommand command, CancellationToken cancellationToken)
+    public async Task<Result<DisconnectResult>> Handle(DisconnectCommand command, CancellationToken cancellationToken)
     {
         var result = await _disconnectFromGameService.DisconnectAsync(command.ConnectionId, cancellationToken);
         return result;

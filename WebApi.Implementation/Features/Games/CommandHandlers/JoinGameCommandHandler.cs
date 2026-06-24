@@ -16,9 +16,9 @@ public class JoinGameCommandHandler(
     IGameLockService _gameLockService,
     ITranslator _translator,
     AppSettings _appSettings
-) : IRequestHandler<JoinGameCommand, Result<JoinGameResultDto>>
+) : IRequestHandler<JoinGameCommand, Result<JoinGameResult>>
 {
-    public async Task<Result<JoinGameResultDto>> Handle(JoinGameCommand command, CancellationToken cancellationToken)
+    public async Task<Result<JoinGameResult>> Handle(JoinGameCommand command, CancellationToken cancellationToken)
     {
         using (await _gameLockService.AcquireLockAsync(command.Data.GameCode, cancellationToken))
         {
@@ -26,27 +26,27 @@ public class JoinGameCommandHandler(
 
             if (game is null)
             {
-                return Result<JoinGameResultDto>.Error(_translator.Translate("game.notFound"));
+                return Result<JoinGameResult>.Error(_translator.Translate("game.notFound"));
             }
 
             if (game.HasStarted)
             {
-                return Result<JoinGameResultDto>.Error(_translator.Translate("game.alreadyStarted"));
+                return Result<JoinGameResult>.Error(_translator.Translate("game.alreadyStarted"));
             }
 
             if (game.Players.Count >= _appSettings.MaxPlayersPerGame)
             {
-                return Result<JoinGameResultDto>.Error(_translator.Translate("game.isFull"));
+                return Result<JoinGameResult>.Error(_translator.Translate("game.isFull"));
             }
 
             var playerId = await _addPlayerToGameService.AddAsync(command.Data, cancellationToken);
 
             if (playerId is null)
             {
-                return Result<JoinGameResultDto>.Error(_translator.Translate("game.failedToJoin"));
+                return Result<JoinGameResult>.Error(_translator.Translate("game.failedToJoin"));
             }
 
-            var gameState = new PublicGameStateDto(
+            var gameState = new PublicGameState(
                 game.GameCode,
                 game.HasStarted,
                 game.Players.ToFrozenDictionary(),
@@ -54,7 +54,7 @@ public class JoinGameCommandHandler(
                 game.CurrentTurnPlayerId
             );
 
-            return new JoinGameResultDto(playerId, gameState);
+            return new JoinGameResult(playerId, gameState);
         }
     }
 }

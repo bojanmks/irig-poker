@@ -12,7 +12,7 @@ public class AddPlayerToGameService(
     IHubConnectionIdProvider _hubConnectionIdProvider
 ) : IAddPlayerToGameService
 {
-    public async Task<string?> AddAsync(JoinGameDto data, CancellationToken cancellationToken = default)
+    public async Task<string?> AddAsync(JoinGameRequest data, CancellationToken cancellationToken = default)
     {
         if (!_hubConnectionIdProvider.TryGetConnectionId(out var connectionId))
         {
@@ -28,7 +28,7 @@ public class AddPlayerToGameService(
 
         var playerId = Guid.NewGuid().ToString("N");
 
-        var player = new PlayerDto
+        var player = new Player
         {
             PlayerId = playerId,
             Username = data.Username
@@ -50,9 +50,11 @@ public class AddPlayerToGameService(
 
         if (!addToMapResult)
         {
-            game!.Players.Remove(playerId, out _);
+            game.Players.Remove(playerId, out _);
             return null;
         }
+
+        game.PlayerOrder.Add(playerId);
 
         return playerId;
     }

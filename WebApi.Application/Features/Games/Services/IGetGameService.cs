@@ -4,5 +4,5 @@ namespace WebApi.Application.Features.Games.Services;
 
 public interface IGetGameService
 {
-    Task<GameDto?> GetAsync(string gameCode, CancellationToken cancellationToken = default);
+    Task<GameState?> GetAsync(string gameCode, CancellationToken cancellationToken = default);
 }

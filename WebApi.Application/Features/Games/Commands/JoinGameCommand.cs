@@ -7,4 +7,4 @@ using WebApi.Common.Features.Games.Joining.Models;
 namespace WebApi.Application.Features.Games.Commands;
 
 [AllowForRoles(UserRole.NotPlaying)]
-public record JoinGameCommand(JoinGameDto Data) : IRequest<Result<JoinGameResultDto>>;
+public record JoinGameCommand(JoinGameRequest Data) : IRequest<Result<JoinGameResult>>;
