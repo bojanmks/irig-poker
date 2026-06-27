@@ -18,7 +18,8 @@
         "disconnected": "Izgubio si konekciju",
         "youWon": "Pobedio/la si!",
         "playerWon": "{{username}} je pobedio/la!",
-        "createNewGame": "Kreiraj novu igru"
+        "createNewGame": "Kreiraj novu igru",
+        "yourHand": "Tvoje karte"
     },
     "theme": {
         "light": "Svetla",

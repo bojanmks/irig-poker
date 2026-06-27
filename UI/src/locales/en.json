@@ -18,7 +18,8 @@
         "disconnected": "You were disconnected",
         "youWon": "You won!",
         "playerWon": "{{username}} won!",
-        "createNewGame": "Create new game"
+        "createNewGame": "Create new game",
+        "yourHand": "Your hand"
     },
     "theme": {
         "light": "Light",

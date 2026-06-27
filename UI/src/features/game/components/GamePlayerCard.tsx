@@ -10,10 +10,13 @@ import {
   CardContent,
 } from "@/features/shared/components/shadcn/Card";
 
+import { CardBack } from "./CardBack";
+
 type GamePlayerCardProps = {
   player: {
     playerId: string;
     username: string;
+    cardCount: number;
   };
   isCurrentTurn: boolean;
   isSelf: boolean;
@@ -55,6 +58,18 @@ export const GamePlayerCard = ({ player, isCurrentTurn, isSelf }: GamePlayerCard
           {player.username[0]?.toUpperCase()}
         </AvatarFallback>
       </Avatar>
+      {player.cardCount > 0 && (
+        <div className="flex flex-wrap justify-center gap-0.5">
+          {Array.from({ length: Math.min(player.cardCount, 7) }).map((_, i) => (
+            <CardBack key={i} displayWidth={24} className="opacity-80" />
+          ))}
+          {player.cardCount > 7 && (
+            <span className="text-xs text-muted-foreground ml-1 leading-6">
+              +{player.cardCount - 7}
+            </span>
+          )}
+        </div>
+      )}
       <CardContent className="flex flex-col items-center gap-1 p-0">
         <span className="font-semibold text-base">{player.username}</span>
         {isSelf && (
