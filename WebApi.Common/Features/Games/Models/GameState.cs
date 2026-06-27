@@ -41,4 +41,45 @@ public class GameState
         var nextIndex = (currentIndex + 1) % PlayerOrder.Count;
         CurrentTurnPlayerId = PlayerOrder[nextIndex];
     }
+
+    public Deck? Deck { get; private set; }
+    public Dictionary<string, List<Card>> PlayerCards { get; } = [];
+
+    public void CreateDeck()
+    {
+        Deck = new Deck();
+        Deck.Shuffle();
+    }
+
+    public void DealCardsToAllPlayers(int count)
+    {
+        if (Deck is null)
+        {
+            throw new InvalidOperationException("Deck has not been created");
+        }
+
+        foreach (var playerId in ActivePlayerIds)
+        {
+            var cards = Deck.Deal(count);
+            PlayerCards[playerId] = cards;
+            Players[playerId].CardCount += count;
+        }
+    }
+
+    public void DealCardToPlayer(string playerId)
+    {
+        if (Deck is null)
+        {
+            throw new InvalidOperationException("Deck has not been created");
+        }
+
+        if (!PlayerCards.TryGetValue(playerId, out var cards))
+        {
+            cards = [];
+            PlayerCards[playerId] = cards;
+        }
+
+        cards.Add(Deck.DealOne());
+        Players[playerId].CardCount++;
+    }
 }

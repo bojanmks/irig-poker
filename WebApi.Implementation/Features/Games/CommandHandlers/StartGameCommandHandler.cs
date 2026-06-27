@@ -60,7 +60,8 @@ public class StartGameCommandHandler(
                 game!.GameCode,
                 game.HasStarted,
                 game.Players.ToFrozenDictionary(),
-                game.PlayerOrder.AsReadOnly(),
+                game.PlayerOrder,
+                game.PlayerCards,
                 game.CurrentTurnPlayerId
             );
 

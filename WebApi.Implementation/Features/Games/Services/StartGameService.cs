@@ -10,7 +10,8 @@ public class StartGameService(
     {
         var game = await _getGameService.GetAsync(gameCode, cancellationToken) ?? throw new InvalidOperationException("Game not found");
         game.Start();
-
+        game.CreateDeck();
+        game.DealCardsToAllPlayers(1);
         game.ShufflePlayerOrder();
         game.NextTurn();
     }
