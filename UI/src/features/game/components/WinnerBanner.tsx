@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -9,27 +10,26 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/features/shared/components/shadcn/Dialog";
-import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
+import { useAppSelector } from "@/features/store/hooks";
 
-import { resetGameState } from "../store/gameStateSlice";
-import { resetCards } from "../store/playerCardsSlice";
 
 export const WinnerBanner = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const winner = useAppSelector((state) => state.gameState.winner);
   const playerId = useAppSelector((state) => state.gameState.playerId);
 
-  if (!winner) return null;
+  const isSelf = useMemo(() => {
+    return winner && winner.winnerPlayerId === playerId;
+  }, [winner, playerId]);
 
-  const isSelf = winner.winnerPlayerId === playerId;
-
-  const handleCreateNewGame = () => {
-    dispatch(resetGameState());
-    dispatch(resetCards());
+  const handleCreateNewGame = useCallback(() => {
     navigate("/");
-  };
+  }, [navigate]);
+
+  if (!winner) {
+    return null;
+  }
 
   return (
     <Dialog open>
