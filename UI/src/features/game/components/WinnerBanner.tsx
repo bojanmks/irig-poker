@@ -33,7 +33,7 @@ export const WinnerBanner = () => {
 
   return (
     <Dialog open>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md" hideClose={true}>
         <DialogHeader>
           <DialogTitle className="text-center">
             {isSelf ? t("game.youWon") : t("game.playerWon", { username: winner.winnerUsername })}
