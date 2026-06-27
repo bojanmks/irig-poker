@@ -1,4 +1,6 @@
+import type { SuitName } from "./SuitName";
+
 export interface Card {
-    suit: string;
+    suit: SuitName;
     rank: number;
 }
