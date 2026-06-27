@@ -1,5 +1,4 @@
 using MediatR;
-using System.Collections.Frozen;
 using WebApi.Application.Core.AppSettings;
 using WebApi.Application.Core.Localization;
 using WebApi.Application.Features.Games.Commands;
@@ -49,8 +48,9 @@ public class JoinGameCommandHandler(
             var gameState = new PublicGameState(
                 game.GameCode,
                 game.HasStarted,
-                game.Players.ToFrozenDictionary(),
-                game.PlayerOrder.AsReadOnly(),
+                game.Players,
+                game.PlayerOrder,
+                game.PlayerCards,
                 game.CurrentTurnPlayerId
             );
 
