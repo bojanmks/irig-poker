@@ -15,14 +15,10 @@ const BACK_H = 727;
 const SPRITE_W = 1920;
 const SPRITE_H = 1080;
 
-export const CardBack = ({ displayWidth, className }: CardBackProps) => {
+const HighResCardBack = ({ displayWidth, className, displayHeight }: CardBackProps & { displayHeight: number }) => {
   const scale = useMemo(() => {
     return displayWidth / BACK_W;
   }, [displayWidth]);
-
-  const displayHeight = useMemo(() => {
-    return Math.round(BACK_H * scale);
-  }, [scale]);
 
   const wrapperStyle = useMemo<CSSProperties>(() => ({
     width: displayWidth,
@@ -53,4 +49,25 @@ export const CardBack = ({ displayWidth, className }: CardBackProps) => {
       />
     </div>
   );
+}
+
+const SmallResCardBack = ({ displayWidth, className, displayHeight }: CardBackProps & { displayHeight: number }) => {
+  return (
+      <div
+        className={cn("shrink-0 rounded-xs border border-white bg-red-700", className)}
+        style={{ width: displayWidth, height: displayHeight }}
+      />
+    );
+}
+
+export const CardBack = ({ displayWidth, className }: CardBackProps) => {
+  const displayHeight = useMemo(() => {
+    return Math.round(displayWidth * (BACK_H / BACK_W));
+  }, [displayWidth]);
+
+  if (displayWidth < 45) {
+    return <SmallResCardBack displayWidth={displayWidth} displayHeight={displayHeight} className={className} />
+  }
+
+  return <HighResCardBack displayWidth={displayWidth} displayHeight={displayHeight} className={className} />
 };
