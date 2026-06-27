@@ -59,7 +59,7 @@ public class StartGameCommandHandler(
             var gameState = new PublicGameState(
                 game!.GameCode,
                 game.HasStarted,
-                game.Players.ToFrozenDictionary(),
+                game.Players,
                 game.PlayerOrder,
                 game.PlayerCards,
                 game.CurrentTurnPlayerId
