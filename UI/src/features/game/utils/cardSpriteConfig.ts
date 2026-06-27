@@ -1,11 +1,13 @@
 import cardSprites from "@/assets/card_sprites.png";
 
-const SPRITE_X = 9;
-const SPRITE_Y = 121;
 const CARD_W = 143;
 const CARD_H = 206;
-const GAP_X = 4;
-const GAP_Y = 4;
+
+// Actual pixel positions of each card column in the sprite (non-uniform gaps)
+const COL_X: number[] = [9, 156, 302, 448, 594, 741, 887, 1033, 1179, 1325, 1472, 1616, 1761];
+
+// Actual pixel positions of each card row in the sprite (uniform 4px gaps)
+const ROW_Y: number[] = [121, 331, 541, 751];
 
 type SuitName = "Hearts" | "Diamonds" | "Clubs" | "Spades";
 
@@ -17,40 +19,29 @@ const SUIT_ROW: Record<SuitName, number> = {
 };
 
 const RANK_COL: Record<number, number> = {
-  99: 0, // Ace
-  2: 1,
-  3: 2,
-  4: 3,
-  5: 4,
-  6: 5,
-  7: 6,
-  8: 7,
-  9: 8,
-  10: 9,
+  99: 0,  // Ace
+  2: 1,   // Two
+  3: 2,   // Three
+  4: 3,   // Four
+  5: 4,   // Five
+  6: 5,   // Six
+  7: 6,   // Seven
+  8: 7,   // Eight
+  9: 8,   // Nine
+  10: 9,  // Ten
   12: 10, // Jack
   13: 11, // Queen
   14: 12, // King
 };
 
 export function getCardSpritePosition(suit: string, rank: number) {
-  const row = SUIT_ROW[suit as SuitName] ?? 0;
   const col = RANK_COL[rank] ?? 0;
+  const row = SUIT_ROW[suit as SuitName] ?? 0;
 
-  const x = SPRITE_X + col * (CARD_W + GAP_X);
-  const y = SPRITE_Y + row * (CARD_H + GAP_Y);
-
-  return { x, y };
-}
-
-export function getCardCssBackground(suit: string, rank: number) {
-  const pos = getCardSpritePosition(suit, rank);
   return {
-    backgroundImage: `url(${cardSprites})`,
-    backgroundPosition: `-${pos.x}px -${pos.y}px`,
-    backgroundSize: `${1920}px ${1080}px`,
-    width: `${CARD_W}px`,
-    height: `${CARD_H}px`,
+    x: COL_X[col],
+    y: ROW_Y[row],
   };
 }
 
-export { CARD_H,CARD_W, cardSprites };
+export { CARD_H, CARD_W, cardSprites };

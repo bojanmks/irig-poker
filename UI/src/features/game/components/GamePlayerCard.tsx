@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
+import { X } from "lucide-react";
+
 import {
   Avatar,
   AvatarFallback,
@@ -59,15 +61,10 @@ export const GamePlayerCard = ({ player, isCurrentTurn, isSelf }: GamePlayerCard
         </AvatarFallback>
       </Avatar>
       {player.cardCount > 0 && (
-        <div className="flex flex-wrap justify-center gap-0.5">
-          {Array.from({ length: Math.min(player.cardCount, 7) }).map((_, i) => (
-            <CardBack key={i} displayWidth={24} className="opacity-80" />
-          ))}
-          {player.cardCount > 7 && (
-            <span className="text-xs text-muted-foreground ml-1 leading-6">
-              +{player.cardCount - 7}
-            </span>
-          )}
+        <div className="flex items-center gap-1.5">
+          <span className="text-sm font-medium tabular-nums">{player.cardCount}</span>
+          <X size={15} />
+          <CardBack displayWidth={28} className="opacity-80" />
         </div>
       )}
       <CardContent className="flex flex-col items-center gap-1 p-0">
