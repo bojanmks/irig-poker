@@ -7,10 +7,8 @@ import {
   Avatar,
   AvatarFallback,
 } from "@/features/shared/components/shadcn/Avatar";
-import {
-  Card,
-  CardContent,
-} from "@/features/shared/components/shadcn/Card";
+import { Card } from "@/features/shared/components/shadcn/Card";
+import { cn } from "@/lib/utils";
 
 import { CardBack } from "./CardBack";
 
@@ -53,29 +51,31 @@ export const GamePlayerCard = ({ player, isCurrentTurn, isSelf }: GamePlayerCard
 
   return (
     <Card
-      className={`flex flex-col items-center gap-4 p-5 transition-all ${cardRingClass}`}
+      className={cn("flex flex-row items-center gap-3 p-3 transition-all", cardRingClass)}
     >
-      <Avatar className={`w-14 h-14 ring-2 ${avatarRingClass}`}>
-        <AvatarFallback className="text-lg">
+      <Avatar className={cn("w-10 h-10 ring-2 shrink-0", avatarRingClass)}>
+        <AvatarFallback className="text-sm">
           {player.username[0]?.toUpperCase()}
         </AvatarFallback>
       </Avatar>
-      {player.cardCount > 0 && (
-        <div className="flex items-center gap-1.5">
-          <span className="text-sm font-medium tabular-nums">{player.cardCount}</span>
-          <X size={15} />
-          <CardBack displayWidth={28} className="opacity-80" />
-        </div>
-      )}
-      <CardContent className="flex flex-col items-center gap-1 p-0">
-        <span className="font-semibold text-base">{player.username}</span>
+
+      <div className="flex flex-col min-w-0">
+        <span className="font-semibold text-sm truncate">{player.username}</span>
         {isSelf && (
-          <span className="text-xs text-accent">{t("game.you")}</span>
+          <span className="text-xs leading-tight text-accent">{t("game.you")}</span>
         )}
         {isCurrentTurn && (
-          <span className="text-xs font-medium text-primary">{t("game.currentTurn")}</span>
+          <span className="text-xs font-medium leading-tight text-primary">{t("game.currentTurn")}</span>
         )}
-      </CardContent>
+      </div>
+
+      {player.cardCount > 0 && (
+        <div className="flex items-center gap-1 ml-auto shrink-0">
+          <span className="text-sm font-medium tabular-nums">{player.cardCount}</span>
+          <X size={12} />
+          <CardBack displayWidth={20} className="opacity-80" />
+        </div>
+      )}
     </Card>
   );
 };
