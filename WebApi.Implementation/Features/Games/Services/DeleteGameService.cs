@@ -19,6 +19,7 @@ public class DeleteGameService(
         foreach (var player in game.Players)
         {
             _playersGamesMap.Map.TryRemove(player.Key, out _);
+            _playersGamesMap.PlayerIdToConnectionId.TryRemove(player.Key, out _);
         }
 
         _gameLockService.RemoveLock(gameCode);

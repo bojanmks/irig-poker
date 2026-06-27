@@ -54,6 +54,8 @@ public class AddPlayerToGameService(
             return null;
         }
 
+        _playersGamesMap.PlayerIdToConnectionId[playerId] = connectionId;
+
         game.PlayerOrder.Add(playerId);
         game.ActivePlayerIds.Add(playerId);
 

@@ -16,15 +16,15 @@ public class StartGameCommandHandler(
     IGameLockService _gameLockService,
     ITranslator _translator,
     AppSettings _appSettings
-) : IRequestHandler<StartGameCommand, Result<PublicGameState>>
+) : IRequestHandler<StartGameCommand, Result<StartGameResult>>
 {
-    public async Task<Result<PublicGameState>> Handle(StartGameCommand command, CancellationToken cancellationToken)
+    public async Task<Result<StartGameResult>> Handle(StartGameCommand command, CancellationToken cancellationToken)
     {
         var applicationUser = await _applicationUserResolver.ResolveAsync(cancellationToken);
 
         if (string.IsNullOrWhiteSpace(applicationUser.GameCode))
         {
-            return Result<PublicGameState>.Error(_translator.Translate("user.notInGame"));
+            return Result<StartGameResult>.Error(_translator.Translate("user.notInGame"));
         }
 
         string gameCode = applicationUser.GameCode;
@@ -35,36 +35,35 @@ public class StartGameCommandHandler(
 
             if (game is null)
             {
-                return Result<PublicGameState>.Error(_translator.Translate("game.notFound"));
+                return Result<StartGameResult>.Error(_translator.Translate("game.notFound"));
             }
 
             if (game.HasStarted)
             {
-                return Result<PublicGameState>.Error(_translator.Translate("game.alreadyStarted"));
+                return Result<StartGameResult>.Error(_translator.Translate("game.alreadyStarted"));
             }
 
             if (game.Players.Count < _appSettings.MinPlayersPerGame)
             {
-                return Result<PublicGameState>.Error(_translator.Translate("game.notEnoughPlayers"));
+                return Result<StartGameResult>.Error(_translator.Translate("game.notEnoughPlayers"));
             }
 
             if (game.Players.Count > _appSettings.MaxPlayersPerGame)
             {
-                return Result<PublicGameState>.Error(_translator.Translate("game.tooManyPlayers"));
+                return Result<StartGameResult>.Error(_translator.Translate("game.tooManyPlayers"));
             }
 
-            await _startGameService.StartAsync(gameCode, cancellationToken);
+            var playerCards = await _startGameService.StartAsync(gameCode, cancellationToken);
 
             var gameState = new PublicGameState(
                 game!.GameCode,
                 game.HasStarted,
                 game.Players,
                 game.PlayerOrder,
-                game.PlayerCards,
                 game.CurrentTurnPlayerId
             );
 
-            return gameState;
+            return new StartGameResult(gameState, playerCards);
         }
     }
 }

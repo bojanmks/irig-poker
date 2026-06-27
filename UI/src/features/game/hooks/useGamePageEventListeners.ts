@@ -10,7 +10,7 @@ export function useGamePageEventListeners(hub: HubMethods) {
     const { connected: hubConnected, on: hubOn, off: hubOff } = hub;
 
     const { onPlayerJoined, onPlayerLeft, onAdminChanged } = usePlayerConnectionChangeEventHandlers();
-    const { onGameStarted } = useGameStartEventHandlers();
+    const { onGameStarted, onCardsDealt } = useGameStartEventHandlers();
     const { onGameWon } = useGameWonEventHandlers();
 
     useEffect(() => {
@@ -19,6 +19,7 @@ export function useGamePageEventListeners(hub: HubMethods) {
             hubOn("PlayerLeft", onPlayerLeft);
             hubOn("AdminChanged", onAdminChanged);
             hubOn("GameStarted", onGameStarted);
+            hubOn("CardsDealt", onCardsDealt);
             hubOn("GameWon", onGameWon);
         }
 
@@ -27,7 +28,8 @@ export function useGamePageEventListeners(hub: HubMethods) {
             hubOff("PlayerLeft");
             hubOff("AdminChanged");
             hubOff("GameStarted");
+            hubOff("CardsDealt");
             hubOff("GameWon");
         }
-    }, [hubConnected, hubOn, hubOff, onPlayerJoined, onPlayerLeft, onAdminChanged, onGameStarted, onGameWon]);
+    }, [hubConnected, hubOn, hubOff, onPlayerJoined, onPlayerLeft, onAdminChanged, onGameStarted, onCardsDealt, onGameWon]);
 }

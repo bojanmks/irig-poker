@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { resetGameState } from "@/features/game/store/gameStateSlice";
+import { resetCards } from "@/features/game/store/playerCardsSlice";
 import { useHub } from "@/features/http/hooks/useHub";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 
@@ -37,6 +38,7 @@ const GamePage = () => {
   useEffect(() => {
     return () => {
       dispatch(resetGameState());
+      dispatch(resetCards());
     };
   }, [dispatch]);
 

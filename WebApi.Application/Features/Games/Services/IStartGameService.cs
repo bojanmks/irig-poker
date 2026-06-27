@@ -1,6 +1,8 @@
-﻿namespace WebApi.Application.Features.Games.Services;
+﻿using WebApi.Common.Features.Games.Models;
+
+namespace WebApi.Application.Features.Games.Services;
 
 public interface IStartGameService
 {
-    Task StartAsync(string gameCode, CancellationToken cancellationToken = default);
+    Task<IReadOnlyDictionary<string, List<Card>>> StartAsync(string gameCode, CancellationToken cancellationToken = default);
 }

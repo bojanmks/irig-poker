@@ -7,12 +7,14 @@ using WebApi.Common.Core.Cqrs;
 using WebApi.Common.Features.Games.Joining.Models;
 using WebApi.Common.Features.Games.Models;
 using WebApi.Common.Features.Games.Winning.Models;
+using WebApi.Implementation.Features.Games.Stores;
 
 namespace WebApi.Api.Features.Games.Hubs;
 
 public class GameHub(
     IMediator _mediator,
-    TimeProvider _timeProvider
+    TimeProvider _timeProvider,
+    PlayersGamesMap _playersGamesMap
 ) : Hub
 {
     public async Task<HubActionResponse<JoinGameResult>> JoinGame(HubActionRequest<JoinGameRequest> request)
@@ -36,15 +38,35 @@ public class GameHub(
         return result.ToHubActionResponse();
     }
 
-    public async Task<HubActionResponse<PublicGameState>> StartGame(HubActionRequest<Empty> _)
+    public async Task<HubActionResponse<StartGameResult>> StartGame(HubActionRequest<Empty> _)
     {
         var result = await _mediator.Send(new StartGameCommand(), Context.ConnectionAborted);
 
         if (result.IsSuccess)
         {
+            var startGameResult = result.Data;
+            var gameCode = startGameResult.GameState.GameCode;
+
             await Clients
-                .Group(result.Data.GameCode)
-                .SendAsync("GameStarted", HubNotification.From(result.Data, _timeProvider), Context.ConnectionAborted);
+                .Group(gameCode)
+                .SendAsync("GameStarted", HubNotification.From(startGameResult.GameState, _timeProvider), Context.ConnectionAborted);
+
+            var tasks = new List<Task>();
+            foreach (var (playerId, cards) in startGameResult.PlayerCards)
+            {
+                if (_playersGamesMap.TryGetConnectionId(playerId, out var connectionId))
+                {
+                    tasks.Add(
+                        Clients.Client(connectionId)
+                            .SendAsync("CardsDealt", HubNotification.From(
+                                new CardsDealtNotification(cards),
+                                _timeProvider
+                            ), Context.ConnectionAborted)
+                    );
+                }
+            }
+
+            await Task.WhenAll(tasks);
         }
 
         return result.ToHubActionResponse();

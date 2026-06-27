@@ -7,6 +7,5 @@ public record PublicGameState(
     bool HasStarted,
     IReadOnlyDictionary<string, Player> Players,
     IReadOnlyList<string> PlayerOrder,
-    IReadOnlyDictionary<string, List<Card>> PlayerCards,
     string? CurrentTurnPlayerId
 );

@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import gameStateReducer from '@/features/game/store/gameStateSlice';
+import playerCardsReducer from '@/features/game/store/playerCardsSlice';
 import wrapperClassReducer from '@/features/shared/store/wrapperClassSlice';
 import themeReducer from '@/features/themes/store/themeSlice';
 
@@ -9,6 +10,7 @@ export const store = configureStore({
     theme: themeReducer,
     wrapperClass: wrapperClassReducer,
     gameState: gameStateReducer,
+    playerCards: playerCardsReducer,
   },
 });
 

@@ -21,6 +21,7 @@ public class DisconnectFromGameService(
         }
 
         result.PlayerId = entry.PlayerId;
+        _playersGamesMap.PlayerIdToConnectionId.TryRemove(entry.PlayerId, out _);
 
         using (await _gameLockService.AcquireLockAsync(entry.GameCode, cancellationToken))
         {

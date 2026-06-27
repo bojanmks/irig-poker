@@ -12,6 +12,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 
 import { resetGameState } from "../store/gameStateSlice";
+import { resetCards } from "../store/playerCardsSlice";
 
 export const WinnerBanner = () => {
   const { t } = useTranslation();
@@ -26,6 +27,7 @@ export const WinnerBanner = () => {
 
   const handleCreateNewGame = () => {
     dispatch(resetGameState());
+    dispatch(resetCards());
     navigate("/");
   };
 
