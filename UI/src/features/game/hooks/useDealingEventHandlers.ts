@@ -4,7 +4,7 @@ import type { HubNotification } from "@/features/http/models/HubNotification";
 import { useAppDispatch } from "@/features/store/hooks";
 
 import type { CardsDealtNotification } from "../models/CardsDealtNotification";
-import { setCards } from "../store/playerCardsSlice";
+import { setCards } from "../store/gameStateSlice";
 
 export function useDealingEventHandlers() {
     const dispatch = useAppDispatch();

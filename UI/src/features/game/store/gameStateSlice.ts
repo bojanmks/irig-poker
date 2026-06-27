@@ -1,18 +1,20 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-import type { GameWonNotification } from '@/features/game/models/GameWonNotification';
+import type { Card } from '@/features/game/models/Card';
 import type { Player } from '@/features/game/models/Player';
 import type { PublicGameState } from '@/features/game/models/PublicGameState';
 
 type GameStateState = {
   gameState: PublicGameState | null;
   playerId: string | null;
-  winner: GameWonNotification | null;
+  cards: Card[];
+  winner: { winnerPlayerId: string; winnerUsername: string } | null;
 };
 
 const initialState: GameStateState = {
   gameState: null,
   playerId: null,
+  cards: [],
   winner: null,
 };
 
@@ -49,19 +51,23 @@ const gameStateSlice = createSlice({
         }
       }
     },
+    setCards(state, action: PayloadAction<Card[]>) {
+      state.cards = action.payload;
+    },
     gameStarted(state, action: PayloadAction<PublicGameState>) {
       state.gameState = action.payload;
     },
-    gameWon(state, action: PayloadAction<GameWonNotification>) {
+    gameWon(state, action: PayloadAction<{ winnerPlayerId: string; winnerUsername: string }>) {
       state.winner = action.payload;
     },
     resetGameState(state) {
       state.gameState = null;
       state.playerId = null;
+      state.cards = [];
       state.winner = null;
     },
   },
 });
 
-export const { setGameState, playerJoined, playerLeft, adminChanged, gameStarted, gameWon, resetGameState } = gameStateSlice.actions;
+export const { setGameState, playerJoined, playerLeft, adminChanged, setCards, gameStarted, gameWon, resetGameState } = gameStateSlice.actions;
 export default gameStateSlice.reducer;

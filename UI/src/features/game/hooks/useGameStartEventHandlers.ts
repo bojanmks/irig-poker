@@ -2,8 +2,7 @@ import { useCallback } from "react";
 
 import type { CardsDealtNotification } from "@/features/game/models/CardsDealtNotification";
 import type { PublicGameState } from "@/features/game/models/PublicGameState";
-import { gameStarted } from "@/features/game/store/gameStateSlice";
-import { setCards } from "@/features/game/store/playerCardsSlice";
+import { gameStarted, setCards } from "@/features/game/store/gameStateSlice";
 import type { HubNotification } from "@/features/http/models/HubNotification";
 import { useAppDispatch } from "@/features/store/hooks";
 
