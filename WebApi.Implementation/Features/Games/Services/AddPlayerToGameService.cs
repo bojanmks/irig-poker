@@ -55,6 +55,7 @@ public class AddPlayerToGameService(
         }
 
         game.PlayerOrder.Add(playerId);
+        game.ActivePlayerIds.Add(playerId);
 
         return playerId;
     }

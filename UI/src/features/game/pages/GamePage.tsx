@@ -10,6 +10,7 @@ import { ConnectingToServer } from "../components/ConnectingToServer";
 import { EnterNameForm } from "../components/EnterNameForm";
 import { GameLobby } from "../components/GameLobby";
 import { JoiningGame } from "../components/JoiningGame";
+import { WinnerBanner } from "../components/WinnerBanner";
 import { GamePageState } from "../consts/GamePageState";
 import { useDiconnectOnPageLeave } from "../hooks/useDisconnectOnPageLeave";
 import { useGameHubDisconnectHandler } from "../hooks/useGameHubDisconnectHandler";
@@ -23,6 +24,7 @@ const GamePage = () => {
   const hub = useHub({ onDisconnected });
   const dispatch = useAppDispatch();
   const gameState = useAppSelector((state) => state.gameState.gameState);
+  const winner = useAppSelector((state) => state.gameState.winner);
 
   const { gameCode } = useParams();
   const { username, setUsername } = useUsernameFromRoute();
@@ -52,7 +54,12 @@ const GamePage = () => {
     return <JoiningGame hub={hub} gameCode={gameCode!} username={username} setPageState={setPageState} />;
   }
 
-  return gameState?.hasStarted ? <ActualGame /> : <GameLobby />;
+  return (
+    <>
+      {gameState?.hasStarted ? <ActualGame /> : <GameLobby />}
+      {winner && <WinnerBanner />}
+    </>
+  );
 };
 
 export default GamePage;

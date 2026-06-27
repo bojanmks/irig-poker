@@ -15,7 +15,10 @@
         "you": "You",
         "connecting": "Connecting to server...",
         "joining": "Joining game...",
-        "disconnected": "You were disconnected"
+        "disconnected": "You were disconnected",
+        "youWon": "You won!",
+        "playerWon": "{{username}} won!",
+        "createNewGame": "Create new game"
     },
     "theme": {
         "light": "Light",

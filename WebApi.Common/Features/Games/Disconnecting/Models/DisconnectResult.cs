@@ -6,4 +6,6 @@ public class DisconnectResult
     public string? PlayerId { get; set; }
     public string? ChangedAdminTo { get; set; }
     public bool HasGameEnded { get; set; } = false;
+    public string? WinnerPlayerId { get; set; }
+    public string? WinnerUsername { get; set; }
 }

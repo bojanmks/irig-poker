@@ -14,6 +14,7 @@ public class GameState
     }
 
     public ConcurrentDictionary<string, Player> Players { get; } = new();
+    public HashSet<string> ActivePlayerIds { get; } = [];
     public List<string> PlayerOrder { get; private set; } = [];
     public void ShufflePlayerOrder()
     {

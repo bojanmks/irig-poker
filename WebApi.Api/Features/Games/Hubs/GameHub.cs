@@ -6,6 +6,7 @@ using WebApi.Application.Features.Games.Commands;
 using WebApi.Common.Core.Cqrs;
 using WebApi.Common.Features.Games.Joining.Models;
 using WebApi.Common.Features.Games.Models;
+using WebApi.Common.Features.Games.Winning.Models;
 
 namespace WebApi.Api.Features.Games.Hubs;
 
@@ -70,6 +71,18 @@ public class GameHub(
                     Clients
                         .Group(result.Data.GameCode)
                         .SendAsync("AdminChanged", HubNotification.From(result.Data.ChangedAdminTo, _timeProvider))
+                );
+            }
+
+            if (!string.IsNullOrWhiteSpace(result.Data.WinnerPlayerId))
+            {
+                tasks.Add(
+                    Clients
+                        .Group(result.Data.GameCode)
+                        .SendAsync("GameWon", HubNotification.From(
+                            new WinnerNotification(result.Data.WinnerPlayerId, result.Data.WinnerUsername!),
+                            _timeProvider
+                        ))
                 );
             }
 

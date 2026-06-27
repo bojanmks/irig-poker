@@ -1,16 +1,19 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
+import type { GameWonNotification } from '@/features/game/models/GameWonNotification';
 import type { Player } from '@/features/game/models/Player';
 import type { PublicGameState } from '@/features/game/models/PublicGameState';
 
 type GameStateState = {
   gameState: PublicGameState | null;
   playerId: string | null;
+  winner: GameWonNotification | null;
 };
 
 const initialState: GameStateState = {
   gameState: null,
   playerId: null,
+  winner: null,
 };
 
 const gameStateSlice = createSlice({
@@ -49,12 +52,16 @@ const gameStateSlice = createSlice({
     gameStarted(state, action: PayloadAction<PublicGameState>) {
       state.gameState = action.payload;
     },
+    gameWon(state, action: PayloadAction<GameWonNotification>) {
+      state.winner = action.payload;
+    },
     resetGameState(state) {
       state.gameState = null;
       state.playerId = null;
+      state.winner = null;
     },
   },
 });
 
-export const { setGameState, playerJoined, playerLeft, adminChanged, gameStarted, resetGameState } = gameStateSlice.actions;
+export const { setGameState, playerJoined, playerLeft, adminChanged, gameStarted, gameWon, resetGameState } = gameStateSlice.actions;
 export default gameStateSlice.reducer;

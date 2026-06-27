@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import type { HubMethods } from "@/features/http/hooks/useHub";
 
 import { useGameStartEventHandlers } from "./useGameStartEventHandlers";
+import { useGameWonEventHandlers } from "./useGameWonEventHandlers";
 import { usePlayerConnectionChangeEventHandlers } from "./usePlayerConnectionChangeEventHandlers";
 
 export function useGamePageEventListeners(hub: HubMethods) {
@@ -10,6 +11,7 @@ export function useGamePageEventListeners(hub: HubMethods) {
 
     const { onPlayerJoined, onPlayerLeft, onAdminChanged } = usePlayerConnectionChangeEventHandlers();
     const { onGameStarted } = useGameStartEventHandlers();
+    const { onGameWon } = useGameWonEventHandlers();
 
     useEffect(() => {
         if (hubConnected) {
@@ -17,6 +19,7 @@ export function useGamePageEventListeners(hub: HubMethods) {
             hubOn("PlayerLeft", onPlayerLeft);
             hubOn("AdminChanged", onAdminChanged);
             hubOn("GameStarted", onGameStarted);
+            hubOn("GameWon", onGameWon);
         }
 
         return () => {
@@ -24,6 +27,7 @@ export function useGamePageEventListeners(hub: HubMethods) {
             hubOff("PlayerLeft");
             hubOff("AdminChanged");
             hubOff("GameStarted");
+            hubOff("GameWon");
         }
-    }, [hubConnected, hubOn, hubOff, onPlayerJoined, onPlayerLeft, onAdminChanged, onGameStarted]);
+    }, [hubConnected, hubOn, hubOff, onPlayerJoined, onPlayerLeft, onAdminChanged, onGameStarted, onGameWon]);
 }

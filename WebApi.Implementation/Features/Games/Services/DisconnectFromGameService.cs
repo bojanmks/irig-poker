@@ -40,9 +40,18 @@ public class DisconnectFromGameService(
 
             game.Players.Remove(entry.PlayerId, out _);
             game.PlayerOrder.Remove(entry.PlayerId);
+            game.ActivePlayerIds.Remove(entry.PlayerId);
 
-            if (game.HasStarted && game.Players.Count() <= 1)
+            if (game.HasStarted && game.ActivePlayerIds.Count <= 1)
             {
+                if (game.ActivePlayerIds.Count == 1)
+                {
+                    var winnerPlayerId = game.ActivePlayerIds.First();
+                    var winner = game.Players[winnerPlayerId];
+                    result.WinnerPlayerId = winner.PlayerId;
+                    result.WinnerUsername = winner.Username;
+                }
+
                 await _deleteGameService.DeleteAsync(entry.GameCode, cancellationToken);
                 result.HasGameEnded = true;
                 return result;
