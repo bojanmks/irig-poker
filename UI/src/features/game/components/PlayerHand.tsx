@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { type CSSProperties,useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useAppSelector } from "@/features/store/hooks";
@@ -16,9 +16,14 @@ export const PlayerHand = () => {
     if (cards.length <= 1) {
       return 0;
     }
-    
+
     return Math.round(CARD_WIDTH * OVERLAP_VISIBLE);
   }, [cards.length]);
+
+  const cardsWrapperStyle = useMemo<CSSProperties>(() => ({
+    width: cards.length > 1 ? CARD_WIDTH + (cards.length - 1) * overlapOffset : CARD_WIDTH,
+    height: Math.round(206 * CARD_WIDTH / 143)
+  }), [cards.length, overlapOffset]);
 
   if (cards.length === 0) {
     return null;
@@ -29,7 +34,9 @@ export const PlayerHand = () => {
       <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
         {t("game.yourHand")}
       </h2>
-      <div className="relative" style={{ width: cards.length > 1 ? CARD_WIDTH + (cards.length - 1) * overlapOffset : CARD_WIDTH, height: Math.round(206 * CARD_WIDTH / 143) }}>
+      <div
+        className="relative"
+        style={cardsWrapperStyle}>
         {cards.map((card, i) => (
           <div
             key={i}
