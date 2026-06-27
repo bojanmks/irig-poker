@@ -1,5 +1,4 @@
 using MediatR;
-using System.Collections.Frozen;
 using WebApi.Application.Core.ApplicationUsers;
 using WebApi.Application.Core.AppSettings;
 using WebApi.Application.Core.Localization;
