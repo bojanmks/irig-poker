@@ -9,14 +9,14 @@ import { CARD_H,CARD_W, getCardSpritePosition } from "../utils/cardSpriteConfig"
 type CardSpriteProps = {
   suit: SuitName;
   rank: number;
-  displayWidth?: number;
+  displayWidth: number;
   className?: string;
 };
 
 const SPRITE_W = 1920;
 const SPRITE_H = 1080;
 
-export const CardSprite = ({ suit, rank, displayWidth = 75, className }: CardSpriteProps) => {
+export const CardSprite = ({ suit, rank, displayWidth, className }: CardSpriteProps) => {
   const pos = useMemo(() => {
     return getCardSpritePosition(suit, rank);
   }, [suit, rank]);
