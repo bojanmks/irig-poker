@@ -11,6 +11,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 
 import { HandType } from "../models/HandType";
+import { Suit } from "../models/Suit";
 import { clearRoundResultData } from "../store/gameStateSlice";
 
 import { CardSprite } from "./CardSprite";
@@ -26,6 +27,13 @@ const handTypeLabels: Record<HandType, string> = {
   [HandType.StraightFlush]: "game.hands.straightFlush",
 };
 
+const suitSymbols: Record<number, string> = {
+  [Suit.Hearts]: "♥",
+  [Suit.Diamonds]: "♦",
+  [Suit.Clubs]: "♣",
+  [Suit.Spades]: "♠",
+};
+
 function rankLabel(rank: number): string {
   switch (rank) {
     case 2: return "2"; case 3: return "3"; case 4: return "4";
@@ -36,7 +44,7 @@ function rankLabel(rank: number): string {
   }
 }
 
-function describeRanks(handType: HandType, ranks: number[]): string {
+function describeRanks(handType: HandType, ranks: number[], suit?: number | null): string {
   if (ranks.length === 0) return "";
   if (handType === HandType.TwoPair) {
     return `${rankLabel(ranks[0])} & ${rankLabel(ranks[1])}`;
@@ -44,7 +52,11 @@ function describeRanks(handType: HandType, ranks: number[]): string {
   if (handType === HandType.FullHouse) {
     return `${rankLabel(ranks[0])} over ${rankLabel(ranks[1])}`;
   }
-  return rankLabel(ranks[0]);
+  const label = rankLabel(ranks[0]);
+  if (handType === HandType.StraightFlush && suit !== null && suit !== undefined) {
+    return `${label}${suitSymbols[suit] ?? ""}`;
+  }
+  return label;
 }
 
 export const RoundResultDisplay = () => {
@@ -86,7 +98,7 @@ export const RoundResultDisplay = () => {
               <span className="font-semibold text-foreground">
                 {t(handTypeLabels[roundResult.claimedHand])}
               </span>
-              {" "}({describeRanks(roundResult.claimedHand, roundResult.ranks)})
+              {" "}({describeRanks(roundResult.claimedHand, roundResult.ranks, roundResult.suit)})
             </p>
             <p className="text-sm text-muted-foreground">
               <span className="font-semibold text-foreground">

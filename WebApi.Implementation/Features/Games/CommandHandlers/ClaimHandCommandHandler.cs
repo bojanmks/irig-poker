@@ -55,7 +55,7 @@ public class ClaimHandCommandHandler(
                 }
             }
 
-            game.SetClaim(applicationUser.PlayerId!, command.Data.ClaimedHand, command.Data.Ranks);
+            game.SetClaim(applicationUser.PlayerId!, command.Data.ClaimedHand, command.Data.Ranks, command.Data.Suit);
             game.NextTurn();
 
             var publicGameState = new PublicGameState(
@@ -66,12 +66,13 @@ public class ClaimHandCommandHandler(
                 game.CurrentTurnPlayerId,
                 game.CurrentClaimedHand,
                 game.ClaimingPlayerId,
-                game.Ranks
+                game.Ranks,
+                game.ClaimedSuit
             );
 
             return new ClaimResult(
                 publicGameState,
-                new ClaimNotification(applicationUser.PlayerId!, command.Data.ClaimedHand, command.Data.Ranks)
+                new ClaimNotification(applicationUser.PlayerId!, command.Data.ClaimedHand, command.Data.Ranks, command.Data.Suit)
             );
         }
     }

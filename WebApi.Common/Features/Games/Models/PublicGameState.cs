@@ -10,5 +10,6 @@ public record PublicGameState(
     string? CurrentTurnPlayerId,
     HandType? CurrentClaimedHand,
     string? ClaimingPlayerId,
-    List<Rank>? Ranks
+    List<Rank>? Ranks,
+    Suit? ClaimedSuit
 );

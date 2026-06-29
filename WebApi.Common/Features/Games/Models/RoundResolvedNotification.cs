@@ -4,6 +4,7 @@ public record RoundResolvedNotification(
     string ClaimingPlayerId,
     HandType ClaimedHand,
     List<Rank> Ranks,
+    Suit? Suit,
     string CallingPlayerId,
     bool WasTruthful,
     string LosingPlayerId,

@@ -1,10 +1,12 @@
 import type { Card } from "./Card";
 import type { HandType } from "./HandType";
+import type { Suit } from "./Suit";
 
 export interface RoundResolvedNotification {
     claimingPlayerId: string;
     claimedHand: HandType;
     ranks: number[];
+    suit: Suit | null;
     callingPlayerId: string;
     wasTruthful: boolean;
     losingPlayerId: string;

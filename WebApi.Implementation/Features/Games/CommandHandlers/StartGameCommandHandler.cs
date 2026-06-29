@@ -63,6 +63,7 @@ public class StartGameCommandHandler(
                 game.CurrentTurnPlayerId,
                 null,
                 null,
+                null,
                 null
             );
 

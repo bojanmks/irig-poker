@@ -59,7 +59,10 @@ public class DisconnectFromGameService(
                 return result;
             }
 
-            game.StartNewRound();
+            if (game.HasStarted)
+            {
+                game.StartNewRound();
+            }
 
             if (!player.IsAdmin)
             {
@@ -71,7 +74,8 @@ public class DisconnectFromGameService(
                     game.CurrentTurnPlayerId,
                     game.CurrentClaimedHand,
                     game.ClaimingPlayerId,
-                    game.Ranks
+                    game.Ranks,
+                    game.ClaimedSuit
                 );
                 return result;
             }
@@ -90,7 +94,8 @@ public class DisconnectFromGameService(
                 game.CurrentTurnPlayerId,
                 game.CurrentClaimedHand,
                 game.ClaimingPlayerId,
-                game.Ranks
+                game.Ranks,
+                game.ClaimedSuit
             );
 
             return result;

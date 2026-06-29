@@ -1,6 +1,7 @@
 import type { HandType } from "./HandType";
 import type { Player } from "./Player";
 import type { Rank } from "./Rank";
+import type { Suit } from "./Suit";
 
 export interface PublicGameState {
     hasStarted: boolean;
@@ -10,4 +11,5 @@ export interface PublicGameState {
     currentClaimedHand: HandType | null;
     claimingPlayerId: string | null;
     ranks: Rank[] | null;
+    claimedSuit: Suit | null;
 }

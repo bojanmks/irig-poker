@@ -14,6 +14,7 @@ public class CallBluffService(
         var claimingPlayerId = game.ClaimingPlayerId!;
         var claimedHand = game.CurrentClaimedHand!.Value;
         var ranks = game.Ranks!;
+        var claimedSuit = game.ClaimedSuit;
 
         var allCards = game.GetAllCombinedCards();
         var wasTruthful = HandEvaluator.HandExistsWithRanks(allCards, claimedHand, ranks);
@@ -63,6 +64,7 @@ public class CallBluffService(
                 game.CurrentTurnPlayerId,
                 null,
                 null,
+                null,
                 null
             );
         }
@@ -71,6 +73,7 @@ public class CallBluffService(
             claimingPlayerId,
             claimedHand,
             ranks,
+            claimedSuit,
             callingPlayerId,
             wasTruthful,
             losingPlayerId,

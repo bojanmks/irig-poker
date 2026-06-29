@@ -7,6 +7,7 @@ import { useAppSelector } from "@/features/store/hooks";
 import { useCallBluff } from "../hooks/useCallBluff";
 import { HandType } from "../models/HandType";
 import type { Rank } from "../models/Rank";
+import { Suit } from "../models/Suit";
 
 import { HandSelector } from "./HandSelector";
 
@@ -21,6 +22,13 @@ const handTypeLabels: Record<HandType, string> = {
     [HandType.StraightFlush]: "game.hands.straightFlush",
 };
 
+const suitSymbols: Record<number, string> = {
+    [Suit.Hearts]: "♥",
+    [Suit.Diamonds]: "♦",
+    [Suit.Clubs]: "♣",
+    [Suit.Spades]: "♠",
+};
+
 function rankLabel(rank: number): string {
     switch (rank) {
         case 2: return "2"; case 3: return "3"; case 4: return "4";
@@ -31,7 +39,7 @@ function rankLabel(rank: number): string {
     }
 }
 
-function describeRanks(handType: HandType, ranks: number[]): string {
+function describeRanks(handType: HandType, ranks: number[], suit?: number | null): string {
     if (ranks.length === 0) return "";
     if (handType === HandType.TwoPair) {
         return `${rankLabel(ranks[0])} & ${rankLabel(ranks[1])}`;
@@ -39,7 +47,11 @@ function describeRanks(handType: HandType, ranks: number[]): string {
     if (handType === HandType.FullHouse) {
         return `${rankLabel(ranks[0])} over ${rankLabel(ranks[1])}`;
     }
-    return rankLabel(ranks[0]);
+    const label = rankLabel(ranks[0]);
+    if (handType === HandType.StraightFlush && suit !== null && suit !== undefined) {
+        return `${label}${suitSymbols[suit] ?? ""}`;
+    }
+    return label;
 }
 
 type ClaimHandPanelProps = {
@@ -52,8 +64,8 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
     const playerId = useAppSelector((state) => state.gameState.playerId);
     const { callBluff } = useCallBluff(hub);
 
-    const handleClaim = useCallback(async (handType: HandType, ranks: Rank[]) => {
-        await hub.invoke("ClaimHand", { claimedHand: handType, ranks });
+    const handleClaim = useCallback(async (handType: HandType, ranks: Rank[], suit?: number) => {
+        await hub.invoke("ClaimHand", { claimedHand: handType, ranks, suit });
     }, [hub]);
 
     if (!gameState) {
@@ -73,7 +85,7 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
                     <span className="font-semibold text-foreground">{currentClaimer.username}</span>
                     {" "}{t("game.claimed")}{" "}
                     <span className="font-semibold text-foreground">{t(handTypeLabels[currentClaim])}</span>
-                    {" "}({describeRanks(currentClaim, currentRanks)})
+                    {" "}({describeRanks(currentClaim, currentRanks, gameState.claimedSuit)})
                 </div>
             )}
 

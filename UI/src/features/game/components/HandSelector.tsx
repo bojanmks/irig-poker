@@ -77,7 +77,7 @@ function handTypeLabelKey(handType: HandType): string {
 type Step = "hand-type" | "suit" | "first-rank" | "second-rank";
 
 type HandSelectorProps = {
-    onSelect: (handType: HandType, ranks: Rank[]) => void;
+    onSelect: (handType: HandType, ranks: Rank[], suit?: Suit) => void;
     currentClaimedHand: HandType | null;
     currentRanks: Rank[] | null;
     disabled?: boolean;
@@ -116,11 +116,11 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
             setFirstRank(rank);
             setStep("second-rank");
         } else {
-            onSelect(selectedHandType, [rank]);
+            onSelect(selectedHandType, [rank], selectedHandType === HandType.StraightFlush ? selectedFlushSuit : undefined);
             setStep("hand-type");
             setSelectedHandType(null);
         }
-    }, [selectedHandType, onSelect, setStep, setSelectedHandType]);
+    }, [selectedHandType, onSelect, setStep, setSelectedHandType, selectedFlushSuit]);
 
     const handleSecondRankClick = useCallback((rank: Rank) => {
         if (selectedHandType === null || firstRank === null) return;

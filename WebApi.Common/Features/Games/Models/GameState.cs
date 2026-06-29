@@ -123,8 +123,9 @@ public class GameState
     public HandType? CurrentClaimedHand { get; set; }
     public string? ClaimingPlayerId { get; set; }
     public List<Rank>? Ranks { get; private set; }
+    public Suit? ClaimedSuit { get; private set; }
 
-    public void SetClaim(string claimingPlayerId, HandType claimedHand, List<Rank> ranks)
+    public void SetClaim(string claimingPlayerId, HandType claimedHand, List<Rank> ranks, Suit? suit = null)
     {
         if (CurrentClaimedHand.HasValue && ClaimingPlayerId is not null && Ranks is not null)
         {
@@ -137,6 +138,7 @@ public class GameState
         ClaimingPlayerId = claimingPlayerId;
         CurrentClaimedHand = claimedHand;
         Ranks = ranks;
+        ClaimedSuit = suit;
     }
 
     public void ClearClaim()
@@ -144,6 +146,7 @@ public class GameState
         CurrentClaimedHand = null;
         ClaimingPlayerId = null;
         Ranks = null;
+        ClaimedSuit = null;
     }
 
     public List<Card> GetAllCombinedCards()

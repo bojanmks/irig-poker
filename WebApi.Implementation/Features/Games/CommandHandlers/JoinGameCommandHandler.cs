@@ -53,6 +53,7 @@ public class JoinGameCommandHandler(
                 game.CurrentTurnPlayerId,
                 null,
                 null,
+                null,
                 null
             );
 
