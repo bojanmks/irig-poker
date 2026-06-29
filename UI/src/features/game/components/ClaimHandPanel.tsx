@@ -79,40 +79,41 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
     const currentRanks = gameState.ranks;
 
     return (
-        <div className="flex flex-col gap-3 p-4 rounded-lg border border-border bg-card/50">
+        <div className="flex flex-col gap-4 p-4 rounded-lg border border-border bg-card/50">
             {currentClaimer && currentClaim !== null && currentRanks !== null && (
-                <div className="text-sm text-muted-foreground">
-                    <span className="font-semibold text-foreground">{currentClaimer.username}</span>
-                    {" "}{t("game.claimed")}{" "}
-                    <span className="font-semibold text-foreground">{t(handTypeLabels[currentClaim])}</span>
-                    {" "}({describeRanks(currentClaim, currentRanks, gameState.claimedSuit)})
-                </div>
+                <>
+                    <div className="flex items-center gap-2">
+                        <div className="text-sm text-muted-foreground">
+                            <span className="font-semibold text-foreground">{currentClaimer.username}</span>
+                            {" "}{t("game.claimed")}{" "}
+                            <span className="font-semibold text-foreground">{t(handTypeLabels[currentClaim])}</span>
+                            {" "}({describeRanks(currentClaim, currentRanks, gameState.claimedSuit)})
+                        </div>
+                        {isMyTurn && (
+                            <button
+                                onClick={callBluff}
+                                className="shrink-0 px-3 py-1.5 text-xs font-semibold rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors"
+                            >
+                                {t("game.callBluff")}
+                            </button>
+                        )}
+                    </div>
+                    {!isMyTurn && (
+                        <span className="shrink-0 text-xs text-muted-foreground">{t("game.waitingForChallenge")}</span>
+                    )}
+                </>
             )}
 
             {isMyTurn && (
-                <div className="flex flex-col gap-2">
-                    {currentClaim !== null && (
-                        <button
-                            onClick={callBluff}
-                            className="px-4 py-2 text-sm font-medium rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors"
-                        >
-                            {t("game.callBluff")}
-                        </button>
-                    )}
-                    <HandSelector
-                        onSelect={handleClaim}
-                        currentClaimedHand={currentClaim}
-                        currentRanks={currentRanks}
-                    />
-                </div>
+                <HandSelector
+                    onSelect={handleClaim}
+                    currentClaimedHand={currentClaim}
+                    currentRanks={currentRanks}
+                />
             )}
 
             {!isMyTurn && currentClaim === null && (
                 <p className="text-sm text-muted-foreground">{t("game.waitingForFirstClaim")}</p>
-            )}
-
-            {!isMyTurn && currentClaim !== null && (
-                <p className="text-sm text-muted-foreground">{t("game.waitingForChallenge")}</p>
             )}
         </div>
     );
