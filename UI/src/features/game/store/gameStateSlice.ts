@@ -3,12 +3,15 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { Card } from '@/features/game/models/Card';
 import type { Player } from '@/features/game/models/Player';
 import type { PublicGameState } from '@/features/game/models/PublicGameState';
+import type { RoundResolvedNotification } from '@/features/game/models/RoundResolvedNotification';
 
 type GameStateState = {
   gameState: PublicGameState | null;
   playerId: string | null;
   cards: Card[];
   winner: { winnerPlayerId: string; winnerUsername: string } | null;
+  roundResult: RoundResolvedNotification | null;
+  eliminatedPlayerId: string | null;
 };
 
 const initialState: GameStateState = {
@@ -16,6 +19,8 @@ const initialState: GameStateState = {
   playerId: null,
   cards: [],
   winner: null,
+  roundResult: null,
+  eliminatedPlayerId: null,
 };
 
 const gameStateSlice = createSlice({
@@ -56,18 +61,36 @@ const gameStateSlice = createSlice({
     },
     gameStarted(state, action: PayloadAction<PublicGameState>) {
       state.gameState = action.payload;
+      state.roundResult = null;
+      state.eliminatedPlayerId = null;
     },
     gameWon(state, action: PayloadAction<{ winnerPlayerId: string; winnerUsername: string }>) {
       state.winner = action.payload;
+    },
+    gameStateUpdated(state, action: PayloadAction<PublicGameState>) {
+      state.gameState = action.payload;
+    },
+    claimMade(state) {
+      if (state.gameState) {
+        state.roundResult = null;
+      }
+    },
+    roundResolved(state, action: PayloadAction<RoundResolvedNotification>) {
+      state.roundResult = action.payload;
+    },
+    playerEliminated(state, action: PayloadAction<string>) {
+      state.eliminatedPlayerId = action.payload;
     },
     resetGameState(state) {
       state.gameState = null;
       state.playerId = null;
       state.cards = [];
       state.winner = null;
+      state.roundResult = null;
+      state.eliminatedPlayerId = null;
     },
   },
 });
 
-export const { setGameState, playerJoined, playerLeft, adminChanged, setCards, gameStarted, gameWon, resetGameState } = gameStateSlice.actions;
+export const { setGameState, playerJoined, playerLeft, adminChanged, setCards, gameStarted, gameWon, gameStateUpdated, claimMade, roundResolved, playerEliminated, resetGameState } = gameStateSlice.actions;
 export default gameStateSlice.reducer;

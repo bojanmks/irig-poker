@@ -56,7 +56,7 @@ const GamePage = () => {
 
   return (
     <>
-      {gameState?.hasStarted ? <ActualGame /> : <GameLobby />}
+      {gameState?.hasStarted ? <ActualGame hub={hub} /> : <GameLobby />}
       {winner && <WinnerBanner />}
     </>
   );

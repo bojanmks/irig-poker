@@ -1,6 +1,6 @@
-import type { SuitName } from "./SuitName";
+import type { Suit } from "./Suit";
 
 export interface Card {
-    suit: SuitName;
+    suit: Suit;
     rank: number;
 }

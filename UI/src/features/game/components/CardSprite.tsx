@@ -3,11 +3,11 @@ import { type CSSProperties,useMemo } from "react";
 import cardSprites from "@/assets/card_sprites.png";
 import { cn } from "@/lib/utils";
 
-import type { SuitName } from "../models/SuitName";
+import type { Suit } from "../models/Suit";
 import { CARD_H,CARD_W, getCardSpritePosition } from "../utils/cardSpriteConfig";
 
 type CardSpriteProps = {
-  suit: SuitName;
+  suit: Suit;
   rank: number;
   displayWidth: number;
   className?: string;

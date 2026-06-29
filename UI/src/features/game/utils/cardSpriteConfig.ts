@@ -1,6 +1,6 @@
 import cardSprites from "@/assets/card_sprites.png";
 
-import type { SuitName } from "../models/SuitName";
+import { Suit } from "../models/Suit";
 
 const CARD_W = 143;
 const CARD_H = 206;
@@ -11,11 +11,11 @@ const COL_X: number[] = [9, 156, 302, 448, 594, 741, 887, 1033, 1179, 1325, 1472
 // Actual pixel positions of each card row in the sprite (uniform 4px gaps)
 const ROW_Y: number[] = [121, 331, 541, 751];
 
-const SUIT_ROW: Record<SuitName, number> = {
-  Hearts: 0,
-  Diamonds: 1,
-  Clubs: 2,
-  Spades: 3,
+const SUIT_ROW: Record<Suit, number> = {
+  [Suit.Hearts]: 0,
+  [Suit.Diamonds]: 1,
+  [Suit.Clubs]: 2,
+  [Suit.Spades]: 3,
 };
 
 const RANK_COL: Record<number, number> = {
@@ -34,7 +34,7 @@ const RANK_COL: Record<number, number> = {
   14: 12, // King
 };
 
-export function getCardSpritePosition(suit: SuitName, rank: number) {
+export function getCardSpritePosition(suit: Suit, rank: number) {
   const col = RANK_COL[rank] ?? 0;
   const row = SUIT_ROW[suit] ?? 0;
 

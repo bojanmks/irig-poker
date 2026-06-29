@@ -60,7 +60,10 @@ public class StartGameCommandHandler(
                 game.HasStarted,
                 game.Players,
                 game.PlayerOrder,
-                game.CurrentTurnPlayerId
+                game.CurrentTurnPlayerId,
+                null,
+                null,
+                null
             );
 
             return new StartGameResult(gameState, playerCards);

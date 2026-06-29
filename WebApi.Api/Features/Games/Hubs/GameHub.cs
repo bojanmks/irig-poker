@@ -72,6 +72,95 @@ public class GameHub(
         return result.ToHubActionResponse();
     }
 
+    public async Task<HubActionResponse<ClaimResult>> ClaimHand(HubActionRequest<ClaimHandRequest> request)
+    {
+        var result = await _mediator.Send(new ClaimHandCommand(request.Data), Context.ConnectionAborted);
+
+        if (result.IsSuccess)
+        {
+            var claimResult = result.Data;
+            var gameCode = claimResult.GameState.GameCode;
+
+            await Clients.Group(gameCode)
+                .SendAsync("ClaimMade", HubNotification.From(
+                    claimResult.ClaimNotification, _timeProvider
+                ), Context.ConnectionAborted);
+
+            await Clients.Group(gameCode)
+                .SendAsync("GameStateUpdated", HubNotification.From(
+                    claimResult.GameState, _timeProvider
+                ), Context.ConnectionAborted);
+        }
+
+        return result.ToHubActionResponse();
+    }
+
+    public async Task<HubActionResponse<CallBluffResult>> CallBluff(HubActionRequest<CallBluffRequest> _)
+    {
+        var result = await _mediator.Send(new CallBluffCommand(), Context.ConnectionAborted);
+
+        if (result.IsSuccess)
+        {
+            var callBluffResult = result.Data;
+            var gameCode = callBluffResult.GameCode;
+
+            await Clients.Group(gameCode)
+                .SendAsync("RoundResolved", HubNotification.From(
+                    callBluffResult.Resolution, _timeProvider
+                ), Context.ConnectionAborted);
+
+            var tasks = new List<Task>();
+
+            if (callBluffResult.EliminatedPlayerId is not null)
+            {
+                tasks.Add(
+                    Clients.Group(gameCode)
+                        .SendAsync("PlayerEliminated", HubNotification.From(
+                            callBluffResult.EliminatedPlayerId, _timeProvider
+                        ), Context.ConnectionAborted)
+                );
+            }
+
+            if (callBluffResult.WinnerPlayerId is not null)
+            {
+                tasks.Add(
+                    Clients.Group(gameCode)
+                        .SendAsync("GameWon", HubNotification.From(
+                            new WinnerNotification(callBluffResult.WinnerPlayerId, callBluffResult.WinnerUsername!),
+                            _timeProvider
+                        ), Context.ConnectionAborted)
+                );
+            }
+            else if (callBluffResult.UpdatedGameState is not null)
+            {
+                tasks.Add(
+                    Clients.Group(gameCode)
+                        .SendAsync("GameStateUpdated", HubNotification.From(
+                            callBluffResult.UpdatedGameState, _timeProvider
+                        ), Context.ConnectionAborted)
+                );
+            }
+
+            foreach (var (playerId, cards) in callBluffResult.PlayerCards)
+            {
+                if (_playersGamesMap.TryGetConnectionId(playerId, out var connectionId))
+                {
+                    tasks.Add(
+                        Clients.Client(connectionId)
+                            .SendAsync("CardsDealt", HubNotification.From(
+                                new CardsDealtNotification(cards),
+                                _timeProvider
+                            ), Context.ConnectionAborted)
+                    );
+                }
+            }
+
+            await Task.WhenAll(tasks);
+        }
+
+        return result.ToHubActionResponse();
+    }
+
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         var result = await _mediator.Send(new DisconnectCommand(Context.ConnectionId));

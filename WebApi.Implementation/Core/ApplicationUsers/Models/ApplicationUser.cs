@@ -9,4 +9,5 @@ public class ApplicationUser : IApplicationUser
     public required UserRole Role { get; init; }
     public required CultureInfo Locale { get; init; }
     public required string? GameCode { get; init; }
+    public required string? PlayerId { get; init; }
 }

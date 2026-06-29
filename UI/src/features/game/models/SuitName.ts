@@ -1,1 +1,0 @@
-export type SuitName = "Hearts" | "Diamonds" | "Clubs" | "Spades";

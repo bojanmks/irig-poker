@@ -8,12 +8,31 @@ public class GameState
     public required string GameCode { get; init; }
 
     public bool HasStarted { get; private set; } = false;
-    public void Start()
+    public void MarkStarted()
     {
+        if (HasStarted)
+        {
+            throw new InvalidOperationException("Game has already started");
+        }
+
+        if (Players.Count < 2)
+        {
+            throw new InvalidOperationException("Cannot start game with less than 2 players");
+        }
+
         HasStarted = true;
     }
 
     public ConcurrentDictionary<string, Player> Players { get; } = new();
+
+    public void InitializeCardCounts()
+    {
+        foreach (var playerId in Players.Keys)
+        {
+            Players[playerId].CardCount = 1;
+        }
+    }
+
     public HashSet<string> ActivePlayerIds { get; } = [];
     public List<string> PlayerOrder { get; private set; } = [];
     public void ShufflePlayerOrder()
@@ -23,18 +42,40 @@ public class GameState
         PlayerOrder = [.. playerIds];
     }
 
-    public string? CurrentTurnPlayerId { get; set; }
+    public string? StartTurnPlayerId { get; private set; }
+
+    public void StartRound()
+    {
+        if (!HasStarted)
+        {
+            throw new InvalidOperationException("Game has not started");
+        }
+
+        if (StartTurnPlayerId is null)
+        {
+            StartTurnPlayerId = PlayerOrder[0];
+        }
+        else
+        {
+            var currentIndex = PlayerOrder.IndexOf(StartTurnPlayerId);
+            var nextIndex = (currentIndex + 1) % PlayerOrder.Count;
+            StartTurnPlayerId = PlayerOrder[nextIndex];
+        }
+
+        CurrentTurnPlayerId = StartTurnPlayerId;
+    }
+
+    public string? CurrentTurnPlayerId { get; private set; }
     public void NextTurn()
     {
-        if (PlayerOrder.Count == 0)
+        if (!HasStarted)
         {
-            throw new InvalidOperationException("No players in the game");
+            throw new InvalidOperationException("Game has not started");
         }
 
         if (CurrentTurnPlayerId is null)
         {
-            CurrentTurnPlayerId = PlayerOrder[0];
-            return;
+            throw new InvalidOperationException("Current turn player is not set");
         }
 
         var currentIndex = PlayerOrder.IndexOf(CurrentTurnPlayerId);
@@ -51,7 +92,7 @@ public class GameState
         Deck.Shuffle();
     }
 
-    public void DealCardsToAllPlayers(int count)
+    public void DealCardsToAllPlayers()
     {
         if (Deck is null)
         {
@@ -60,26 +101,91 @@ public class GameState
 
         foreach (var playerId in ActivePlayerIds)
         {
-            var cards = Deck.Deal(count);
+            var cards = Deck.Deal(Players[playerId].CardCount);
             PlayerCards[playerId] = cards;
-            Players[playerId].CardCount += count;
         }
     }
 
-    public void DealCardToPlayer(string playerId)
+    public void AddCardToPlayer(string playerId)
     {
         if (Deck is null)
         {
             throw new InvalidOperationException("Deck has not been created");
         }
 
-        if (!PlayerCards.TryGetValue(playerId, out var cards))
-        {
-            cards = [];
-            PlayerCards[playerId] = cards;
-        }
-
-        cards.Add(Deck.DealOne());
         Players[playerId].CardCount++;
     }
+
+    public HandType? CurrentClaimedHand { get; set; }
+    public string? ClaimingPlayerId { get; set; }
+    public List<Rank>? Ranks { get; set; }
+
+    public static bool IsStrongerThan(HandType handType, List<Rank> ranks, HandType otherHandType, List<Rank> otherRanks)
+    {
+        if (handType != otherHandType)
+        {
+            return handType > otherHandType;
+        }
+
+        for (int i = 0; i < ranks.Count && i < otherRanks.Count; i++)
+        {
+            var cmp = HandEvaluator.CompareRanks(ranks[i], otherRanks[i]);
+            if (cmp != 0) return cmp > 0;
+        }
+
+        return ranks.Count > otherRanks.Count;
+    }
+
+    public void SetClaim(string claimingPlayerId, HandType claimedHand, List<Rank> ranks)
+    {
+        if (CurrentClaimedHand.HasValue && ClaimingPlayerId is not null && Ranks is not null)
+        {
+            if (!IsStrongerThan(claimedHand, ranks, CurrentClaimedHand.Value, Ranks))
+            {
+                throw new InvalidOperationException("Must claim a stronger hand than the current claim");
+            }
+        }
+
+        ClaimingPlayerId = claimingPlayerId;
+        CurrentClaimedHand = claimedHand;
+        Ranks = ranks;
+    }
+
+    public void ClearClaim()
+    {
+        CurrentClaimedHand = null;
+        ClaimingPlayerId = null;
+        Ranks = null;
+    }
+
+    public List<Card> GetAllCombinedCards()
+    {
+        return PlayerCards.SelectMany(kvp => kvp.Value).ToList();
+    }
+
+    public void RemovePlayer(string playerId)
+    {
+        ActivePlayerIds.Remove(playerId);
+        PlayerOrder = [.. PlayerOrder.Where(id => id != playerId)];
+        PlayerCards.Remove(playerId);
+
+        if (CurrentTurnPlayerId == playerId)
+        {
+            NextTurn();
+        }
+    }
+
+    public void AddCardsToPlayer(string playerId, List<Card> cards)
+    {
+        if (!PlayerCards.TryGetValue(playerId, out var existing))
+        {
+            existing = [];
+            PlayerCards[playerId] = existing;
+        }
+
+        existing.AddRange(cards);
+        Players[playerId].CardCount += cards.Count;
+    }
+
+    public const int MaxCardCount = 7;
 }

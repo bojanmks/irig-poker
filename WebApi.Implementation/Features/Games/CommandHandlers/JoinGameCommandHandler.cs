@@ -50,7 +50,10 @@ public class JoinGameCommandHandler(
                 game.HasStarted,
                 game.Players,
                 game.PlayerOrder,
-                game.CurrentTurnPlayerId
+                game.CurrentTurnPlayerId,
+                null,
+                null,
+                null
             );
 
             return new JoinGameResult(playerId, gameState);

@@ -37,11 +37,11 @@ export function useHub(params: UseHubParams): HubMethods {
   useEffect(() => {
     const start = async () => {
       if (connection.state === signalR.HubConnectionState.Connected) {
-        if (!connected) setConnected(true);
+        setConnected(true);
         return;
       }
 
-      if (connection.state === signalR.HubConnectionState.Connecting) {
+      if (connection.state !== signalR.HubConnectionState.Disconnected) {
         return;
       }
 
@@ -50,7 +50,7 @@ export function useHub(params: UseHubParams): HubMethods {
     };
 
     start();
-  }, [connected, setConnected]);
+  }, [setConnected]);
 
   useEffect(() => {
     const handler = () => {

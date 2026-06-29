@@ -10,11 +10,12 @@ public class StartGameService(
     public async Task<IReadOnlyDictionary<string, List<Card>>> StartAsync(string gameCode, CancellationToken cancellationToken = default)
     {
         var game = await _getGameService.GetAsync(gameCode, cancellationToken) ?? throw new InvalidOperationException("Game not found");
-        game.Start();
+        game.MarkStarted();
+        game.InitializeCardCounts();
         game.CreateDeck();
-        game.DealCardsToAllPlayers(1);
+        game.DealCardsToAllPlayers();
         game.ShufflePlayerOrder();
-        game.NextTurn();
+        game.StartRound();
 
         return game.PlayerCards;
     }

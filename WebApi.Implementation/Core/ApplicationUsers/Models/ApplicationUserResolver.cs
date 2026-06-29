@@ -20,7 +20,8 @@ public class ApplicationUserResolver(
         {
             Locale = locale,
             Role = UserRole.NotPlaying,
-            GameCode = null
+            GameCode = null,
+            PlayerId = null
         };
     }
 
@@ -46,7 +47,8 @@ public class ApplicationUserResolver(
         {
             Locale = locale,
             GameCode = entry.GameCode,
-            Role = userRole
+            Role = userRole,
+            PlayerId = entry.PlayerId
         };
     }
 }

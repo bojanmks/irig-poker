@@ -9,11 +9,16 @@
   },
   "game": {
     "notFound": "Igra ne postoji",
+    "notStarted": "Igra nije počela",
     "alreadyStarted": "Igra je već počela",
     "isFull": "Igra je puna",
     "notEnoughPlayers": "Nema dovoljno igrača u igri",
     "tooManyPlayers": "Previše igrača je u igri",
-    "failedToJoin": "Nije uspelo pridruživanje igri"
+    "failedToJoin": "Nije uspelo pridruživanje igri",
+    "notYourTurn": "Nije tvoj potez",
+    "mustClaimStrongerHand": "Moraš da prijaviš jaču kombinaciju od trenutne",
+    "noClaimToCall": "Nema aktivne prijave za prozivku",
+    "cannotCallOwnBluff": "Ne možeš da prozivaš samog sebe"
   },
   "user": {
     "notInGame": "Korisnik nije u igri"

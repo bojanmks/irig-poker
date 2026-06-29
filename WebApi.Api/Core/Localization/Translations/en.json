@@ -9,11 +9,16 @@
   },
   "game": {
     "notFound": "Game not found",
+    "notStarted": "Game has not started",
     "alreadyStarted": "Game has already started",
     "isFull": "Game is full",
     "notEnoughPlayers": "Not enough players in the game",
     "tooManyPlayers": "Too many players in the game",
-    "failedToJoin": "Failed to join the game"
+    "failedToJoin": "Failed to join the game",
+    "notYourTurn": "It is not your turn",
+    "mustClaimStrongerHand": "You must claim a stronger hand than the current claim",
+    "noClaimToCall": "There is no active claim to call",
+    "cannotCallOwnBluff": "You cannot call your own bluff"
   },
   "user": {
     "notInGame": "User is not in a game"
