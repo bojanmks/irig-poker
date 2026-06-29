@@ -11,8 +11,7 @@ import connection from "../clients/hubClient";
 import type { HubActionRequest } from "../models/HubActionRequest";
 import type { HubActionResponse } from "../models/HubActionResponse";
 import type { HubNotification } from "../models/HubNotification";
-
-import { addHangingNotification, clearHangingNotifications, hangingNotifications } from "./useHangingNotifications";
+import { addHangingNotification, clearHangingNotifications, hangingNotifications } from "../util/hangingNotifications";
 
 export type HubMethods = {
   connected: boolean;
