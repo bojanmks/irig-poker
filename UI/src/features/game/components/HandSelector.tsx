@@ -215,7 +215,7 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
                             onClick={() => handleSuitClick(suit)}
                             className="rounded-md transition-all hover:ring-2 hover:ring-primary hover:ring-offset-2"
                         >
-                            <CardSprite suit={suit} rank={99} displayWidth={60} />
+                            <CardSprite suit={suit} rank={Rank.Ace} displayWidth={60} />
                         </button>
                     ))}
                 </div>
