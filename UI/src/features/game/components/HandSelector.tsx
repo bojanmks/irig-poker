@@ -1,6 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { ArrowLeft } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 
 import { HandType } from "../models/HandType";
@@ -80,6 +82,8 @@ type HandSelectorProps = {
     currentRanks: Rank[] | null;
     disabled?: boolean;
 };
+
+const BackArrow = () => <ArrowLeft size={18} />;
 
 export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disabled }: HandSelectorProps) => {
     const { t } = useTranslation();
@@ -201,9 +205,9 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
                 <div className="flex items-center gap-2">
                     <button
                         onClick={handleBack}
-                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center"
                     >
-                        &larr; {t("game.back")}
+                        <BackArrow /> {t("game.back")}
                     </button>
                     <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
                         {t(handTypeLabelKey(selectedHandType!))}
@@ -230,9 +234,9 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
             <div className="flex items-center gap-2">
                 <button
                     onClick={handleBack}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center"
                 >
-                    &larr; {t("game.back")}
+                    <BackArrow /> {t("game.back")}
                 </button>
                 <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
                     {t(handTypeLabelKey(selectedHandType!))}
