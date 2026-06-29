@@ -41,12 +41,11 @@
             "highCard": "Visoka karta",
             "onePair": "Jedan par",
             "twoPair": "Dva para",
-            "straight": "Skala",
-            "threeOfAKind": "Tri ista",
-            "fullHouse": "Full House",
-            "fourOfAKind": "Četiri ista",
-            "straightFlush": "Skala u boji",
-            "royalFlush": "Royal Flush"
+            "straight": "Kenta",
+            "threeOfAKind": "Triling",
+            "fullHouse": "Full house",
+            "fourOfAKind": "Poker",
+            "straightFlush": "Kenta u boji"
         }
     },
     "theme": {
