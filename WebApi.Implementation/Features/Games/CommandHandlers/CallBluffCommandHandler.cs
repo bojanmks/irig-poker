@@ -10,6 +10,7 @@ namespace WebApi.Implementation.Features.Games.CommandHandlers;
 
 public class CallBluffCommandHandler(
     IApplicationUserResolver _applicationUserResolver,
+    ICallBluffService _callBluffService,
     IGetGameService _getGameService,
     IGameLockService _gameLockService,
     ITranslator _translator
@@ -55,95 +56,16 @@ public class CallBluffCommandHandler(
                 return Result<CallBluffResult>.Error(_translator.Translate("game.cannotCallOwnBluff"));
             }
 
-            var claimingPlayerId = game.ClaimingPlayerId;
-            var claimedHand = game.CurrentClaimedHand.Value;
-            var ranks = game.Ranks;
-
-            var allCards = game.GetAllCombinedCards();
-            var wasTruthful = HandEvaluator.HandExistsWithRanks(allCards, claimedHand, ranks);
-
-            string losingPlayerId;
-            if (wasTruthful)
-            {
-                losingPlayerId = applicationUser.PlayerId!;
-            }
-            else
-            {
-                losingPlayerId = claimingPlayerId;
-            }
-
-            var allPlayerCardsSnapshot = game.PlayerCards
-                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToList());
-
-            game.AddCardToPlayer(losingPlayerId);
-            game.DealCardsToAllPlayers();
-            var loserNewCardCount = game.Players[losingPlayerId].CardCount;
-
-            string? eliminatedPlayerId = null;
-            string? winnerPlayerId = null;
-            string? winnerUsername = null;
-
-            if (loserNewCardCount >= GameState.MaxCardCount)
-            {
-                eliminatedPlayerId = losingPlayerId;
-                game.RemovePlayer(losingPlayerId);
-
-                if (game.ActivePlayerIds.Count <= 1)
-                {
-                    var lastPlayerId = game.ActivePlayerIds.FirstOrDefault();
-                    if (lastPlayerId is not null)
-                    {
-                        winnerPlayerId = lastPlayerId;
-                        winnerUsername = game.Players[lastPlayerId].Username;
-                    }
-                }
-            }
-
-            game.ClearClaim();
-
-            PublicGameState? updatedGameState = null;
-
-            if (winnerPlayerId is null)
-            {
-                game.StartRound();
-
-                updatedGameState = new PublicGameState(
-                    game.GameCode,
-                    game.HasStarted,
-                    game.Players,
-                    game.PlayerOrder,
-                    game.CurrentTurnPlayerId,
-                    null,
-                    null,
-                    null
-                );
-            }
-
-            var resolution = new RoundResolvedNotification(
-                claimingPlayerId,
-                claimedHand,
-                ranks,
-                applicationUser.PlayerId!,
-                wasTruthful,
-                losingPlayerId,
-                loserNewCardCount,
-                allPlayerCardsSnapshot,
-                eliminatedPlayerId,
-                winnerPlayerId,
-                winnerUsername
-            );
-
-            var playerCardsCopy = game.PlayerCards
-                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToList());
+            var serviceResult = await _callBluffService.CallBluffAsync(gameCode, applicationUser.PlayerId!, cancellationToken);
 
             return new CallBluffResult(
                 gameCode,
-                resolution,
-                eliminatedPlayerId,
-                winnerPlayerId,
-                winnerUsername,
-                updatedGameState,
-                playerCardsCopy
+                serviceResult.Resolution,
+                serviceResult.EliminatedPlayerId,
+                serviceResult.WinnerPlayerId,
+                serviceResult.WinnerUsername,
+                serviceResult.UpdatedGameState,
+                serviceResult.PlayerCards
             );
         }
     }

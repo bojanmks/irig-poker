@@ -20,6 +20,7 @@ public class GamesModule : BaseModule
         services.AddTransient<IAddPlayerToGameService, AddPlayerToGameService>();
         services.AddTransient<IDisconnectFromGameService, DisconnectFromGameService>();
         services.AddTransient<IStartGameService, StartGameService>();
+        services.AddTransient<ICallBluffService, CallBluffService>();
     }
 
     public override void UseServices(WebApplication app)
