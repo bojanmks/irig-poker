@@ -25,7 +25,7 @@ type UseHubParams = {
   onDisconnected?: () => void;
 } | undefined;
 
-export function useHub(params: UseHubParams): HubMethods {
+export function useHub(params?: UseHubParams): HubMethods {
   const { onDisconnected } = params || {};
 
   const [connected, setConnected] = useState(false);

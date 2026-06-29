@@ -34,7 +34,10 @@
         "loserGetsCard": "{{username}} dobija kartu",
         "allCards": "Sve karte",
         "playerEliminated": "{{username}} je eliminisan/a!",
+        "playerLeftWarning": "{{username}} je napustio/la igru",
         "youLostPlayerWon": "{{username}} je pobedio/la u igri!",
+        "roundResult": "Rezultat runde",
+        "close": "Zatvori",
         "waitingForFirstClaim": "Čeka se prva prijava...",
         "waitingForChallenge": "Čeka se prozivka ili jača prijava...",
         "hands": {

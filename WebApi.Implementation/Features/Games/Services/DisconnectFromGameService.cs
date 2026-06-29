@@ -1,5 +1,6 @@
 ﻿using WebApi.Application.Features.Games.Services;
 using WebApi.Common.Features.Games.Disconnecting.Models;
+using WebApi.Common.Features.Games.Models;
 using WebApi.Implementation.Features.Games.Stores;
 
 namespace WebApi.Implementation.Features.Games.Services;
@@ -60,6 +61,16 @@ public class DisconnectFromGameService(
 
             if (!player.IsAdmin)
             {
+                result.UpdatedGameState = new PublicGameState(
+                    game.GameCode,
+                    game.HasStarted,
+                    game.Players,
+                    game.PlayerOrder,
+                    game.CurrentTurnPlayerId,
+                    game.CurrentClaimedHand,
+                    game.ClaimingPlayerId,
+                    game.Ranks
+                );
                 return result;
             }
 
@@ -75,6 +86,17 @@ public class DisconnectFromGameService(
 
             newAdmin.Value.SetIsAdmin(true);
             result.ChangedAdminTo = newAdmin.Key;
+
+            result.UpdatedGameState = new PublicGameState(
+                game.GameCode,
+                game.HasStarted,
+                game.Players,
+                game.PlayerOrder,
+                game.CurrentTurnPlayerId,
+                game.CurrentClaimedHand,
+                game.ClaimingPlayerId,
+                game.Ranks
+            );
 
             return result;
         }

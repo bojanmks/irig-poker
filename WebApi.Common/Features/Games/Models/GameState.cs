@@ -118,7 +118,7 @@ public class GameState
 
     public HandType? CurrentClaimedHand { get; set; }
     public string? ClaimingPlayerId { get; set; }
-    public List<Rank>? Ranks { get; set; }
+    public List<Rank>? Ranks { get; private set; }
 
     public static bool IsStrongerThan(HandType handType, List<Rank> ranks, HandType otherHandType, List<Rank> otherRanks)
     {

@@ -33,6 +33,12 @@ public class GameHub(
                     player,
                     result.Data.GameState.PlayerOrder
                 ), _timeProvider), Context.ConnectionAborted);
+
+            await Clients
+                .Group(request.Data.GameCode)
+                .SendAsync("GameStateUpdated", HubNotification.From(
+                    result.Data.GameState, _timeProvider
+                ), Context.ConnectionAborted);
         }
 
         return result.ToHubActionResponse();
@@ -111,16 +117,6 @@ public class GameHub(
 
             var tasks = new List<Task>();
 
-            if (callBluffResult.EliminatedPlayerId is not null)
-            {
-                tasks.Add(
-                    Clients.Group(gameCode)
-                        .SendAsync("PlayerEliminated", HubNotification.From(
-                            callBluffResult.EliminatedPlayerId, _timeProvider
-                        ), Context.ConnectionAborted)
-                );
-            }
-
             if (callBluffResult.WinnerPlayerId is not null)
             {
                 tasks.Add(
@@ -176,12 +172,14 @@ public class GameHub(
                     .SendAsync("PlayerLeft", HubNotification.From(result.Data.PlayerId!, _timeProvider))
             };
 
-            if (!string.IsNullOrWhiteSpace(result.Data.ChangedAdminTo))
+            if (result.Data.UpdatedGameState is not null)
             {
                 tasks.Add(
                     Clients
                         .Group(result.Data.GameCode)
-                        .SendAsync("AdminChanged", HubNotification.From(result.Data.ChangedAdminTo, _timeProvider))
+                        .SendAsync("GameStateUpdated", HubNotification.From(
+                            result.Data.UpdatedGameState, _timeProvider
+                        ))
                 );
             }
 

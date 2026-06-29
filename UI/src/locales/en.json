@@ -34,7 +34,10 @@
         "loserGetsCard": "{{username}} gets a card",
         "allCards": "All cards",
         "playerEliminated": "{{username}} is eliminated!",
+        "playerLeftWarning": "{{username}} left the game",
         "youLostPlayerWon": "{{username}} won the game!",
+        "roundResult": "Round result",
+        "close": "Close",
         "waitingForFirstClaim": "Waiting for the first claim...",
         "waitingForChallenge": "Waiting for a challenge or up the bet...",
         "hands": {

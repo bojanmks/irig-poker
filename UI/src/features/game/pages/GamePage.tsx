@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import type { GameWonNotification } from "@/features/game/models/GameWonNotification";
+import type { RoundResolvedNotification } from "@/features/game/models/RoundResolvedNotification";
 import { resetGameState } from "@/features/game/store/gameStateSlice";
 import { useHub } from "@/features/http/hooks/useHub";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
@@ -24,13 +26,27 @@ const GamePage = () => {
   const hub = useHub({ onDisconnected });
   const dispatch = useAppDispatch();
   const gameState = useAppSelector((state) => state.gameState.gameState);
-  const winner = useAppSelector((state) => state.gameState.winner);
+
+  const [winnerData, setWinnerData] = useState<GameWonNotification | null>(null);
+  const [roundResultData, setRoundResultData] = useState<RoundResolvedNotification | null>(null);
 
   const { gameCode } = useParams();
   const { username, setUsername } = useUsernameFromRoute();
   const [pageState, setPageState] = useState<GamePageState>(GamePageState.Joining);
 
-  useGamePageEventListeners(hub);
+  const onGameWon = useCallback((data: GameWonNotification) => {
+    setWinnerData(data);
+  }, []);
+
+  const onRoundResolved = useCallback((data: RoundResolvedNotification) => {
+    setRoundResultData(data);
+  }, []);
+
+  const dismissRoundResult = useCallback(() => {
+    setRoundResultData(null);
+  }, []);
+
+  useGamePageEventListeners(hub, { onGameWon, onRoundResolved });
 
   useGamePageWrapperClass(pageState);
 
@@ -56,8 +72,12 @@ const GamePage = () => {
 
   return (
     <>
-      {gameState?.hasStarted ? <ActualGame hub={hub} /> : <GameLobby />}
-      {winner && <WinnerBanner />}
+      {gameState?.hasStarted ? (
+        <ActualGame hub={hub} roundResultData={roundResultData} onDismissRoundResult={dismissRoundResult} />
+      ) : (
+        <GameLobby />
+      )}
+      {winnerData && <WinnerBanner winner={winnerData} />}
     </>
   );
 };

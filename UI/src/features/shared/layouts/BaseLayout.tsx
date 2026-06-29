@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom"
 import clsx from "clsx"
 import { GitBranch } from "lucide-react"
 
+import MuteToggle from "@/features/audio/components/MuteToggle"
 import LanguageSwitcher from "@/features/localization/components/LanguageSwitcher"
 import { useAppSelector } from "@/features/store/hooks"
 import ThemeSwitcher from "@/features/themes/components/ThemeSwitcher"
@@ -26,6 +27,7 @@ const BaseLayout = () => {
         >
           <GitBranch size={16} />
         </a>
+        <MuteToggle />
         <ThemeSwitcher />
         <LanguageSwitcher />
       </div>
