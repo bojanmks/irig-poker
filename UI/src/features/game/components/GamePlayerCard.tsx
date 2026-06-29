@@ -38,12 +38,12 @@ export const GamePlayerCard = ({ player, isCurrentTurn, isSelf }: GamePlayerCard
   }, [isSelf, isCurrentTurn]);
 
   const avatarRingClass = useMemo(() => {
-    if (isCurrentTurn) {
-      return "ring-primary";
-    }
-
     if (isSelf) {
       return "ring-accent";
+    }
+
+    if (isCurrentTurn) {
+      return "ring-primary";
     }
 
     return "ring-border";
