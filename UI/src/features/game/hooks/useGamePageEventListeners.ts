@@ -5,6 +5,7 @@ import type { RoundResolvedNotification } from "@/features/game/models/RoundReso
 import type { HubMethods } from "@/features/http/hooks/useHub";
 
 import { useClaimEventHandlers } from "./useClaimEventHandlers";
+import { useDealingEventHandlers } from "./useDealingEventHandlers";
 import { useGameStartEventHandlers } from "./useGameStartEventHandlers";
 import { useGameWonEventHandlers } from "./useGameWonEventHandlers";
 import { usePlayerConnectionChangeEventHandlers } from "./usePlayerConnectionChangeEventHandlers";
@@ -19,7 +20,8 @@ export function useGamePageEventListeners(hub: HubMethods, callbacks: GameNotifi
     const { connected: hubConnected, on: hubOn, off: hubOff } = hub;
 
     const { onPlayerLeft } = usePlayerConnectionChangeEventHandlers();
-    const { onGameStarted, onCardsDealt } = useGameStartEventHandlers();
+    const { onGameStarted } = useGameStartEventHandlers();
+    const { onCardsDealt } = useDealingEventHandlers();
     const { onGameWon } = useGameWonEventHandlers(callbacks.onGameWon);
     const { onClaimMade, onGameStateUpdated } = useClaimEventHandlers();
     const { onRoundResolved } = useRoundEventHandlers(callbacks.onRoundResolved);
