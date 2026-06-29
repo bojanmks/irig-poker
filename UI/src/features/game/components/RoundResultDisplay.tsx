@@ -8,10 +8,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/features/shared/components/shadcn/Dialog";
-import { useAppSelector } from "@/features/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 
 import { HandType } from "../models/HandType";
-import type { RoundResolvedNotification } from "../models/RoundResolvedNotification";
+import { clearRoundResultData } from "../store/gameStateSlice";
 
 import { CardSprite } from "./CardSprite";
 
@@ -47,13 +47,10 @@ function describeRanks(handType: HandType, ranks: number[]): string {
   return rankLabel(ranks[0]);
 }
 
-type RoundResultDisplayProps = {
-  roundResult: RoundResolvedNotification | null;
-  onDismiss: () => void;
-};
-
-export const RoundResultDisplay = ({ roundResult, onDismiss }: RoundResultDisplayProps) => {
+export const RoundResultDisplay = () => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const roundResult = useAppSelector((state) => state.gameState.roundResultData);
   const gameState = useAppSelector((state) => state.gameState.gameState);
 
   const hasWinner = roundResult?.winnerPlayerId != null;
@@ -62,6 +59,10 @@ export const RoundResultDisplay = ({ roundResult, onDismiss }: RoundResultDispla
     return roundResult?.winnerUsername ?? "";
   }, [roundResult]);
 
+  const handleDismiss = useMemo(() => {
+    return () => dispatch(clearRoundResultData());
+  }, [dispatch]);
+
   if (!roundResult || !gameState) {
     return null;
   }
@@ -69,7 +70,7 @@ export const RoundResultDisplay = ({ roundResult, onDismiss }: RoundResultDispla
   const loserUsername = gameState.players[roundResult.losingPlayerId]?.username ?? "?";
 
   return (
-    <Dialog open onOpenChange={(open) => { if (!open) onDismiss(); }}>
+    <Dialog open onOpenChange={(open) => { if (!open) handleDismiss(); }}>
       <DialogContent className="sm:max-w-lg max-h-[90dvh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{t("game.roundResult")}</DialogTitle>
@@ -151,7 +152,7 @@ export const RoundResultDisplay = ({ roundResult, onDismiss }: RoundResultDispla
         </div>
 
         <div className="flex justify-center mt-2">
-          <Button onClick={onDismiss}>
+          <Button onClick={handleDismiss}>
             {t("game.close")}
           </Button>
         </div>

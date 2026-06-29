@@ -15,7 +15,7 @@ public class StartGameService(
         game.CreateDeck();
         game.DealCardsToAllPlayers();
         game.ShufflePlayerOrder();
-        game.StartRound();
+        game.StartNewRound();
 
         return game.PlayerCards;
     }

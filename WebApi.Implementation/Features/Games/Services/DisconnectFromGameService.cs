@@ -59,6 +59,8 @@ public class DisconnectFromGameService(
                 return result;
             }
 
+            game.StartNewRound();
+
             if (!player.IsAdmin)
             {
                 result.UpdatedGameState = new PublicGameState(
@@ -75,14 +77,7 @@ public class DisconnectFromGameService(
             }
 
             player.SetIsAdmin(false);
-            var newAdmin = game.Players.FirstOrDefault(x => x.Key != entry.PlayerId);
-
-            if (newAdmin.Value is null)
-            {
-                await _deleteGameService.DeleteAsync(entry.GameCode, cancellationToken);
-                result.HasGameEnded = true;
-                return result;
-            }
+            var newAdmin = game.Players.First(x => x.Key != entry.PlayerId);
 
             newAdmin.Value.SetIsAdmin(true);
             result.ChangedAdminTo = newAdmin.Key;

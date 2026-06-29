@@ -53,7 +53,7 @@ public class CallBluffService(
 
         if (winnerPlayerId is null)
         {
-            game.StartRound();
+            game.StartNewRound();
 
             updatedGameState = new PublicGameState(
                 game.GameCode,

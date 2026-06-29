@@ -46,7 +46,7 @@ public class GameState
 
     public string? StartTurnPlayerId { get; private set; }
 
-    public void StartRound()
+    public void StartNewRound()
     {
         if (!HasStarted)
         {
@@ -63,6 +63,8 @@ public class GameState
             var nextIndex = (currentIndex + 1) % PlayerOrder.Count;
             StartTurnPlayerId = PlayerOrder[nextIndex];
         }
+
+        ClearClaim();
 
         CurrentTurnPlayerId = StartTurnPlayerId;
     }

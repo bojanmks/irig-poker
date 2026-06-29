@@ -12,15 +12,10 @@ import {
 } from "@/features/shared/components/shadcn/Dialog";
 import { useAppSelector } from "@/features/store/hooks";
 
-import type { GameWonNotification } from "../models/GameWonNotification";
-
-type WinnerBannerProps = {
-  winner: GameWonNotification | null;
-};
-
-export const WinnerBanner = ({ winner }: WinnerBannerProps) => {
+export const WinnerBanner = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const winner = useAppSelector((state) => state.gameState.winnerData);
   const playerId = useAppSelector((state) => state.gameState.playerId);
 
   const isSelf = useMemo(() => {
