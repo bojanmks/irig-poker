@@ -1,6 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using WebApi.Common.Features.Players.Models;
 
+using static WebApi.Common.Features.Games.Helpers.HandStrengthHelper;
+
 namespace WebApi.Common.Features.Games.Models;
 
 public class GameState
@@ -119,22 +121,6 @@ public class GameState
     public HandType? CurrentClaimedHand { get; set; }
     public string? ClaimingPlayerId { get; set; }
     public List<Rank>? Ranks { get; private set; }
-
-    public static bool IsStrongerThan(HandType handType, List<Rank> ranks, HandType otherHandType, List<Rank> otherRanks)
-    {
-        if (handType != otherHandType)
-        {
-            return handType > otherHandType;
-        }
-
-        for (int i = 0; i < ranks.Count && i < otherRanks.Count; i++)
-        {
-            var cmp = HandEvaluator.CompareRanks(ranks[i], otherRanks[i]);
-            if (cmp != 0) return cmp > 0;
-        }
-
-        return ranks.Count > otherRanks.Count;
-    }
 
     public void SetClaim(string claimingPlayerId, HandType claimedHand, List<Rank> ranks)
     {

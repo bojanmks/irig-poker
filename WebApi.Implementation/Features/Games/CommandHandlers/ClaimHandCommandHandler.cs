@@ -6,6 +6,8 @@ using WebApi.Application.Features.Games.Services;
 using WebApi.Common.Core.Result.Models;
 using WebApi.Common.Features.Games.Models;
 
+using static WebApi.Common.Features.Games.Helpers.HandStrengthHelper;
+
 namespace WebApi.Implementation.Features.Games.CommandHandlers;
 
 public class ClaimHandCommandHandler(
@@ -47,7 +49,7 @@ public class ClaimHandCommandHandler(
 
             if (game.CurrentClaimedHand.HasValue && game.ClaimingPlayerId is not null && game.Ranks is not null)
             {
-                if (!GameState.IsStrongerThan(command.Data.ClaimedHand, command.Data.Ranks, game.CurrentClaimedHand.Value, game.Ranks))
+                if (!IsStrongerThan(command.Data.ClaimedHand, command.Data.Ranks, game.CurrentClaimedHand.Value, game.Ranks))
                 {
                     return Result<ClaimResult>.Error(_translator.Translate("game.mustClaimStrongerHand"));
                 }
