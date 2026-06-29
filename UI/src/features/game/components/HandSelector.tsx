@@ -85,8 +85,10 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
     const { t } = useTranslation();
     const [step, setStep] = useState<Step>("hand-type");
     const [selectedHandType, setSelectedHandType] = useState<HandType | null>(null);
-    const [selectedSuit, setSelectedSuit] = useState<Suit>(Suit.Hearts);
     const [firstRank, setFirstRank] = useState<Rank | null>(null);
+
+    const [selectedFlushSuit, setSelectedFlushSuit] = useState<Suit>(Suit.Hearts);
+    const displaySuit = useMemo(() => selectedHandType === HandType.StraightFlush ? selectedFlushSuit : Suit.Hearts, [selectedHandType, selectedFlushSuit]);
 
     const handleHandTypeClick = useCallback((ht: HandType) => {
         setSelectedHandType(ht);
@@ -99,9 +101,9 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
     }, [setStep, setFirstRank]);
 
     const handleSuitClick = useCallback((suit: Suit) => {
-        setSelectedSuit(suit);
+        setSelectedFlushSuit(suit);
         setStep("first-rank");
-    }, [setSelectedSuit, setStep]);
+    }, [setSelectedFlushSuit, setStep]);
 
     const handleFirstRankClick = useCallback((rank: Rank) => {
         if (selectedHandType === null) return;
@@ -114,7 +116,7 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
             setStep("hand-type");
             setSelectedHandType(null);
         }
-    }, [selectedHandType, onSelect]);
+    }, [selectedHandType, onSelect, setStep, setSelectedHandType]);
 
     const handleSecondRankClick = useCallback((rank: Rank) => {
         if (selectedHandType === null || firstRank === null) return;
@@ -252,7 +254,7 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
                                 (!enabled || selected) ? "grayscale" : "hover:ring-2 hover:ring-primary hover:ring-offset-1"
                             )}
                         >
-                            <CardSprite suit={selectedSuit} rank={rank} displayWidth={50} />
+                            <CardSprite suit={displaySuit} rank={rank} displayWidth={50} />
                         </button>
                     );
                 })}
