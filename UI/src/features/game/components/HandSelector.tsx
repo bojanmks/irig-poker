@@ -45,16 +45,6 @@ const allSuits: Suit[] = [
     Suit.Spades
 ];
 
-function straightValue(rank: Rank): number {
-    switch (rank) {
-        case Rank.Jack: return 11;
-        case Rank.Queen: return 12;
-        case Rank.King: return 13;
-        case Rank.Ace: return 14;
-        default: return rank;
-    }
-}
-
 function isStraightHandType(ht: HandType): boolean {
     return ht === HandType.Straight || ht === HandType.StraightFlush;
 }
@@ -64,8 +54,11 @@ function isStrongerThan(handType: HandType, ranks: Rank[], otherHandType: HandTy
         return handType > otherHandType;
     }
 
+    const ranksArr = handType === HandType.TwoPair ? [...ranks].sort((a, b) => b - a) : ranks;
+    const otherRanksArr = handType === HandType.TwoPair ? [...otherRanks].sort((a, b) => b - a) : otherRanks;
+
     for (let i = 0; i < Math.min(ranks.length, otherRanks.length); i++) {
-        const cmp = straightValue(ranks[i]) - straightValue(otherRanks[i]);
+        const cmp = ranksArr[i] - otherRanksArr[i];
 
         if (cmp !== 0) {
             return cmp > 0;
@@ -178,7 +171,7 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
                 case HandType.FullHouse:
                     return !(currentRanks[0] === Rank.Ace && currentRanks[1] === Rank.King);
                 case HandType.TwoPair:
-                    return Math.max(...currentRanks) !== Rank.Ace;
+                    return !(Math.max(...currentRanks) === Rank.Ace && Math.min(...currentRanks) === Rank.King);
                 default:
                     return currentRanks[0] !== Rank.Ace;
             }
@@ -202,11 +195,19 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
 
         if (step === "first-rank") {
             if (selectedHandType === HandType.TwoPair) {
-                return rank >= Math.min(...currentRanks);
+                if (rank === currentRanks[0]) {
+                    return rank === Rank.Ace || Math.max(...currentRanks) !== Rank.Ace;
+                }
+
+                return rank > Math.min(...currentRanks);
             }
 
             if (selectedHandType === HandType.FullHouse) {
-                return rank >= currentRanks[0];
+                if (rank === currentRanks[0]) {
+                    return currentRanks[1] !== Rank.Ace;
+                }
+
+                return rank > currentRanks[0];
             }
 
             const testRanks: Rank[] = [rank];
