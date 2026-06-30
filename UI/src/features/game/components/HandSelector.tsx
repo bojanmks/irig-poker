@@ -11,7 +11,7 @@ import { Suit } from "../models/Suit";
 
 import { CardSprite } from "./CardSprite";
 
-const handTypes = [
+const allHandTypes = [
     HandType.HighCard,
     HandType.OnePair,
     HandType.TwoPair,
@@ -19,7 +19,7 @@ const handTypes = [
     HandType.ThreeOfAKind,
     HandType.FullHouse,
     HandType.FourOfAKind,
-    HandType.StraightFlush,
+    HandType.StraightFlush
 ];
 
 const allRanks: Rank[] = [
@@ -38,12 +38,19 @@ const allRanks: Rank[] = [
     Rank.Ace
 ];
 
+const allSuits: Suit[] = [
+    Suit.Hearts,
+    Suit.Diamonds,
+    Suit.Clubs,
+    Suit.Spades
+];
+
 function straightValue(rank: Rank): number {
     switch (rank) {
-        case 12: return 11;
-        case 13: return 12;
-        case 14: return 13;
-        case 99: return 14;
+        case Rank.Jack: return 11;
+        case Rank.Queen: return 12;
+        case Rank.King: return 13;
+        case Rank.Ace: return 14;
         default: return rank;
     }
 }
@@ -53,11 +60,18 @@ function isStraightHandType(ht: HandType): boolean {
 }
 
 function isStrongerThan(handType: HandType, ranks: Rank[], otherHandType: HandType, otherRanks: Rank[]): boolean {
-    if (handType !== otherHandType) return handType > otherHandType;
+    if (handType !== otherHandType) {
+        return handType > otherHandType;
+    }
+
     for (let i = 0; i < Math.min(ranks.length, otherRanks.length); i++) {
         const cmp = straightValue(ranks[i]) - straightValue(otherRanks[i]);
-        if (cmp !== 0) return cmp > 0;
+
+        if (cmp !== 0) {
+            return cmp > 0;
+        }
     }
+
     return ranks.length > otherRanks.length;
 }
 
@@ -151,25 +165,56 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
     }, [selectedHandType]);
 
     const isHandTypeEnabled = useCallback((ht: HandType) => {
-        if (disabled) return false;
-        if (currentClaimedHand === null || currentRanks === null) return true;
+        if (disabled) {
+            return false;
+        }
+
+        if (currentClaimedHand === null || currentRanks === null) {
+            return true;
+        }
+
+        if (currentClaimedHand == ht) {
+            switch (currentClaimedHand) {
+                case HandType.FullHouse:
+                    return !(currentRanks[0] === Rank.Ace && currentRanks[1] === Rank.King);
+                case HandType.TwoPair:
+                    return Math.max(...currentRanks) !== Rank.Ace;
+                default:
+                    return currentRanks[0] !== Rank.Ace;
+            }
+        }
+
         return ht >= currentClaimedHand;
     }, [disabled, currentClaimedHand, currentRanks]);
 
     const isRankEnabled = useCallback((rank: Rank) => {
-        if (selectedHandType === null) return false;
-        if (currentClaimedHand === null || currentRanks === null) return true;
+        if (selectedHandType === null) {
+            return false;
+        }
+
+        if (currentClaimedHand === null || currentRanks === null) {
+            return true;
+        }
+
+        if (selectedHandType !== currentClaimedHand) {
+            return selectedHandType > currentClaimedHand;
+        }
 
         if (step === "first-rank") {
-            if (selectedHandType === HandType.TwoPair || selectedHandType === HandType.FullHouse) {
-                return straightValue(rank) >= straightValue(currentRanks[0]);
+            if (selectedHandType === HandType.TwoPair) {
+                return rank >= Math.min(...currentRanks);
             }
+
+            if (selectedHandType === HandType.FullHouse) {
+                return rank >= currentRanks[0];
+            }
+
             const testRanks: Rank[] = [rank];
             return isStrongerThan(selectedHandType, testRanks, currentClaimedHand, currentRanks);
         }
 
-        if (step === "second-rank" && firstRank !== null) {
-            const testRanks: Rank[] = [firstRank, rank];
+        if (step === "second-rank") {
+            const testRanks: Rank[] = [firstRank!, rank];
             return isStrongerThan(selectedHandType, testRanks, currentClaimedHand, currentRanks);
         }
 
@@ -183,7 +228,7 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
                     {t("game.claimHand")}
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                    {handTypes.map(ht => (
+                    {allHandTypes.map(ht => (
                         <button
                             key={ht}
                             onClick={() => handleHandTypeClick(ht)}
@@ -199,7 +244,6 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
     }
 
     if (step === "suit") {
-        const suits: Suit[] = [Suit.Hearts, Suit.Diamonds, Suit.Clubs, Suit.Spades];
         return (
             <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
@@ -215,7 +259,7 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
                     </h3>
                 </div>
                 <div className="flex gap-2 justify-center">
-                    {suits.map(suit => (
+                    {allSuits.map(suit => (
                         <button
                             key={suit}
                             onClick={() => handleSuitClick(suit)}
