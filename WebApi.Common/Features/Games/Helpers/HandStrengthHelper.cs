@@ -11,10 +11,20 @@ public static class HandStrengthHelper
             return handType > otherHandType;
         }
 
+        if (handType == HandType.TwoPair)
+        {
+            ranks = [.. ranks.Order()];
+            otherRanks = [.. otherRanks.Order()];
+        }
+
         for (int i = 0; i < ranks.Count && i < otherRanks.Count; i++)
         {
             var cmp = HandEvaluator.CompareRanks(ranks[i], otherRanks[i]);
-            if (cmp != 0) return cmp > 0;
+
+            if (cmp != 0)
+            {
+                return cmp > 0;
+            }
         }
 
         return ranks.Count > otherRanks.Count;
