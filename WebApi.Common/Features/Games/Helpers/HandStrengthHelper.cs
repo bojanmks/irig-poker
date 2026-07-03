@@ -17,7 +17,7 @@ public static class HandStrengthHelper
             otherRanks = [.. otherRanks.Order()];
         }
 
-        for (int i = 0; i < ranks.Count && i < otherRanks.Count; i++)
+        for (int i = 0; i < Math.Min(ranks.Count, otherRanks.Count); i++)
         {
             var cmp = HandEvaluator.CompareRanks(ranks[i], otherRanks[i]);
 
