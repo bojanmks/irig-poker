@@ -45,7 +45,7 @@ function describeRanks(handType: HandType, ranks: number[], suit?: number | null
         return `${rankLabel(ranks[0])} & ${rankLabel(ranks[1])}`;
     }
     if (handType === HandType.FullHouse) {
-        return `${rankLabel(ranks[0])} over ${rankLabel(ranks[1])}`;
+        return `3x${rankLabel(ranks[0])} & 2x${rankLabel(ranks[1])}`;
     }
     const label = rankLabel(ranks[0]);
     if (handType === HandType.StraightFlush && suit !== null && suit !== undefined) {
