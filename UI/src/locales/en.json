@@ -64,6 +64,7 @@
         "dark": "Dark",
         "system": "System"
     },
+    "appTitle": "Irig Poker",
     "common": {
         "anErrorOccurred": "An error occurred"
     }
