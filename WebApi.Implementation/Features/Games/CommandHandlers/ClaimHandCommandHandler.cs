@@ -58,6 +58,8 @@ public class ClaimHandCommandHandler(
             game.SetClaim(applicationUser.PlayerId!, command.Data.ClaimedHand, command.Data.Ranks, command.Data.Suit);
             game.NextTurn();
 
+            game.LastActivityAt = DateTimeOffset.UtcNow;
+
             var publicGameState = new PublicGameState(
                 game.GameCode,
                 game.HasStarted,

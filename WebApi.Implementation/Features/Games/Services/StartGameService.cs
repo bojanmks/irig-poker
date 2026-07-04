@@ -18,6 +18,8 @@ public class StartGameService(
         game.ShufflePlayerOrder();
         game.StartNewRound();
 
+        game.LastActivityAt = DateTimeOffset.UtcNow;
+
         return game.PlayerCards;
     }
 }

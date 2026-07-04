@@ -50,6 +50,8 @@ public class CallBluffService(
 
         game.ClearClaim();
 
+        game.LastActivityAt = DateTimeOffset.UtcNow;
+
         PublicGameState? updatedGameState = null;
 
         if (winnerPlayerId is null)

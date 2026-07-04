@@ -75,6 +75,8 @@ public class DisconnectFromGameService(
                 game.UpdateCardCountThreshold();
             }
 
+            game.LastActivityAt = DateTimeOffset.UtcNow;
+
             if (!player.IsAdmin)
             {
                 result.UpdatedGameState = new PublicGameState(

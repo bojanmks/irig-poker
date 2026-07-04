@@ -62,6 +62,8 @@ public class AddPlayerToGameService(
 
         game.UpdateCardCountThreshold();
 
+        game.LastActivityAt = DateTimeOffset.UtcNow;
+
         return (playerId, game);
     }
 }

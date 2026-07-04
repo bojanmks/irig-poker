@@ -21,6 +21,8 @@ public class GamesModule : BaseModule
         services.AddTransient<IDisconnectFromGameService, DisconnectFromGameService>();
         services.AddTransient<IStartGameService, StartGameService>();
         services.AddTransient<ICallBluffService, CallBluffService>();
+        services.AddSingleton<IGameCleanupService, GameCleanupService>();
+        services.AddHostedService<GameCleanupBackgroundService>();
     }
 
     public override void UseServices(WebApplication app)

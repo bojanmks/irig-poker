@@ -9,6 +9,9 @@ public class GameState
 {
     public required string GameCode { get; init; }
 
+    public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset LastActivityAt { get; set; } = DateTimeOffset.UtcNow;
+
     public List<RoundHistoryEntry> RoundHistory { get; } = [];
 
     public bool HasStarted { get; private set; } = false;
