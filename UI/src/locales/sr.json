@@ -20,6 +20,7 @@
         "youWon": "Pobedio/la si!",
         "playerWon": "{{username}} je pobedio/la!",
         "createNewGame": "Kreiraj novu igru",
+        "youAreEliminated": "Eliminisan/a si",
         "yourHand": "Tvoje karte",
         "claimHand": "Izjavi kombinaciju",
         "callBluff": "Prozovi blef",

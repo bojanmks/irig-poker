@@ -11,6 +11,10 @@ const CARD_WIDTH = 90;
 export const PlayerHand = () => {
   const { t } = useTranslation();
   const cards = useAppSelector((state) => state.gameState.cards);
+  const gameState = useAppSelector((state) => state.gameState.gameState);
+  const playerId = useAppSelector((state) => state.gameState.playerId);
+
+  const isEliminated = playerId && gameState?.players[playerId]?.isEliminated;
 
   const overlapOffset = useMemo(() => {
     if (cards.length <= 1) {
@@ -24,6 +28,16 @@ export const PlayerHand = () => {
     width: cards.length > 1 ? CARD_WIDTH + (cards.length - 1) * overlapOffset : CARD_WIDTH,
     height: Math.round(206 * CARD_WIDTH / 143)
   }), [cards.length, overlapOffset]);
+
+  if (isEliminated) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-sm font-semibold text-red-600 dark:text-red-400 text-center">
+          {t("game.youAreEliminated")}
+        </p>
+      </div>
+    );
+  }
 
   if (cards.length === 0) {
     return null;

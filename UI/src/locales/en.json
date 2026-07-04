@@ -20,6 +20,7 @@
         "youWon": "You won!",
         "playerWon": "{{username}} won!",
         "createNewGame": "Create new game",
+        "youAreEliminated": "You are eliminated",
         "yourHand": "Your hand",
         "claimHand": "Claim a hand",
         "callBluff": "Call bluff",
