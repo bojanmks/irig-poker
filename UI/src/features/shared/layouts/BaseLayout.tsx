@@ -7,6 +7,7 @@ import { GitBranch } from "lucide-react"
 
 import MuteToggle from "@/features/audio/components/MuteToggle"
 import LanguageSwitcher from "@/features/localization/components/LanguageSwitcher"
+import { buttonVariants } from "@/features/shared/components/shadcn/Button"
 import { useAppSelector } from "@/features/store/hooks"
 import ThemeSwitcher from "@/features/themes/components/ThemeSwitcher"
 
@@ -23,7 +24,7 @@ const BaseLayout = () => {
           href="https://github.com/bojanmks" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="flex items-center justify-center w-8 h-8 rounded-md border border-border hover:bg-accent transition-colors"
+          className={buttonVariants({ variant: "outline", size: "icon" })}
         >
           <GitBranch size={16} />
         </a>
