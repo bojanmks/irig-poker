@@ -39,6 +39,7 @@
         "roundResult": "Round result",
         "close": "Close",
         "waitingForPlayer": "Waiting for {{username}}...",
+        "startingRound": "You are starting this round",
         "hands": {
             "highCard": "High Card",
             "onePair": "One Pair",

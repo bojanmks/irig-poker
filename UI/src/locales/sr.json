@@ -23,8 +23,8 @@
         "claimHand": "Prijavi kombinaciju",
         "callBluff": "Prozovi blef",
         "back": "Nazad",
-        "selectRank": "Izaberi rang",
-        "selectSecondRank": " — izaberi drugi rang",
+        "selectRank": "Izaberi kartu",
+        "selectSecondRank": " — izaberi drugu kartu",
         "selectSuit": "Izaberi boju",
         "straightPreview": "Skala:",
         "claimed": "je prijavio/la",
@@ -39,6 +39,7 @@
         "roundResult": "Rezultat runde",
         "close": "Zatvori",
         "waitingForPlayer": "Čeka se {{username}}...",
+        "startingRound": "Započinješ rundu",
         "hands": {
             "highCard": "Visoka karta",
             "onePair": "Jedan par",

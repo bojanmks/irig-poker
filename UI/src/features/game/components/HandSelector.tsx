@@ -225,9 +225,6 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
     if (step === "hand-type") {
         return (
             <div className="flex flex-col gap-2">
-                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-                    {t("game.claimHand")}
-                </h3>
                 <div className="flex flex-wrap gap-2">
                     {allHandTypes.map(ht => (
                         <button

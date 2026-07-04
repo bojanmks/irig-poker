@@ -1,7 +1,15 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { HubMethods } from "@/features/http/hooks/useHub";
+import { Button } from "@/features/shared/components/shadcn/Button";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/features/shared/components/shadcn/Dialog";
 import { useAppSelector } from "@/features/store/hooks";
 
 import { useCallBluff } from "../hooks/useCallBluff";
@@ -70,14 +78,48 @@ type ClaimHandPanelProps = {
     hub: HubMethods;
 };
 
+type ClaimHandDialogProps = {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    onClaim: (handType: HandType, ranks: Rank[], suit?: number) => void;
+    currentClaimedHand: HandType | null;
+    currentRanks: Rank[] | null;
+};
+
+const ClaimHandDialog = ({ open, onOpenChange, onClaim, currentClaimedHand, currentRanks }: ClaimHandDialogProps) => {
+    const { t } = useTranslation();
+
+    return (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogTrigger asChild>
+                <Button variant="outline" size="sm">
+                    {t("game.claimHand")}
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>{t("game.claimHand")}</DialogTitle>
+                </DialogHeader>
+                <HandSelector
+                    onSelect={onClaim}
+                    currentClaimedHand={currentClaimedHand}
+                    currentRanks={currentRanks}
+                />
+            </DialogContent>
+        </Dialog>
+    );
+};
+
 export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
     const { t } = useTranslation();
     const gameState = useAppSelector((state) => state.gameState.gameState);
     const playerId = useAppSelector((state) => state.gameState.playerId);
     const { callBluff } = useCallBluff(hub);
+    const [dialogOpen, setDialogOpen] = useState(false);
 
     const handleClaim = useCallback(async (handType: HandType, ranks: Rank[], suit?: number) => {
         await hub.invoke("ClaimHand", { claimedHand: handType, ranks, suit });
+        setDialogOpen(false);
     }, [hub]);
 
     if (!gameState) {
@@ -92,48 +134,62 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
     const currentTurnPlayer = gameState.currentTurnPlayerId ? gameState.players[gameState.currentTurnPlayerId] : null;
 
     return (
-        <div className="flex flex-col gap-4 p-4 rounded-lg border border-border bg-card/50">
-            {currentClaimer && currentClaim !== null && currentRanks !== null && (
-                <>
-                    <div className="flex items-start gap-4">
-                        <div className="flex flex-col gap-2">
-                            <div className="text-sm text-muted-foreground">
-                                <span className="font-semibold text-foreground">{currentClaimer.username}</span>
-                                {" "}{t("game.claimed")}{" "}
-                                <span className="font-semibold text-foreground">{t(handTypeLabels[currentClaim])}</span>
-                                {" "}({describeRanks(currentClaim, currentRanks, gameState.claimedSuit)})
-                            </div>
-                            <ClaimedHandCards
-                                handType={currentClaim}
-                                ranks={currentRanks}
-                                suit={gameState.claimedSuit}
-                            />
-                        </div>
-                        {isMyTurn && (
-                            <button
+        <div className="h-60 p-4 rounded-lg border border-border bg-card/50">
+            {currentClaimer && currentClaim !== null && currentRanks !== null ? (
+                <div className="flex flex-col items-center gap-3 h-full justify-center">
+                    <div className="text-sm text-muted-foreground text-center truncate max-w-full">
+                        <span className="font-semibold text-foreground">{currentClaimer.username}</span>
+                        {" "}{t("game.claimed")}{" "}
+                        <span className="font-semibold text-foreground">{t(handTypeLabels[currentClaim])}</span>
+                        {" "}({describeRanks(currentClaim, currentRanks, gameState.claimedSuit)})
+                    </div>
+                    <ClaimedHandCards
+                        handType={currentClaim}
+                        ranks={currentRanks}
+                        suit={gameState.claimedSuit}
+                    />
+                    {isMyTurn ? (
+                        <div className="flex flex-col items-center gap-2">
+                            <Button
                                 onClick={callBluff}
-                                className="shrink-0 px-3 py-1.5 text-xs font-semibold rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors"
+                                variant="destructive"
+                                size="sm"
                             >
                                 {t("game.callBluff")}
-                            </button>
-                        )}
-                    </div>
-                    {!isMyTurn && (
-                        <span className="shrink-0 text-xs text-muted-foreground">{t("game.waitingForPlayer", { username: currentTurnPlayer?.username ?? "" })}</span>
+                            </Button>
+                            <ClaimHandDialog
+                                open={dialogOpen}
+                                onOpenChange={setDialogOpen}
+                                onClaim={handleClaim}
+                                currentClaimedHand={currentClaim}
+                                currentRanks={currentRanks}
+                            />
+                        </div>
+                    ) : (
+                        <p className="text-xs text-muted-foreground text-center">
+                            {t("game.waitingForPlayer", { username: currentTurnPlayer?.username ?? "" })}
+                        </p>
                     )}
-                </>
-            )}
-
-            {isMyTurn && (
-                <HandSelector
-                    onSelect={handleClaim}
-                    currentClaimedHand={currentClaim}
-                    currentRanks={currentRanks}
-                />
-            )}
-
-            {!isMyTurn && currentClaim === null && (
-                <p className="text-sm text-muted-foreground">{t("game.waitingForPlayer", { username: currentTurnPlayer?.username ?? "" })}</p>
+                </div>
+            ) : isMyTurn ? (
+                <div className="flex flex-col items-center justify-center gap-3 h-full">
+                    <p className="text-sm text-muted-foreground text-center">
+                        {t("game.startingRound")}
+                    </p>
+                    <ClaimHandDialog
+                        open={dialogOpen}
+                        onOpenChange={setDialogOpen}
+                        onClaim={handleClaim}
+                        currentClaimedHand={currentClaim}
+                        currentRanks={currentRanks}
+                    />
+                </div>
+            ) : (
+                <div className="flex items-center justify-center h-full">
+                    <p className="text-sm text-muted-foreground text-center">
+                        {t("game.waitingForPlayer", { username: currentTurnPlayer?.username ?? "" })}
+                    </p>
+                </div>
             )}
         </div>
     );
