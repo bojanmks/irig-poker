@@ -11,6 +11,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 
 import { HandType } from "../models/HandType";
+import { Rank } from "../models/Rank";
 import { Suit } from "../models/Suit";
 import { clearRoundResultData } from "../store/gameStateSlice";
 
@@ -34,17 +35,28 @@ const suitSymbols: Record<number, string> = {
   [Suit.Spades]: "♠",
 };
 
-function rankLabel(rank: number): string {
+function rankLabel(rank: Rank): string {
   switch (rank) {
-    case 2: return "2"; case 3: return "3"; case 4: return "4";
-    case 5: return "5"; case 6: return "6"; case 7: return "7";
-    case 8: return "8"; case 9: return "9"; case 10: return "10";
-    case 12: return "J"; case 13: return "Q"; case 14: return "K";
-    case 99: return "A"; default: return "?";
+    case Rank.Two: return "2";
+    case Rank.Three: return "3";
+    case Rank.Four: return "4";
+    case Rank.Five: return "5";
+    case Rank.Six: return "6";
+    case Rank.Seven: return "7";
+    case Rank.Eight: return "8";
+    case Rank.Nine: return "9";
+    case Rank.Ten: return "10";
+    case Rank.Jack: return "J";
+    case Rank.Queen: return "Q";
+    case Rank.King: return "K";
+    case Rank.Ace: return "A";
+    default:
+      rank satisfies never;   
+      return "";
   }
 }
 
-function describeRanks(handType: HandType, ranks: number[], suit?: number | null): string {
+function describeRanks(handType: HandType, ranks: Rank[], suit?: number | null): string {
   if (ranks.length === 0) return "";
   if (handType === HandType.TwoPair) {
     return `${rankLabel(ranks[0])} & ${rankLabel(ranks[1])}`;
