@@ -13,7 +13,6 @@ import { EnterNameForm } from "../components/EnterNameForm";
 import { GameLobby } from "../components/GameLobby";
 import { JoiningGame } from "../components/JoiningGame";
 import { RoundResultDisplay } from "../components/RoundResultDisplay";
-import { WinnerBanner } from "../components/WinnerBanner";
 import { GamePageState } from "../consts/GamePageState";
 import { useDiconnectOnPageLeave } from "../hooks/useDisconnectOnPageLeave";
 import { useGameHubDisconnectHandler } from "../hooks/useGameHubDisconnectHandler";
@@ -71,7 +70,6 @@ const GamePage = () => {
       ) : (
         <GameLobby />
       )}
-      <WinnerBanner />
       <RoundResultDisplay />
     </>
   );

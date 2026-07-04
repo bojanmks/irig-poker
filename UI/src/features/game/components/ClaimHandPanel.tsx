@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 import type { HubMethods } from "@/features/http/hooks/useHub";
 import { Button } from "@/features/shared/components/shadcn/Button";
@@ -113,8 +114,10 @@ const ClaimHandDialog = ({ open, onOpenChange, onClaim, currentClaimedHand, curr
 
 export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const gameState = useAppSelector((state) => state.gameState.gameState);
     const playerId = useAppSelector((state) => state.gameState.playerId);
+    const winner = useAppSelector((state) => state.gameState.winnerData);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [actionLoading, setActionLoading] = useState(false);
 
@@ -139,6 +142,20 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
 
     if (!gameState) {
         return null;
+    }
+
+    if (winner) {
+        const isSelf = winner.winnerPlayerId === playerId;
+        return (
+            <div className="h-60 p-4 rounded-lg border border-border bg-card/50 flex flex-col items-center justify-center gap-3">
+                <p className="text-lg font-semibold text-center">
+                    {isSelf ? t("game.youWon") : t("game.playerWon", { username: winner.winnerUsername })}
+                </p>
+                <Button onClick={() => navigate("/")}>
+                    {t("game.createNewGame")}
+                </Button>
+            </div>
+        );
     }
 
     const isMyTurn = gameState.currentTurnPlayerId === playerId;
