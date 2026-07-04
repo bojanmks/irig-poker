@@ -12,7 +12,6 @@ import {
 } from "@/features/shared/components/shadcn/Dialog";
 import { useAppSelector } from "@/features/store/hooks";
 
-import { useCallBluff } from "../hooks/useCallBluff";
 import { HandType } from "../models/HandType";
 import { Rank } from "../models/Rank";
 import { Suit } from "../models/Suit";
@@ -84,15 +83,16 @@ type ClaimHandDialogProps = {
     onClaim: (handType: HandType, ranks: Rank[], suit?: number) => void;
     currentClaimedHand: HandType | null;
     currentRanks: Rank[] | null;
+    actionLoading: boolean;
 };
 
-const ClaimHandDialog = ({ open, onOpenChange, onClaim, currentClaimedHand, currentRanks }: ClaimHandDialogProps) => {
+const ClaimHandDialog = ({ open, onOpenChange, onClaim, currentClaimedHand, currentRanks, actionLoading }: ClaimHandDialogProps) => {
     const { t } = useTranslation();
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogTrigger asChild>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" loading={actionLoading}>
                     {t("game.claimHand")}
                 </Button>
             </DialogTrigger>
@@ -104,6 +104,7 @@ const ClaimHandDialog = ({ open, onOpenChange, onClaim, currentClaimedHand, curr
                     onSelect={onClaim}
                     currentClaimedHand={currentClaimedHand}
                     currentRanks={currentRanks}
+                    disabled={actionLoading}
                 />
             </DialogContent>
         </Dialog>
@@ -114,12 +115,26 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
     const { t } = useTranslation();
     const gameState = useAppSelector((state) => state.gameState.gameState);
     const playerId = useAppSelector((state) => state.gameState.playerId);
-    const { callBluff } = useCallBluff(hub);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [actionLoading, setActionLoading] = useState(false);
+
+    const handleCallBluff = useCallback(async () => {
+        setActionLoading(true);
+        try {
+            await hub.invoke("CallBluff", {});
+        } finally {
+            setActionLoading(false);
+        }
+    }, [hub]);
 
     const handleClaim = useCallback(async (handType: HandType, ranks: Rank[], suit?: number) => {
-        await hub.invoke("ClaimHand", { claimedHand: handType, ranks, suit });
-        setDialogOpen(false);
+        setActionLoading(true);
+        try {
+            await hub.invoke("ClaimHand", { claimedHand: handType, ranks, suit });
+            setDialogOpen(false);
+        } finally {
+            setActionLoading(false);
+        }
     }, [hub]);
 
     if (!gameState) {
@@ -151,9 +166,10 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
                     {isMyTurn ? (
                         <div className="flex flex-col items-center gap-2">
                             <Button
-                                onClick={callBluff}
+                                onClick={handleCallBluff}
                                 variant="destructive"
                                 size="sm"
+                                loading={actionLoading}
                             >
                                 {t("game.callBluff")}
                             </Button>
@@ -163,6 +179,7 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
                                 onClaim={handleClaim}
                                 currentClaimedHand={currentClaim}
                                 currentRanks={currentRanks}
+                                actionLoading={actionLoading}
                             />
                         </div>
                     ) : (
@@ -182,6 +199,7 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
                         onClaim={handleClaim}
                         currentClaimedHand={currentClaim}
                         currentRanks={currentRanks}
+                        actionLoading={actionLoading}
                     />
                 </div>
             ) : (
