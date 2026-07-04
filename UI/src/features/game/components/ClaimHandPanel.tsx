@@ -12,6 +12,8 @@ import {
     DialogTrigger,
 } from "@/features/shared/components/shadcn/Dialog";
 import { useAppSelector } from "@/features/store/hooks";
+import { useMediaQuery } from "@/lib/useMediaQuery";
+import { cn } from "@/lib/utils";
 
 import { HandType } from "../models/HandType";
 import { Rank } from "../models/Rank";
@@ -77,6 +79,9 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
     const winner = useAppSelector((state) => state.gameState.winnerData);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [actionLoading, setActionLoading] = useState(false);
+    const isLg = useMediaQuery("(min-width: 1024px)");
+    const cardSpriteWidth = isLg ? 80 : 60;
+    const panelHeightClass = isLg ? "h-80" : "h-60";
 
     const handleCallBluff = useCallback(async () => {
         setActionLoading(true);
@@ -104,7 +109,7 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
     if (winner) {
         const isSelf = winner.winnerPlayerId === playerId;
         return (
-            <div className="h-60 p-4 rounded-lg border border-border bg-card/50 flex flex-col items-center justify-center gap-3">
+            <div className={cn(panelHeightClass, "p-4 rounded-lg border border-border bg-card/50 flex flex-col items-center justify-center gap-3")}>
                 <p className="text-lg font-semibold text-center">
                     {isSelf ? t("game.youWon") : t("game.playerWon", { username: winner.winnerUsername })}
                 </p>
@@ -123,7 +128,7 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
     const currentTurnPlayer = gameState.currentTurnPlayerId ? gameState.players[gameState.currentTurnPlayerId] : null;
 
     return (
-        <div className="h-60 p-4 rounded-lg border border-border bg-card/50">
+        <div className={cn(panelHeightClass, "p-4 rounded-lg border border-border bg-card/50")}>
             {currentClaimer && currentClaim !== null && currentRanks !== null ? (
                 <div className="flex flex-col items-center gap-3 h-full justify-center">
                     <div className="text-sm text-muted-foreground text-center truncate max-w-full">
@@ -136,6 +141,7 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
                         handType={currentClaim}
                         ranks={currentRanks}
                         suit={gameState.claimedSuit}
+                        displayWidth={cardSpriteWidth}
                     />
                     {isMyTurn ? (
                         <div className="flex flex-col items-center gap-2">

@@ -32,7 +32,7 @@ const handTypeLabels: Record<HandType, string> = {
 export const RoundHistoryDialog = () => {
   const { t } = useTranslation();
   const isLg = useMediaQuery("(min-width: 1024px)");
-  const cardWidth = isLg ? 80 : 50;
+  const cardWidth = isLg ? 80 : 60;
   const gameState = useAppSelector((state) => state.gameState.gameState);
   const roundHistory = gameState?.roundHistory ?? [];
 
