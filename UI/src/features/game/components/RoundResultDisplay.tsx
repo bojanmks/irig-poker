@@ -96,12 +96,13 @@ export const RoundResultDisplay = () => {
 
   return (
     <Dialog open onOpenChange={(open) => { if (!open) handleDismiss(); }}>
-      <DialogContent className="sm:max-w-lg max-h-[90dvh] overflow-y-auto">
+      <DialogContent className="sm:max-w-lg max-h-[90dvh] flex flex-col">
         <DialogHeader>
           <DialogTitle>{t("game.roundResult")}</DialogTitle>
         </DialogHeader>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex-1 overflow-y-auto min-h-0">
+          <div className="flex flex-col gap-4">
           <div className="flex flex-col items-center gap-2">
             <p className="text-sm text-muted-foreground">
               <span className="font-semibold text-foreground">
@@ -180,8 +181,9 @@ export const RoundResultDisplay = () => {
             </div>
           </div>
         </div>
+        </div>
 
-        <div className="flex justify-center mt-2">
+        <div className="flex justify-center pt-2">
           <Button onClick={handleDismiss}>
             {t("game.close")}
           </Button>
