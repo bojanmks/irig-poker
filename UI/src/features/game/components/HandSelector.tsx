@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { ArrowLeft } from "lucide-react";
 
+import { useMediaQuery } from "@/lib/useMediaQuery";
 import { cn } from "@/lib/utils";
 
 import { HandType } from "../models/HandType";
@@ -94,6 +95,9 @@ const BackArrow = () => <ArrowLeft size={18} />;
 
 export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disabled }: HandSelectorProps) => {
     const { t } = useTranslation();
+    const isLg = useMediaQuery("(min-width: 1024px)");
+    const suitCardWidth = isLg ? 90 : 60;
+    const rankCardWidth = isLg ? 75 : 50;
     const [step, setStep] = useState<Step>("hand-type");
     const [selectedHandType, setSelectedHandType] = useState<HandType | null>(null);
     const [firstRank, setFirstRank] = useState<Rank | null>(null);
@@ -263,7 +267,7 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
                             onClick={() => handleSuitClick(suit)}
                             className="rounded-md transition-all hover:ring-2 hover:ring-primary hover:ring-offset-2"
                         >
-                            <CardSprite suit={suit} rank={Rank.Ace} displayWidth={60} />
+                            <CardSprite suit={suit} rank={Rank.Ace} displayWidth={suitCardWidth} />
                         </button>
                     ))}
                 </div>
@@ -300,7 +304,7 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
                                 (!enabled || selected) ? "grayscale" : "hover:ring-2 hover:ring-primary hover:ring-offset-1"
                             )}
                         >
-                            <CardSprite suit={displaySuit} rank={rank} displayWidth={50} />
+                            <CardSprite suit={displaySuit} rank={rank} displayWidth={rankCardWidth} />
                         </button>
                     );
                 })}

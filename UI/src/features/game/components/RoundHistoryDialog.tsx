@@ -11,6 +11,7 @@ import {
   DialogTrigger,
 } from "@/features/shared/components/shadcn/Dialog";
 import { useAppSelector } from "@/features/store/hooks";
+import { useMediaQuery } from "@/lib/useMediaQuery";
 
 import { HandType } from "../models/HandType";
 import { describeRanks } from "../utils/describeRanks";
@@ -30,6 +31,8 @@ const handTypeLabels: Record<HandType, string> = {
 
 export const RoundHistoryDialog = () => {
   const { t } = useTranslation();
+  const isLg = useMediaQuery("(min-width: 1024px)");
+  const cardWidth = isLg ? 80 : 50;
   const gameState = useAppSelector((state) => state.gameState.gameState);
   const roundHistory = gameState?.roundHistory ?? [];
 
@@ -67,7 +70,7 @@ export const RoundHistoryDialog = () => {
                     handType={entry.claimedHand}
                     ranks={entry.ranks}
                     suit={entry.suit}
-                    displayWidth={50}
+                    displayWidth={cardWidth}
                   />
                 </div>
               ))}

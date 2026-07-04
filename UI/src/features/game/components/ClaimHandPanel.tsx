@@ -97,7 +97,7 @@ const ClaimHandDialog = ({ open, onOpenChange, onClaim, currentClaimedHand, curr
                     {t("game.claimHand")}
                 </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="lg:max-w-4xl">
                 <DialogHeader>
                     <DialogTitle>{t("game.claimHand")}</DialogTitle>
                 </DialogHeader>

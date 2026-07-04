@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from "@/features/shared/components/shadcn/Dialog";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
+import { useMediaQuery } from "@/lib/useMediaQuery";
 import { cn } from "@/lib/utils";
 
 import { HandType } from "../models/HandType";
@@ -32,6 +33,8 @@ const handTypeLabels: Record<HandType, string> = {
 
 export const RoundResultDisplay = () => {
   const { t } = useTranslation();
+  const isLg = useMediaQuery("(min-width: 1024px)");
+  const cardWidth = isLg ? 90 : 60;
   const dispatch = useAppDispatch();
   const roundResult = useAppSelector((state) => state.gameState.roundResultData);
   const gameState = useAppSelector((state) => state.gameState.gameState);
@@ -89,6 +92,7 @@ export const RoundResultDisplay = () => {
               handType={roundResult.claimedHand}
               ranks={roundResult.ranks}
               suit={roundResult.suit}
+              displayWidth={cardWidth}
             />
             <p className="text-sm text-muted-foreground">
               <span className="font-semibold text-foreground">
@@ -145,7 +149,7 @@ export const RoundResultDisplay = () => {
                   return (
                     <div key={`${pid}-${i}`} className="flex flex-col items-center gap-1">
                       <div className={cn(isRelevant && highlightClass)}>
-                        <CardSprite suit={card.suit} rank={card.rank} displayWidth={60} />
+                        <CardSprite suit={card.suit} rank={card.rank} displayWidth={cardWidth} />
                       </div>
                       <span className="text-xs text-muted-foreground">
                         {gameState.players[pid]?.username}
