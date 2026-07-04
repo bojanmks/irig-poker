@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-import { UsersIcon } from "lucide-react";
+import { Dot, UsersIcon } from "lucide-react";
 
 import { useAppSelector } from "@/features/store/hooks";
 
@@ -29,12 +29,17 @@ export const GameLobbyPlayerList = () => {
                     <UsersIcon className="w-5 h-5 text-muted-foreground" />
                     <span className="font-semibold">{t("game.players")}</span>
                 </div>
-                <span className="text-sm text-muted-foreground">
+                <div className="flex items-center text-sm text-muted-foreground">
                     {t("game.playerCount", {
-                        count: gameState.playerOrder.length,
+                        count: gameState.playerOrder.length
+                    })}
+
+                    <Dot size={15} />
+                    
+                    {t("game.eliminatedAt", {
                         max: gameState.maxCardCount
                     })}
-                </span>
+                </div>
             </div>
             <div className="space-y-2">
                 {players.map((player) => (
