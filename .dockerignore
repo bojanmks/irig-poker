@@ -1,9 +1,6 @@
 .git
 .github
 
-UI/node_modules
-UI/dist
-
 **/bin
 **/obj
 
