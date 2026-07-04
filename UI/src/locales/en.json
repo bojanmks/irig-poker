@@ -40,6 +40,8 @@
         "close": "Close",
         "waitingForPlayer": "Waiting for {{username}}...",
         "startingRound": "You are starting this round",
+        "viewAllPlayers": "View all players",
+        "allPlayers": "All players",
         "hands": {
             "highCard": "High Card",
             "onePair": "One Pair",

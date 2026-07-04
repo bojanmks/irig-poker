@@ -40,6 +40,8 @@
         "close": "Zatvori",
         "waitingForPlayer": "Čeka se {{username}}...",
         "startingRound": "Započinješ rundu",
+        "viewAllPlayers": "Prikaži sve igrače",
+        "allPlayers": "Svi igrači",
         "hands": {
             "highCard": "Visoka karta",
             "onePair": "Jedan par",
