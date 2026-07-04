@@ -34,6 +34,7 @@ jobs:
             --build-arg VITE_API_BASE_URL= \
             ./UI
 
+      # PUSH UI IMAGE
       - name: Push UI
         run: |
           docker push ghcr.io/bojanmks/ui:latest
@@ -49,7 +50,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u bojanmks --password-stdin
-            cd /opt/irigpoker
+            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            cd ${{ vars.DOCKER_COMPOSE_DIR }}
             docker compose pull
             docker compose up -d
