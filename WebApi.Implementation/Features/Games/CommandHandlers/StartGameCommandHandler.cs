@@ -55,21 +55,7 @@ public class StartGameCommandHandler(
 
             var playerCards = await _startGameService.StartAsync(gameCode, cancellationToken);
 
-            var gameState = new PublicGameState(
-                game!.GameCode,
-                game.HasStarted,
-                game.Players,
-                game.PlayerOrder,
-                game.CurrentTurnPlayerId,
-                null,
-                null,
-                null,
-                null,
-                game.MaxCardCount,
-                game.RoundHistory
-            );
-
-            return new StartGameResult(gameState, playerCards);
+            return new StartGameResult(PublicGameState.FromGameState(game), playerCards);
         }
     }
 }

@@ -60,22 +60,8 @@ public class ClaimHandCommandHandler(
 
             game.LastActivityAt = DateTimeOffset.UtcNow;
 
-            var publicGameState = new PublicGameState(
-                game.GameCode,
-                game.HasStarted,
-                game.Players,
-                game.PlayerOrder,
-                game.CurrentTurnPlayerId,
-                game.CurrentClaimedHand,
-                game.ClaimingPlayerId,
-                game.Ranks,
-                game.ClaimedSuit,
-                game.MaxCardCount,
-                game.RoundHistory
-            );
-
             return new ClaimResult(
-                publicGameState,
+                PublicGameState.FromGameState(game),
                 new ClaimNotification(applicationUser.PlayerId!, command.Data.ClaimedHand, command.Data.Ranks, command.Data.Suit)
             );
         }

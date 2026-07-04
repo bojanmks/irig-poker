@@ -79,19 +79,7 @@ public class DisconnectFromGameService(
 
             if (!player.IsAdmin)
             {
-                result.UpdatedGameState = new PublicGameState(
-                    game.GameCode,
-                    game.HasStarted,
-                    game.Players,
-                    game.PlayerOrder,
-                    game.CurrentTurnPlayerId,
-                    game.CurrentClaimedHand,
-                    game.ClaimingPlayerId,
-                    game.Ranks,
-                    game.ClaimedSuit,
-                    game.MaxCardCount,
-                    game.RoundHistory
-                );
+                result.UpdatedGameState = PublicGameState.FromGameState(game);
                 return result;
             }
 
@@ -101,19 +89,7 @@ public class DisconnectFromGameService(
             newAdmin.Value.SetIsAdmin(true);
             result.ChangedAdminTo = newAdmin.Key;
 
-            result.UpdatedGameState = new PublicGameState(
-                game.GameCode,
-                game.HasStarted,
-                game.Players,
-                game.PlayerOrder,
-                game.CurrentTurnPlayerId,
-                game.CurrentClaimedHand,
-                game.ClaimingPlayerId,
-                game.Ranks,
-                game.ClaimedSuit,
-                game.MaxCardCount,
-                game.RoundHistory
-            );
+            result.UpdatedGameState = PublicGameState.FromGameState(game);
 
             return result;
         }

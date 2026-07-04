@@ -57,20 +57,7 @@ public class CallBluffService(
         if (winnerPlayerId is null)
         {
             game.StartNewRound();
-
-            updatedGameState = new PublicGameState(
-                game.GameCode,
-                game.HasStarted,
-                game.Players,
-                game.PlayerOrder,
-                game.CurrentTurnPlayerId,
-                null,
-                null,
-                null,
-                null,
-                game.MaxCardCount,
-                game.RoundHistory
-            );
+            updatedGameState = PublicGameState.FromGameState(game);
         }
 
         var resolution = new RoundResolvedNotification(

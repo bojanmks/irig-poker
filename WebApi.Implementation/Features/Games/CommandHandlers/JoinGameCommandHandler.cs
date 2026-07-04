@@ -43,21 +43,7 @@ public class JoinGameCommandHandler(
                 return Result<JoinGameResult>.Error(_translator.Translate("game.failedToJoin"));
             }
 
-            var publicGameState = new PublicGameState(
-                gameState.GameCode,
-                gameState.HasStarted,
-                gameState.Players,
-                gameState.PlayerOrder,
-                gameState.CurrentTurnPlayerId,
-                null,
-                null,
-                null,
-                null,
-                gameState.MaxCardCount,
-                gameState.RoundHistory
-            );
-
-            return new JoinGameResult(playerId, publicGameState);
+            return new JoinGameResult(playerId, PublicGameState.FromGameState(gameState));
         }
     }
 }
