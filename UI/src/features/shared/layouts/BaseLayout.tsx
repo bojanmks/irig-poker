@@ -21,7 +21,7 @@ const BaseLayout = () => {
     <div>
       <div className="py-4 pr-4 flex justify-end items-center gap-2">
         <a 
-          href="https://github.com/bojanmks" 
+          href="https://github.com/bojanmks/irig-poker" 
           target="_blank" 
           rel="noopener noreferrer"
           className={buttonVariants({ variant: "outline", size: "icon" })}
