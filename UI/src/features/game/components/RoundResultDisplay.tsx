@@ -9,11 +9,13 @@ import {
   DialogTitle,
 } from "@/features/shared/components/shadcn/Dialog";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
+import { cn } from "@/lib/utils";
 
 import { HandType } from "../models/HandType";
 import { Rank } from "../models/Rank";
 import { Suit } from "../models/Suit";
 import { clearRoundResultData } from "../store/gameStateSlice";
+import { findRelevantCards } from "../utils/findRelevantCards";
 
 import { CardSprite } from "./CardSprite";
 import { ClaimedHandCards } from "./ClaimedHandCards";
@@ -88,11 +90,24 @@ export const RoundResultDisplay = () => {
     return () => dispatch(clearRoundResultData());
   }, [dispatch]);
 
+  const relevantCardKeys = useMemo(() => {
+    if (!roundResult) return new Set<string>();
+    const allCards = Object.values(roundResult.allPlayerCards).flat();
+    return new Set(
+      findRelevantCards(allCards, roundResult.claimedHand, roundResult.ranks, roundResult.suit)
+        .map((c) => `${c.suit}-${c.rank}`)
+    );
+  }, [roundResult]);
+
   if (!roundResult || !gameState) {
     return null;
   }
 
   const loserUsername = gameState.players[roundResult.losingPlayerId]?.username ?? "?";
+
+  const highlightClass = roundResult.wasTruthful
+    ? "ring-2 ring-primary ring-offset-1 rounded-xs"
+    : "ring-2 ring-red-500 ring-offset-1 rounded-xs";
 
   return (
     <Dialog open onOpenChange={(open) => { if (!open) handleDismiss(); }}>
@@ -169,14 +184,19 @@ export const RoundResultDisplay = () => {
             </p>
             <div className="flex flex-wrap gap-2 justify-center">
               {Object.entries(roundResult.allPlayerCards).flatMap(([pid, cards]) =>
-                cards.map((card, i) => (
-                  <div key={`${pid}-${i}`} className="flex flex-col items-center gap-1">
-                    <CardSprite suit={card.suit} rank={card.rank} displayWidth={60} />
-                    <span className="text-xs text-muted-foreground">
-                      {gameState.players[pid]?.username}
-                    </span>
-                  </div>
-                ))
+                cards.map((card, i) => {
+                  const isRelevant = relevantCardKeys.has(`${card.suit}-${card.rank}`);
+                  return (
+                    <div key={`${pid}-${i}`} className="flex flex-col items-center gap-1">
+                      <div className={cn(isRelevant && highlightClass)}>
+                        <CardSprite suit={card.suit} rank={card.rank} displayWidth={60} />
+                      </div>
+                      <span className="text-xs text-muted-foreground">
+                        {gameState.players[pid]?.username}
+                      </span>
+                    </div>
+                  );
+                })
               )}
             </div>
           </div>
