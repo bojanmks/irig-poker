@@ -10,10 +10,10 @@ public class CorsModule : BaseModule
     {
         services.AddCors(options =>
         {
-            options.AddPolicy("AllowAll", policy =>
+            options.AddPolicy("AllowSpecificOrigins", policy =>
             {
                 policy
-                    .WithOrigins("http://localhost:5173")
+                    .WithOrigins("http://localhost:5173", "https://irigpoker.bojanm.dev")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials();
@@ -23,6 +23,6 @@ public class CorsModule : BaseModule
 
     public override void UseServices(WebApplication app)
     {
-        app.UseCors("AllowAll");
+        app.UseCors("AllowSpecificOrigins");
     }
 }
