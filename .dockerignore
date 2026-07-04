@@ -1,0 +1,13 @@
+.git
+.github
+
+UI/node_modules
+UI/dist
+
+**/bin
+**/obj
+
+.vs
+
+.gitignore
+README.md
