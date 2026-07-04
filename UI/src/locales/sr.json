@@ -38,8 +38,7 @@
         "youLostPlayerWon": "{{username}} je pobedio/la u igri!",
         "roundResult": "Rezultat runde",
         "close": "Zatvori",
-        "waitingForFirstClaim": "Čeka se prva prijava...",
-        "waitingForChallenge": "Čeka se prozivka ili jača prijava...",
+        "waitingForPlayer": "Čeka se {{username}}...",
         "hands": {
             "highCard": "Visoka karta",
             "onePair": "Jedan par",

@@ -77,6 +77,7 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
     const currentClaimerId = gameState.claimingPlayerId;
     const currentClaimer = currentClaimerId ? gameState.players[currentClaimerId] : null;
     const currentRanks = gameState.ranks;
+    const currentTurnPlayer = gameState.currentTurnPlayerId ? gameState.players[gameState.currentTurnPlayerId] : null;
 
     return (
         <div className="flex flex-col gap-4 p-4 rounded-lg border border-border bg-card/50">
@@ -99,7 +100,7 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
                         )}
                     </div>
                     {!isMyTurn && (
-                        <span className="shrink-0 text-xs text-muted-foreground">{t("game.waitingForChallenge")}</span>
+                        <span className="shrink-0 text-xs text-muted-foreground">{t("game.waitingForPlayer", { username: currentTurnPlayer?.username ?? "" })}</span>
                     )}
                 </>
             )}
@@ -113,7 +114,7 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
             )}
 
             {!isMyTurn && currentClaim === null && (
-                <p className="text-sm text-muted-foreground">{t("game.waitingForFirstClaim")}</p>
+                <p className="text-sm text-muted-foreground">{t("game.waitingForPlayer", { username: currentTurnPlayer?.username ?? "" })}</p>
             )}
         </div>
     );

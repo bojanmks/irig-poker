@@ -38,8 +38,7 @@
         "youLostPlayerWon": "{{username}} won the game!",
         "roundResult": "Round result",
         "close": "Close",
-        "waitingForFirstClaim": "Waiting for the first claim...",
-        "waitingForChallenge": "Waiting for a challenge or up the bet...",
+        "waitingForPlayer": "Waiting for {{username}}...",
         "hands": {
             "highCard": "High Card",
             "onePair": "One Pair",
