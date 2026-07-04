@@ -32,13 +32,13 @@ public class GameHub(
                 .SendAsync("PlayerJoined", HubNotification.From(new PlayerJoinNotification(
                     player,
                     result.Data.GameState.PlayerOrder
-                ), _timeProvider), Context.ConnectionAborted);
+                ), _timeProvider));
 
             await Clients
                 .Group(request.Data.GameCode)
                 .SendAsync("GameStateUpdated", HubNotification.From(
                     result.Data.GameState, _timeProvider
-                ), Context.ConnectionAborted);
+                ));
         }
 
         return result.ToHubActionResponse();
@@ -55,7 +55,7 @@ public class GameHub(
 
             await Clients
                 .Group(gameCode)
-                .SendAsync("GameStarted", HubNotification.From(startGameResult.GameState, _timeProvider), Context.ConnectionAborted);
+                .SendAsync("GameStarted", HubNotification.From(startGameResult.GameState, _timeProvider));
 
             var tasks = new List<Task>();
             foreach (var (playerId, cards) in startGameResult.PlayerCards)
@@ -67,7 +67,7 @@ public class GameHub(
                             .SendAsync("CardsDealt", HubNotification.From(
                                 new CardsDealtNotification(cards),
                                 _timeProvider
-                            ), Context.ConnectionAborted)
+                            ))
                     );
                 }
             }
@@ -90,12 +90,12 @@ public class GameHub(
             await Clients.Group(gameCode)
                 .SendAsync("ClaimMade", HubNotification.From(
                     claimResult.ClaimNotification, _timeProvider
-                ), Context.ConnectionAborted);
+                ));
 
             await Clients.Group(gameCode)
                 .SendAsync("GameStateUpdated", HubNotification.From(
                     claimResult.GameState, _timeProvider
-                ), Context.ConnectionAborted);
+                ));
         }
 
         return result.ToHubActionResponse();
@@ -113,7 +113,7 @@ public class GameHub(
             await Clients.Group(gameCode)
                 .SendAsync("RoundResolved", HubNotification.From(
                     callBluffResult.Resolution, _timeProvider
-                ), Context.ConnectionAborted);
+                ));
 
             var tasks = new List<Task>();
 
@@ -124,7 +124,7 @@ public class GameHub(
                         .SendAsync("GameWon", HubNotification.From(
                             new WinnerNotification(callBluffResult.WinnerPlayerId, callBluffResult.WinnerUsername!),
                             _timeProvider
-                        ), Context.ConnectionAborted)
+                        ))
                 );
             }
             else if (callBluffResult.UpdatedGameState is not null)
@@ -133,7 +133,7 @@ public class GameHub(
                     Clients.Group(gameCode)
                         .SendAsync("GameStateUpdated", HubNotification.From(
                             callBluffResult.UpdatedGameState, _timeProvider
-                        ), Context.ConnectionAborted)
+                        ))
                 );
             }
 
@@ -146,7 +146,7 @@ public class GameHub(
                             .SendAsync("CardsDealt", HubNotification.From(
                                 new CardsDealtNotification(cards),
                                 _timeProvider
-                            ), Context.ConnectionAborted)
+                            ))
                     );
                 }
             }
