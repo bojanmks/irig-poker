@@ -3,4 +3,5 @@ export interface Player {
     username: string;
     isAdmin: boolean;
     cardCount: number;
+    isEliminated: boolean;
 }

@@ -60,8 +60,21 @@ public class GameState
         else
         {
             var currentIndex = PlayerOrder.IndexOf(StartTurnPlayerId);
-            var nextIndex = (currentIndex + 1) % PlayerOrder.Count;
-            StartTurnPlayerId = PlayerOrder[nextIndex];
+
+            while (true)
+            {
+                var nextIndex = (currentIndex + 1) % PlayerOrder.Count;
+                var nextId = PlayerOrder[nextIndex];
+
+                if (Players[nextId].IsEliminated)
+                {
+                    currentIndex = nextIndex;
+                    continue;
+                }
+
+                StartTurnPlayerId = PlayerOrder[nextIndex];
+                break;
+            }
         }
 
         ClearClaim();
@@ -83,8 +96,21 @@ public class GameState
         }
 
         var currentIndex = PlayerOrder.IndexOf(CurrentTurnPlayerId);
-        var nextIndex = (currentIndex + 1) % PlayerOrder.Count;
-        CurrentTurnPlayerId = PlayerOrder[nextIndex];
+
+        while (true)
+        {
+            var nextIndex = (currentIndex + 1) % PlayerOrder.Count;
+            var nextId = PlayerOrder[nextIndex];
+
+            if (Players[nextId].IsEliminated)
+            {
+                currentIndex = nextIndex;
+                continue;
+            }
+
+            CurrentTurnPlayerId = PlayerOrder[nextIndex];
+            break;
+        }
     }
 
     public Deck? Deck { get; private set; }
@@ -93,7 +119,6 @@ public class GameState
     public void CreateDeck()
     {
         Deck = new Deck();
-        Deck.Shuffle();
     }
 
     public void DealCardsToAllPlayers()
@@ -102,6 +127,8 @@ public class GameState
         {
             throw new InvalidOperationException("Deck has not been created");
         }
+
+        Deck.Shuffle();
 
         foreach (var playerId in ActivePlayerIds)
         {
@@ -154,11 +181,11 @@ public class GameState
         return PlayerCards.SelectMany(kvp => kvp.Value).ToList();
     }
 
-    public void RemovePlayer(string playerId)
+    public void EliminatePlayer(string playerId)
     {
         ActivePlayerIds.Remove(playerId);
-        PlayerOrder = [.. PlayerOrder.Where(id => id != playerId)];
         PlayerCards.Remove(playerId);
+        Players[playerId].IsEliminated = true;
 
         if (CurrentTurnPlayerId == playerId)
         {

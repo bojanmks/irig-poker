@@ -17,12 +17,14 @@ type GamePlayerCardProps = {
     playerId: string;
     username: string;
     cardCount: number;
+    isEliminated: boolean;
   };
   isCurrentTurn: boolean;
   isSelf: boolean;
 };
 
 export const GamePlayerCard = ({ player, isCurrentTurn, isSelf }: GamePlayerCardProps) => {
+  const isEliminated = player.isEliminated;
   const { t } = useTranslation();
 
   const cardRingClass = useMemo(() => {
@@ -50,9 +52,9 @@ export const GamePlayerCard = ({ player, isCurrentTurn, isSelf }: GamePlayerCard
   }, [isSelf, isCurrentTurn]);
 
   return (
-    <Card
-      className={cn("flex flex-row items-center gap-3 p-3 transition-all", cardRingClass)}
-    >
+      <Card
+        className={cn("flex flex-row items-center gap-3 p-3 transition-all", cardRingClass, isEliminated && "opacity-50")}
+      >
       <Avatar className={cn("w-10 h-10 ring-2 shrink-0", avatarRingClass)}>
         <AvatarFallback className="text-sm">
           {player.username[0]?.toUpperCase()}
@@ -69,7 +71,7 @@ export const GamePlayerCard = ({ player, isCurrentTurn, isSelf }: GamePlayerCard
         )}
       </div>
 
-      {player.cardCount > 0 && (
+      {!isEliminated && player.cardCount > 0 && (
         <div className="flex items-center gap-1 ml-auto shrink-0">
           <span className="text-sm font-medium tabular-nums">{player.cardCount}</span>
           <X size={12} />

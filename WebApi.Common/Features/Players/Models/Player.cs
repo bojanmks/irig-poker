@@ -6,6 +6,7 @@ public class Player
     public required string Username { get; init; }
     public bool IsAdmin { get; private set; }
     public int CardCount { get; set; }
+    public bool IsEliminated { get; set; }
 
     public void SetIsAdmin(bool value)
     {
