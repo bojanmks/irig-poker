@@ -26,6 +26,16 @@ jobs:
         run: |
           docker push ghcr.io/bojanmks/webapi:latest
 
+      # BUILD UI IMAGE
+      - name: Build UI
+        run: |
+          docker build \
+            -t ghcr.io/bojanmks/ui:latest \
+            ./UI
+
+      - name: Push UI
+        run: |
+          docker push ghcr.io/bojanmks/ui:latest
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
@@ -38,6 +48,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
+            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u bojanmks --password-stdin
             cd /opt/irigpoker
             docker compose pull
             docker compose up -d
