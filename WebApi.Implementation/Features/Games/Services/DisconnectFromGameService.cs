@@ -58,6 +58,7 @@ public class DisconnectFromGameService(
 
                     await _deleteGameService.DeleteAsync(entry.GameCode, cancellationToken);
                     result.HasGameEnded = true;
+                    result.UpdatedGameState = PublicGameState.FromGameState(game);
                     return result;
                 }
 
@@ -69,6 +70,7 @@ public class DisconnectFromGameService(
                 {
                     await _deleteGameService.DeleteAsync(entry.GameCode, cancellationToken);
                     result.HasGameEnded = true;
+                    result.UpdatedGameState = PublicGameState.FromGameState(game);
                     return result;
                 }
 
