@@ -6,6 +6,7 @@ import { useAppSelector } from "@/features/store/hooks";
 import { ClaimHandPanel } from "./ClaimHandPanel";
 import { GamePlayerList } from "./GamePlayerList";
 import { PlayerHand } from "./PlayerHand";
+import { RoundHistoryDialog } from "./RoundHistoryDialog";
 
 type ActualGameProps = {
     hub: HubMethods;
@@ -17,9 +18,12 @@ const ActualGame = ({ hub }: ActualGameProps) => {
 
     return (
         <div className="flex flex-col gap-4">
-            <span className="text-xs text-muted-foreground">
-                {t("game.eliminatedAt", { max: gameState?.maxCardCount })}
-            </span>
+            <div className="flex items-center justify-between">
+                <span className="text-xs text-muted-foreground">
+                    {t("game.eliminatedAt", { max: gameState?.maxCardCount })}
+                </span>
+                <RoundHistoryDialog />
+            </div>
             <ClaimHandPanel hub={hub} />
             <div className="flex flex-col lg:flex-row gap-4">
                 <div className="lg:w-1/3 xl:w-1/4 shrink-0 order-2 lg:order-1">

@@ -1,6 +1,7 @@
 import type { HandType } from "./HandType";
 import type { Player } from "./Player";
 import type { Rank } from "./Rank";
+import type { RoundHistoryEntry } from "./RoundHistoryEntry";
 import type { Suit } from "./Suit";
 
 export interface PublicGameState {
@@ -13,4 +14,5 @@ export interface PublicGameState {
     ranks: Rank[] | null;
     claimedSuit: Suit | null;
     maxCardCount: number;
+    roundHistory: RoundHistoryEntry[];
 }

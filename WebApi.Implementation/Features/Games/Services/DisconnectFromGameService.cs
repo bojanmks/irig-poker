@@ -87,7 +87,8 @@ public class DisconnectFromGameService(
                     game.ClaimingPlayerId,
                     game.Ranks,
                     game.ClaimedSuit,
-                    game.MaxCardCount
+                    game.MaxCardCount,
+                    game.RoundHistory
                 );
                 return result;
             }
@@ -108,7 +109,8 @@ public class DisconnectFromGameService(
                 game.ClaimingPlayerId,
                 game.Ranks,
                 game.ClaimedSuit,
-                game.MaxCardCount
+                game.MaxCardCount,
+                game.RoundHistory
             );
 
             return result;

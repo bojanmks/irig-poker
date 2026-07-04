@@ -9,6 +9,8 @@ public class GameState
 {
     public required string GameCode { get; init; }
 
+    public List<RoundHistoryEntry> RoundHistory { get; } = [];
+
     public bool HasStarted { get; private set; } = false;
     public void MarkStarted()
     {
@@ -78,6 +80,7 @@ public class GameState
         }
 
         ClearClaim();
+        RoundHistory.Clear();
 
         CurrentTurnPlayerId = StartTurnPlayerId;
     }
@@ -166,6 +169,8 @@ public class GameState
         CurrentClaimedHand = claimedHand;
         Ranks = ranks;
         ClaimedSuit = suit;
+
+        RoundHistory.Add(new RoundHistoryEntry(claimingPlayerId, claimedHand, ranks, suit));
     }
 
     public void ClearClaim()

@@ -40,6 +40,8 @@
         "playerLeftWarning": "{{username}} je napustio/la igru",
         "youLostPlayerWon": "{{username}} je pobedio/la u igri!",
         "roundResult": "Rezultat runde",
+        "roundHistory": "Istorija runde",
+        "roundHistoryEmpty": "Još uvek nema izjava u ovoj rundi",
         "close": "Zatvori",
         "waitingForPlayer": "Čeka se {{username}}...",
         "startingRound": "Započinješ rundu",

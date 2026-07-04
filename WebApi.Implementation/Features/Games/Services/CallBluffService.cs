@@ -66,7 +66,8 @@ public class CallBluffService(
                 null,
                 null,
                 null,
-                game.MaxCardCount
+                game.MaxCardCount,
+                game.RoundHistory
             );
         }
 

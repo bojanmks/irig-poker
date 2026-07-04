@@ -12,5 +12,6 @@ public record PublicGameState(
     string? ClaimingPlayerId,
     List<Rank>? Ranks,
     Suit? ClaimedSuit,
-    int MaxCardCount
+    int MaxCardCount,
+    IReadOnlyList<RoundHistoryEntry> RoundHistory
 );

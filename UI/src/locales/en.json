@@ -40,6 +40,8 @@
         "playerLeftWarning": "{{username}} left the game",
         "youLostPlayerWon": "{{username}} won the game!",
         "roundResult": "Round result",
+        "roundHistory": "Round history",
+        "roundHistoryEmpty": "No claims in this round yet",
         "close": "Close",
         "waitingForPlayer": "Waiting for {{username}}...",
         "startingRound": "You are starting this round",

@@ -65,7 +65,8 @@ public class StartGameCommandHandler(
                 null,
                 null,
                 null,
-                game.MaxCardCount
+                game.MaxCardCount,
+                game.RoundHistory
             );
 
             return new StartGameResult(gameState, playerCards);

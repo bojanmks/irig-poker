@@ -53,7 +53,8 @@ public class JoinGameCommandHandler(
                 null,
                 null,
                 null,
-                gameState.MaxCardCount
+                gameState.MaxCardCount,
+                gameState.RoundHistory
             );
 
             return new JoinGameResult(playerId, publicGameState);
