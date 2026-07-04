@@ -56,7 +56,7 @@ const ClaimHandDialog = ({ open, onOpenChange, onClaim, currentClaimedHand, curr
                     {t("game.claimHand")}
                 </Button>
             </DialogTrigger>
-            <DialogContent className="lg:max-w-4xl">
+            <DialogContent className="sm:max-w-[calc(100%-2rem)] lg:max-w-4xl">
                 <DialogHeader>
                     <DialogTitle>{t("game.claimHand")}</DialogTitle>
                 </DialogHeader>
