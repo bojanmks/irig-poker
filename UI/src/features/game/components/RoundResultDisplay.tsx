@@ -16,6 +16,7 @@ import { Suit } from "../models/Suit";
 import { clearRoundResultData } from "../store/gameStateSlice";
 
 import { CardSprite } from "./CardSprite";
+import { ClaimedHandCards } from "./ClaimedHandCards";
 
 const handTypeLabels: Record<HandType, string> = {
   [HandType.HighCard]: "game.hands.highCard",
@@ -101,7 +102,7 @@ export const RoundResultDisplay = () => {
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
-          <div className="text-center">
+          <div className="flex flex-col items-center gap-2">
             <p className="text-sm text-muted-foreground">
               <span className="font-semibold text-foreground">
                 {gameState.players[roundResult.claimingPlayerId]?.username}
@@ -112,6 +113,11 @@ export const RoundResultDisplay = () => {
               </span>
               {" "}({describeRanks(roundResult.claimedHand, roundResult.ranks, roundResult.suit)})
             </p>
+            <ClaimedHandCards
+              handType={roundResult.claimedHand}
+              ranks={roundResult.ranks}
+              suit={roundResult.suit}
+            />
             <p className="text-sm text-muted-foreground">
               <span className="font-semibold text-foreground">
                 {gameState.players[roundResult.callingPlayerId]?.username}

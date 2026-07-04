@@ -9,6 +9,7 @@ import { HandType } from "../models/HandType";
 import { Rank } from "../models/Rank";
 import { Suit } from "../models/Suit";
 
+import { ClaimedHandCards } from "./ClaimedHandCards";
 import { HandSelector } from "./HandSelector";
 
 const handTypeLabels: Record<HandType, string> = {
@@ -94,12 +95,19 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
         <div className="flex flex-col gap-4 p-4 rounded-lg border border-border bg-card/50">
             {currentClaimer && currentClaim !== null && currentRanks !== null && (
                 <>
-                    <div className="flex items-center gap-2">
-                        <div className="text-sm text-muted-foreground">
-                            <span className="font-semibold text-foreground">{currentClaimer.username}</span>
-                            {" "}{t("game.claimed")}{" "}
-                            <span className="font-semibold text-foreground">{t(handTypeLabels[currentClaim])}</span>
-                            {" "}({describeRanks(currentClaim, currentRanks, gameState.claimedSuit)})
+                    <div className="flex items-start gap-4">
+                        <div className="flex flex-col gap-2">
+                            <div className="text-sm text-muted-foreground">
+                                <span className="font-semibold text-foreground">{currentClaimer.username}</span>
+                                {" "}{t("game.claimed")}{" "}
+                                <span className="font-semibold text-foreground">{t(handTypeLabels[currentClaim])}</span>
+                                {" "}({describeRanks(currentClaim, currentRanks, gameState.claimedSuit)})
+                            </div>
+                            <ClaimedHandCards
+                                handType={currentClaim}
+                                ranks={currentRanks}
+                                suit={gameState.claimedSuit}
+                            />
                         </div>
                         {isMyTurn && (
                             <button
