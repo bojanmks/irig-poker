@@ -20,11 +20,21 @@ export const GameLobbyPlayerList = () => {
         return gameState.playerOrder.map(po => gameState.players[po]);
     }, [gameState]);
 
+    if (!gameState) return null;
+
     return (
         <>
-            <div className="flex items-center mb-4 gap-2">
-                <UsersIcon className="w-5 h-5 text-muted-foreground" />
-                <span className="font-semibold">{t("game.players")}</span>
+            <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                    <UsersIcon className="w-5 h-5 text-muted-foreground" />
+                    <span className="font-semibold">{t("game.players")}</span>
+                </div>
+                <span className="text-sm text-muted-foreground">
+                    {t("game.playerCount", {
+                        count: gameState.playerOrder.length,
+                        max: gameState.maxCardCount
+                    })}
+                </span>
             </div>
             <div className="space-y-2">
                 {players.map((player) => (

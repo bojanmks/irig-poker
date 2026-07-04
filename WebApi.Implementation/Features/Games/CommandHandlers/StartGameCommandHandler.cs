@@ -48,7 +48,7 @@ public class StartGameCommandHandler(
                 return Result<StartGameResult>.Error(_translator.Translate("game.notEnoughPlayers"));
             }
 
-            if (game.Players.Count > _appSettings.MaxPlayersPerGame)
+            if (game.Players.Count > GameState.MaxPlayers)
             {
                 return Result<StartGameResult>.Error(_translator.Translate("game.tooManyPlayers"));
             }
@@ -64,7 +64,8 @@ public class StartGameCommandHandler(
                 null,
                 null,
                 null,
-                null
+                null,
+                game.MaxCardCount
             );
 
             return new StartGameResult(gameState, playerCards);

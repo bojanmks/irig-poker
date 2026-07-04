@@ -1,5 +1,4 @@
 using MediatR;
-using WebApi.Application.Core.AppSettings;
 using WebApi.Application.Core.Localization;
 using WebApi.Application.Features.Games.Commands;
 using WebApi.Application.Features.Games.Services;
@@ -13,8 +12,7 @@ public class JoinGameCommandHandler(
     IAddPlayerToGameService _addPlayerToGameService,
     IGetGameService _getGameService,
     IGameLockService _gameLockService,
-    ITranslator _translator,
-    AppSettings _appSettings
+    ITranslator _translator
 ) : IRequestHandler<JoinGameCommand, Result<JoinGameResult>>
 {
     public async Task<Result<JoinGameResult>> Handle(JoinGameCommand command, CancellationToken cancellationToken)
@@ -33,31 +31,32 @@ public class JoinGameCommandHandler(
                 return Result<JoinGameResult>.Error(_translator.Translate("game.alreadyStarted"));
             }
 
-            if (game.Players.Count >= _appSettings.MaxPlayersPerGame)
+            if (game.Players.Count >= GameState.MaxPlayers)
             {
                 return Result<JoinGameResult>.Error(_translator.Translate("game.isFull"));
             }
 
-            var playerId = await _addPlayerToGameService.AddAsync(command.Data, cancellationToken);
+            var (playerId, gameState) = await _addPlayerToGameService.AddAsync(command.Data, cancellationToken);
 
-            if (playerId is null)
+            if (playerId is null || gameState is null)
             {
                 return Result<JoinGameResult>.Error(_translator.Translate("game.failedToJoin"));
             }
 
-            var gameState = new PublicGameState(
-                game.GameCode,
-                game.HasStarted,
-                game.Players,
-                game.PlayerOrder,
-                game.CurrentTurnPlayerId,
+            var publicGameState = new PublicGameState(
+                gameState.GameCode,
+                gameState.HasStarted,
+                gameState.Players,
+                gameState.PlayerOrder,
+                gameState.CurrentTurnPlayerId,
                 null,
                 null,
                 null,
-                null
+                null,
+                gameState.MaxCardCount
             );
 
-            return new JoinGameResult(playerId, gameState);
+            return new JoinGameResult(playerId, publicGameState);
         }
     }
 }

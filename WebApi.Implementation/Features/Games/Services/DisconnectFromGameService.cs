@@ -44,24 +44,35 @@ public class DisconnectFromGameService(
             game.PlayerOrder.Remove(entry.PlayerId);
             game.ActivePlayerIds.Remove(entry.PlayerId);
 
-            if (game.HasStarted && game.ActivePlayerIds.Count <= 1)
-            {
-                if (game.ActivePlayerIds.Count == 1)
-                {
-                    var winnerPlayerId = game.ActivePlayerIds.First();
-                    var winner = game.Players[winnerPlayerId];
-                    result.WinnerPlayerId = winner.PlayerId;
-                    result.WinnerUsername = winner.Username;
-                }
-
-                await _deleteGameService.DeleteAsync(entry.GameCode, cancellationToken);
-                result.HasGameEnded = true;
-                return result;
-            }
-
             if (game.HasStarted)
             {
+                if (game.ActivePlayerIds.Count <= 1)
+                {
+                    if (game.ActivePlayerIds.Count == 1)
+                    {
+                        var winnerPlayerId = game.ActivePlayerIds.First();
+                        var winner = game.Players[winnerPlayerId];
+                        result.WinnerPlayerId = winner.PlayerId;
+                        result.WinnerUsername = winner.Username;
+                    }
+
+                    await _deleteGameService.DeleteAsync(entry.GameCode, cancellationToken);
+                    result.HasGameEnded = true;
+                    return result;
+                }
+
                 game.StartNewRound();
+            }
+            else
+            {
+                if (game.ActivePlayerIds.Count <= 0)
+                {
+                    await _deleteGameService.DeleteAsync(entry.GameCode, cancellationToken);
+                    result.HasGameEnded = true;
+                    return result;
+                }
+
+                game.UpdateCardCountThreshold();
             }
 
             if (!player.IsAdmin)
@@ -75,7 +86,8 @@ public class DisconnectFromGameService(
                     game.CurrentClaimedHand,
                     game.ClaimingPlayerId,
                     game.Ranks,
-                    game.ClaimedSuit
+                    game.ClaimedSuit,
+                    game.MaxCardCount
                 );
                 return result;
             }
@@ -95,7 +107,8 @@ public class DisconnectFromGameService(
                 game.CurrentClaimedHand,
                 game.ClaimingPlayerId,
                 game.Ranks,
-                game.ClaimedSuit
+                game.ClaimedSuit,
+                game.MaxCardCount
             );
 
             return result;

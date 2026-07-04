@@ -1,6 +1,7 @@
 ﻿using WebApi.Application.Core.ApplicationUsers;
 using WebApi.Application.Features.Games.Services;
 using WebApi.Common.Features.Games.Joining.Models;
+using WebApi.Common.Features.Games.Models;
 using WebApi.Common.Features.Players.Models;
 using WebApi.Implementation.Features.Games.Stores;
 
@@ -12,18 +13,18 @@ public class AddPlayerToGameService(
     IHubConnectionIdProvider _hubConnectionIdProvider
 ) : IAddPlayerToGameService
 {
-    public async Task<string?> AddAsync(JoinGameRequest data, CancellationToken cancellationToken = default)
+    public async Task<(string? PlayerId, GameState? GameState)> AddAsync(JoinGameRequest data, CancellationToken cancellationToken = default)
     {
         if (!_hubConnectionIdProvider.TryGetConnectionId(out var connectionId))
         {
-            return null;
+            return (null, null);
         }
 
         var game = await _getGameService.GetAsync(data.GameCode, cancellationToken);
 
         if (game is null)
         {
-            return null;
+            return (null, null);
         }
 
         var playerId = Guid.NewGuid().ToString("N");
@@ -43,7 +44,7 @@ public class AddPlayerToGameService(
 
         if (!addToGameResult)
         {
-            return null;
+            return (null, null);
         }
 
         bool addToMapResult = _playersGamesMap.Map.TryAdd(connectionId, (playerId, data.GameCode));
@@ -51,7 +52,7 @@ public class AddPlayerToGameService(
         if (!addToMapResult)
         {
             game.Players.Remove(playerId, out _);
-            return null;
+            return (null, null);
         }
 
         _playersGamesMap.PlayerIdToConnectionId[playerId] = connectionId;
@@ -59,6 +60,8 @@ public class AddPlayerToGameService(
         game.PlayerOrder.Add(playerId);
         game.ActivePlayerIds.Add(playerId);
 
-        return playerId;
+        game.UpdateCardCountThreshold();
+
+        return (playerId, game);
     }
 }

@@ -11,5 +11,6 @@ public record PublicGameState(
     HandType? CurrentClaimedHand,
     string? ClaimingPlayerId,
     List<Rank>? Ranks,
-    Suit? ClaimedSuit
+    Suit? ClaimedSuit,
+    int MaxCardCount
 );

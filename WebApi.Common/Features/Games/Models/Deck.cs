@@ -15,6 +15,8 @@ public class Deck
                 _cards.Add(new Card(suit, rank));
             }
         }
+
+        Shuffle();
     }
 
     public void Shuffle()

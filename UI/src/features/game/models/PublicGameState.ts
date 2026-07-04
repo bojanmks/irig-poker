@@ -12,4 +12,5 @@ export interface PublicGameState {
     claimingPlayerId: string | null;
     ranks: Rank[] | null;
     claimedSuit: Suit | null;
+    maxCardCount: number;
 }

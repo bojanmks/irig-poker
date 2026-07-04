@@ -32,7 +32,7 @@ public class CallBluffService(
         string? winnerPlayerId = null;
         string? winnerUsername = null;
 
-        if (loserNewCardCount >= GameState.MaxCardCount)
+        if (loserNewCardCount >= game.MaxCardCount)
         {
             eliminatedPlayerId = losingPlayerId;
             game.RemovePlayer(losingPlayerId);
@@ -65,7 +65,8 @@ public class CallBluffService(
                 null,
                 null,
                 null,
-                null
+                null,
+                game.MaxCardCount
             );
         }
 

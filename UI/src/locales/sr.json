@@ -10,6 +10,7 @@
         "copyLink": "Klikni da kopiraš link igre",
         "linkCopied": "Link je kopiran",
         "players": "Igrači",
+        "playerCount": "{{count}}/15 \u00B7 Eliminacija na {{max}} karata",
         "start": "Započni igru",
         "currentTurn": "Na potezu",
         "you": "Ti",

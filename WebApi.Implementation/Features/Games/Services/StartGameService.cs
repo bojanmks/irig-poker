@@ -11,6 +11,7 @@ public class StartGameService(
     {
         var game = await _getGameService.GetAsync(gameCode, cancellationToken) ?? throw new InvalidOperationException("Game not found");
         game.MarkStarted();
+        game.UpdateCardCountThreshold();
         game.InitializeCardCounts();
         game.CreateDeck();
         game.DealCardsToAllPlayers();

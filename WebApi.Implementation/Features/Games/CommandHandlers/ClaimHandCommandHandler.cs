@@ -67,7 +67,8 @@ public class ClaimHandCommandHandler(
                 game.CurrentClaimedHand,
                 game.ClaimingPlayerId,
                 game.Ranks,
-                game.ClaimedSuit
+                game.ClaimedSuit,
+                game.MaxCardCount
             );
 
             return new ClaimResult(
