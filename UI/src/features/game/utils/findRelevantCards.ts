@@ -1,23 +1,40 @@
 import type { Card } from "../models/Card";
 import { HandType } from "../models/HandType";
-import type { Rank } from "../models/Rank";
+import { Rank } from "../models/Rank";
 import type { Suit } from "../models/Suit";
 
+const allRanks: Rank[] = [
+    Rank.Two,
+    Rank.Three,
+    Rank.Four,
+    Rank.Five,
+    Rank.Six,
+    Rank.Seven,
+    Rank.Eight,
+    Rank.Nine,
+    Rank.Ten,
+    Rank.Jack,
+    Rank.Queen,
+    Rank.King,
+    Rank.Ace
+];
+
 function getStraightNeededRanks(topRank: Rank): Rank[] {
-  if (topRank === 5) {
-    return [99 as Rank, 2, 3, 4, 5];
+  if (topRank === Rank.Five) {
+    return [Rank.Ace, Rank.Two, Rank.Three, Rank.Four, Rank.Five];
   }
 
+  const topRankIndex = allRanks.indexOf(topRank);
   const needed: Rank[] = [];
-  for (let i = 0; i < 5; i++) {
-    needed.push((topRank - i) as Rank);
+  for (let i = topRankIndex; i > topRankIndex - 5; i--) {
+    needed.push(allRanks[i]);
   }
   return needed;
 }
 
 export function findRelevantCards(
   cards: Card[],
-  handType: number,
+  handType: HandType,
   ranks: Rank[],
   suit: Suit | null,
 ): Card[] {
