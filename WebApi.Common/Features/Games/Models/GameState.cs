@@ -31,7 +31,7 @@ public class GameState
     {
         foreach (var playerId in Players.Keys)
         {
-            Players[playerId].CardCount = 1;
+            Players[playerId].CardCount = 6;
         }
     }
 
