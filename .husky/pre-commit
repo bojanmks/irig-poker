@@ -1,3 +1,10 @@
 #!/usr/bin/env sh
 cd UI
 npx --no-install --no-warn-ignored lint-staged
+
+cd ..
+STAGED_CS=$(git diff --cached --name-only --diff-filter=d -- '*.cs')
+if [ -n "$STAGED_CS" ]; then
+  dotnet format --include $STAGED_CS
+  git add $STAGED_CS
+fi
