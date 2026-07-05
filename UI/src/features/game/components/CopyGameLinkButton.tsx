@@ -9,23 +9,18 @@ import { showSuccess } from "@/features/shared/utils/toast";
 
 export const CopyGameLinkButton = () => {
   const [isHovered, setIsHovered] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { gameCode } = useParams();
 
-  const displayGameUrl = useMemo(() => {
+  const gameUrl = useMemo(() => {
     const url = new URL(window.location.href);
-    return gameCode ? `${url.origin}/${gameCode}` : url.origin;
-  }, [gameCode]);
-
-  const copyGameUrl = useMemo(() => {
-    const url = new URL(window.location.href);
-    return gameCode ? `${url.origin}/unknown/${gameCode}` : url.origin;
-  }, [gameCode]);
+    return gameCode ? `${url.origin}/${i18n.language}/${gameCode}` : url.origin;
+  }, [gameCode, i18n.language]);
 
   const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText(copyGameUrl);
+    navigator.clipboard.writeText(gameUrl);
     showSuccess(t("game.linkCopied"));
-  }, [copyGameUrl]);
+  }, [gameUrl]);
 
   return (
     <Button
@@ -37,7 +32,7 @@ export const CopyGameLinkButton = () => {
     >
       {isHovered ? (
         <>
-          <span className="truncate">{displayGameUrl}</span>
+          <span className="truncate">{gameUrl}</span>
           <CopyIcon className="w-4 h-4 shrink-0" />
         </>
       ) : (
