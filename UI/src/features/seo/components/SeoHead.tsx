@@ -23,7 +23,8 @@ const SeoHead = ({ titleKey, descriptionKey }: SeoHeadProps) => {
     return pathname.replace(`/${i18n.language}`, `/${otherLang}`);
   }, [pathname, i18n.language]);
 
-  const currentUrl = useMemo(() => window.location.origin + pathname, [pathname]);
+  const origin = window.location.origin;
+  const currentUrl = useMemo(() => origin + pathname, [origin, pathname]);
 
   const jsonLd = useMemo(() => ({
     "@context": "https://schema.org",
