@@ -44,21 +44,22 @@ type ClaimHandDialogProps = {
     currentClaimedHand: HandType | null;
     currentRanks: Rank[] | null;
     actionLoading: boolean;
+    labelKey: string;
 };
 
-const ClaimHandDialog = ({ open, onOpenChange, onClaim, currentClaimedHand, currentRanks, actionLoading }: ClaimHandDialogProps) => {
+const ClaimHandDialog = ({ open, onOpenChange, onClaim, currentClaimedHand, currentRanks, actionLoading, labelKey }: ClaimHandDialogProps) => {
     const { t } = useTranslation();
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogTrigger asChild>
                 <Button variant="outline" size="sm" loading={actionLoading}>
-                    {t("game.claimHand")}
+                    {t(labelKey)}
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[calc(100%-2rem)] lg:max-w-4xl">
                 <DialogHeader>
-                    <DialogTitle>{t("game.claimHand")}</DialogTitle>
+                    <DialogTitle>{t(labelKey)}</DialogTitle>
                 </DialogHeader>
                 <HandSelector
                     onSelect={onClaim}
@@ -160,6 +161,7 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
                                 currentClaimedHand={currentClaim}
                                 currentRanks={currentRanks}
                                 actionLoading={actionLoading}
+                                labelKey="game.raise"
                             />
                         </div>
                     ) : (
@@ -180,6 +182,7 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
                         currentClaimedHand={currentClaim}
                         currentRanks={currentRanks}
                         actionLoading={actionLoading}
+                        labelKey="game.open"
                     />
                 </div>
             ) : (
