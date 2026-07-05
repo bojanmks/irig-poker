@@ -34,7 +34,6 @@ const template = readFileSync(resolve(root, "dist/index.html"), "utf-8");
 for (const [lang, locale] of Object.entries(locales)) {
   const title = escapeHtml(get(locale, "appTitle"));
   const description = escapeHtml(get(locale, "metaDescription"));
-  const otherLang = lang === "en" ? "sr" : "en";
 
   const jsonLd = JSON.stringify({
     "@context": "https://schema.org",
