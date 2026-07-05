@@ -1,6 +1,5 @@
 import { useCallback, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 import { DynamicForm, type FieldConfig } from "@/features/form/components/DynamicForm"
 import { FieldType } from "@/features/form/consts/FieldType";
@@ -23,7 +22,7 @@ export function CreateGamePage() {
   const navigate = useNavigate();
   const { send } = useRequest();
   const dispatch = useAppDispatch();
-  const { i18n } = useTranslation();
+  const { lang } = useParams();
 
   useEffect(() => {
     dispatch(setAdditionalClass("max-w-md"))
@@ -39,11 +38,10 @@ export function CreateGamePage() {
       url: "/games/create",
     })
 
-    const lang = i18n.language.startsWith("sr") ? "sr" : "en";
     navigate(`/${lang}/${result.data}`, {
       state: { username: data.username }
     })
-  },[navigate, send]);
+  },[navigate, send, lang]);
 
   return (
     <>
