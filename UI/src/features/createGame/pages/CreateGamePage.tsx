@@ -46,7 +46,7 @@ export function CreateGamePage() {
 
   return (
     <>
-      <SeoHead titleKey="appTitle" descriptionKey="metaDescription" />
+      <SeoHead titleKey="meta.title" descriptionKey="meta.description" />
       <DynamicForm<{ username: string }>
         fields={formFields}
         onSubmit={handleSubmit}

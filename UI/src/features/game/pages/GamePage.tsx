@@ -66,7 +66,7 @@ const GamePage = () => {
 
   return (
     <>
-      <SeoHead titleKey="appTitle" descriptionKey="metaDescriptionGame" />
+      <SeoHead titleKey="meta.title" descriptionKey="meta.gameDescription" />
       {gameState?.hasStarted ? (
         <ActualGame hub={hub} />
       ) : (
