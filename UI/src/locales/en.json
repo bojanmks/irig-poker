@@ -56,8 +56,7 @@
             "threeOfAKind": "Three of a Kind",
             "fullHouse": "Full House",
             "fourOfAKind": "Four of a Kind",
-            "straightFlush": "Straight Flush",
-            "royalFlush": "Royal Flush"
+            "straightFlush": "Straight Flush"
         }
     },
     "theme": {
