@@ -5,6 +5,7 @@ import type { GameWonNotification } from "@/features/game/models/GameWonNotifica
 import type { RoundResolvedNotification } from "@/features/game/models/RoundResolvedNotification";
 import { resetGameState, setRoundResultData, setWinnerData } from "@/features/game/store/gameStateSlice";
 import { useHub } from "@/features/http/hooks/useHub";
+import SeoHead from "@/features/seo/components/SeoHead";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 
 import ActualGame from "../components/ActualGame";
@@ -65,6 +66,7 @@ const GamePage = () => {
 
   return (
     <>
+      <SeoHead titleKey="appTitle" descriptionKey="metaDescriptionGame" />
       {gameState?.hasStarted ? (
         <ActualGame hub={hub} />
       ) : (

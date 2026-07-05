@@ -1,10 +1,12 @@
 import { useCallback, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom"
 
 import { DynamicForm, type FieldConfig } from "@/features/form/components/DynamicForm"
 import { FieldType } from "@/features/form/consts/FieldType";
 import { usernameValidation } from "@/features/game/gameValidationRules";
 import { useRequest } from "@/features/http/hooks/useRequest"
+import SeoHead from "@/features/seo/components/SeoHead"
 import { setAdditionalClass } from "@/features/shared/store/wrapperClassSlice";
 import { useAppDispatch } from "@/features/store/hooks";
 
@@ -21,6 +23,7 @@ export function CreateGamePage() {
   const navigate = useNavigate();
   const { send } = useRequest();
   const dispatch = useAppDispatch();
+  const { i18n } = useTranslation();
 
   useEffect(() => {
     dispatch(setAdditionalClass("max-w-md"))
@@ -36,17 +39,21 @@ export function CreateGamePage() {
       url: "/games/create",
     })
 
-    navigate(`/${result.data}`, {
+    const lang = i18n.language.startsWith("sr") ? "sr" : "en";
+    navigate(`/${lang}/${result.data}`, {
       state: { username: data.username }
     })
   },[navigate, send]);
 
   return (
-    <DynamicForm<{ username: string }>
-      fields={formFields}
-      onSubmit={handleSubmit}
-      submitLabel="game.createPrivateGame"
-      autoFocusFieldName="username"
-    />
+    <>
+      <SeoHead titleKey="appTitle" descriptionKey="metaDescription" />
+      <DynamicForm<{ username: string }>
+        fields={formFields}
+        onSubmit={handleSubmit}
+        submitLabel="game.createPrivateGame"
+        autoFocusFieldName="username"
+      />
+    </>
   )
 }

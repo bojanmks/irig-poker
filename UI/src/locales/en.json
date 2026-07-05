@@ -65,6 +65,10 @@
         "system": "System"
     },
     "appTitle": "Irig Poker",
+    "metaDescription": "Play Irig Poker - a multiplayer bluffing card game. Challenge your friends and call their bluffs!",
+    "metaDescriptionGame": "Join an Irig Poker game room. Play the multiplayer bluffing card game in real-time.",
+    "notFoundTitle": "404 - Page not found",
+    "notFoundDescription": "The page you are looking for does not exist.",
     "common": {
         "anErrorOccurred": "An error occurred"
     }

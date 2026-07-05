@@ -1,5 +1,6 @@
-import { useMemo } from "react";
+import { useCallback,useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import {
   Select,
@@ -10,6 +11,9 @@ import {
 
 const LanguageSwitcher = () => {
   const { i18n, t } = useTranslation();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
   const currentLang = i18n.language.startsWith("sr") ? "sr" : "en";
 
   const languages = useMemo(() => {
@@ -19,9 +23,11 @@ const LanguageSwitcher = () => {
     ];
   }, [t]);
 
-  const handleChange = (lang: string) => {
+  const handleChange = useCallback((lang: string) => {
     i18n.changeLanguage(lang);
-  };
+    const newPath = pathname.replace(/^\/(en|sr)\/?/, `/${lang}/`).replace(/\/$/, '');
+    navigate(newPath, { replace: true });
+  }, [pathname, navigate, i18n]);
 
   const selected = languages.find((lang) => lang.code === currentLang);
 

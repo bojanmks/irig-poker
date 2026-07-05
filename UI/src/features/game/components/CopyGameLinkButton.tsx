@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
 
 import { CopyIcon } from "lucide-react";
 
@@ -9,8 +10,10 @@ import { showSuccess } from "@/features/shared/utils/toast";
 export const CopyGameLinkButton = () => {
   const [isHovered, setIsHovered] = useState(false);
   const { t } = useTranslation();
+  const { gameCode } = useParams();
 
-  const gameUrl = window.location.href;
+  const url = new URL(window.location.href);
+  const gameUrl = gameCode ? `${url.origin}/${gameCode}` : url.origin;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(gameUrl);

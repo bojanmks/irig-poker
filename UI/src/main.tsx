@@ -2,6 +2,7 @@ import './index.css'
 import "./lib/i18n.ts";
 
 import React from 'react';
+import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
 import { createBrowserRouter, createRoutesFromElements, Route,RouterProvider } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
@@ -33,6 +34,8 @@ const router = createBrowserRouter(
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <HelmetProvider>
+      <RouterProvider router={router} />
+    </HelmetProvider>
   </React.StrictMode>
 );

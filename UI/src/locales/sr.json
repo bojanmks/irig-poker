@@ -65,6 +65,10 @@
         "system": "Sistem"
     },
     "appTitle": "Iriški Poker",
+    "metaDescription": "Igraj Iriški Poker - multiplayer igra blefiranja. Izazovi prijatelje i prozivaj blefove!",
+    "metaDescriptionGame": "Pridruži se Iriški Poker igri. Igraj multiplayer igru blefiranja u realnom vremenu.",
+    "notFoundTitle": "404 - Stranica nije pronađena",
+    "notFoundDescription": "Stranica koju tražite ne postoji.",
     "common": {
         "anErrorOccurred": "Došlo je do greške"
     }
