@@ -22,7 +22,7 @@
         "createNewGame": "Create new game",
         "youAreEliminated": "You are eliminated",
         "yourHand": "Your hand",
-        "open": "Open",
+        "play": "Play",
         "raise": "Raise",
         "callBluff": "Call bluff",
         "eliminatedAt": "Eliminated at {{max}} cards",

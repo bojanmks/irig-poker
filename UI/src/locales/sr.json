@@ -22,7 +22,7 @@
         "createNewGame": "Kreiraj novu igru",
         "youAreEliminated": "Eliminisan/a si",
         "yourHand": "Tvoje karte",
-        "open": "Otvori",
+        "play": "Igraj",
         "raise": "Podigni",
         "callBluff": "Prozovi blef",
         "eliminatedAt": "Eliminacija na {{max}} karata",

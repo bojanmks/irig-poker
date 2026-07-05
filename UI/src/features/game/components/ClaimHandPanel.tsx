@@ -182,7 +182,7 @@ export const ClaimHandPanel = ({ hub }: ClaimHandPanelProps) => {
                         currentClaimedHand={currentClaim}
                         currentRanks={currentRanks}
                         actionLoading={actionLoading}
-                        labelKey="game.open"
+                        labelKey="game.play"
                     />
                 </div>
             ) : (
