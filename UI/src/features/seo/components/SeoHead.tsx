@@ -19,9 +19,18 @@ const SeoHead = ({ titleKey, descriptionKey }: SeoHeadProps) => {
     return supportedLangs.filter(lang => lang !== i18n.language);
   }, [i18n.language]);
 
-  const getOtherLangPath = useCallback((otherLang: Language) => {
-    return pathname.replace(`/${i18n.language}`, `/${otherLang}`);
-  }, [pathname, i18n.language]);
+  const getOtherLangPath = useCallback(
+    (otherLang: Language) => {
+      const segments = pathname.split("/");
+
+      if (supportedLangs.includes(segments[1] as Language)) {
+        segments[1] = otherLang;
+      }
+
+      return segments.join("/");
+    },
+    [pathname]
+  );
 
   const origin = window.location.origin;
   const currentUrl = useMemo(() => origin + pathname, [origin, pathname]);
