@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 cd UI
-npx --no-install --no-warn-ignored lint-staged
+npx --no-install lint-staged
 
 cd ..
 STAGED_CS=$(git diff --cached --name-only --diff-filter=d -- '*.cs')
