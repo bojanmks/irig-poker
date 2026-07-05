@@ -16,15 +16,9 @@ const LanguageGuard = () => {
     }
   }, [lang, i18n]);
 
-  if (!lang || lang === "unknown") {
+  if (!lang || !supportedLangs.includes(lang)) {
     const segments = pathname.split('/').filter(Boolean);
-    segments[0] = i18n.language || "en";
-    return <Navigate to={`/${segments.join("/")}`} replace />;
-  }
-
-  if (!supportedLangs.includes(lang)) {
-    const segments = pathname.split('/').filter(Boolean);
-    segments[0] = "en";
+    segments[0] = i18n.language;
     return <Navigate to={`/${segments.join("/")}`} replace />;
   }
 

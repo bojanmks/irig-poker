@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 
 import { CopyIcon } from "lucide-react";
 
-import type { Language } from "@/features/localization/types/Language";
 import { Button } from "@/features/shared/components/shadcn/Button";
 import { showSuccess } from "@/features/shared/utils/toast";
 
@@ -20,7 +19,7 @@ export const CopyGameLinkButton = () => {
 
   const copyGameUrl = useMemo(() => {
     const url = new URL(window.location.href);
-    return gameCode ? `${url.origin}/${"unknown" satisfies Language}/${gameCode}` : url.origin;
+    return gameCode ? `${url.origin}/unknown/${gameCode}` : url.origin;
   }, []);
 
   const handleCopy = useCallback(() => {
