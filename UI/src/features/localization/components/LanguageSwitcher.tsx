@@ -1,6 +1,6 @@
 import { useCallback,useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import {
   Select,
@@ -8,6 +8,10 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/features/shared/components/shadcn/Select";
+
+function replaceLanguage(pathname: string, lang: string) {
+  return pathname.replace(/^\/[^/]+/, `/${lang}`);
+}
 
 const LanguageSwitcher = () => {
   const { i18n, t } = useTranslation();
@@ -23,11 +27,15 @@ const LanguageSwitcher = () => {
     ];
   }, [t]);
 
-  const handleChange = useCallback((lang: string) => {
-    i18n.changeLanguage(lang);
-    const newPath = pathname.replace(/^\/(en|sr)\/?/, `/${lang}/`).replace(/\/$/, '');
-    navigate(newPath, { replace: true });
-  }, [pathname, navigate, i18n]);
+  const handleChange = useCallback(
+    (newLang: string) => {
+      i18n.changeLanguage(newLang);
+      navigate(replaceLanguage(pathname, newLang), {
+        replace: true,
+      });
+    },
+    [pathname, navigate, i18n]
+  );
 
   const selected = languages.find((lang) => lang.code === currentLang);
 
