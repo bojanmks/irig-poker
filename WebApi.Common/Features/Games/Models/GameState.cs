@@ -215,7 +215,7 @@ public class GameState
 
     public static readonly int MaxPlayers = 15;
     public int MaxCardCount { get; private set; } = 7;
-    
+
     public void UpdateCardCountThreshold()
     {
         MaxCardCount = CalculateMaxCardCount(ActivePlayerIds.Count);
