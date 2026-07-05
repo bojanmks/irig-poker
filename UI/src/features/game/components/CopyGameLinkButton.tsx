@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 
 import { CopyIcon } from "lucide-react";
 
+import type { Language } from "@/features/localization/types/Language";
 import { Button } from "@/features/shared/components/shadcn/Button";
 import { showSuccess } from "@/features/shared/utils/toast";
 
@@ -12,13 +13,20 @@ export const CopyGameLinkButton = () => {
   const { t } = useTranslation();
   const { gameCode } = useParams();
 
-  const url = new URL(window.location.href);
-  const gameUrl = gameCode ? `${url.origin}/${gameCode}` : url.origin;
+  const displayGameUrl = useMemo(() => {
+    const url = new URL(window.location.href);
+    return gameCode ? `${url.origin}/${gameCode}` : url.origin;
+  }, [gameCode]);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(gameUrl);
+  const copyGameUrl = useMemo(() => {
+    const url = new URL(window.location.href);
+    return gameCode ? `${url.origin}/${"unknown" satisfies Language}/${gameCode}` : url.origin;
+  }, []);
+
+  const handleCopy = useCallback(() => {
+    navigator.clipboard.writeText(copyGameUrl);
     showSuccess(t("game.linkCopied"));
-  };
+  }, [copyGameUrl]);
 
   return (
     <Button
@@ -30,7 +38,7 @@ export const CopyGameLinkButton = () => {
     >
       {isHovered ? (
         <>
-          <span className="truncate">{gameUrl}</span>
+          <span className="truncate">{displayGameUrl}</span>
           <CopyIcon className="w-4 h-4 shrink-0" />
         </>
       ) : (

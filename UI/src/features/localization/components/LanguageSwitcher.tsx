@@ -9,6 +9,8 @@ import {
   SelectTrigger,
 } from "@/features/shared/components/shadcn/Select";
 
+import type { Language } from "../types/Language";
+
 function replaceLanguage(pathname: string, lang: string) {
   return pathname.replace(/^\/[^/]+/, `/${lang}`);
 }
@@ -18,9 +20,7 @@ const LanguageSwitcher = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const currentLang = i18n.language.startsWith("sr") ? "sr" : "en";
-
-  const languages = useMemo(() => {
+  const languages = useMemo<{code: Language, label: string, imageAlt: string, flag: string}[]>(() => {
     return [
       { code: "sr", label: "SR", imageAlt: t('serbianLanguage'), flag: "rs" },
       { code: "en", label: "EN", imageAlt: t('englishLanguage'), flag: "gb" }
@@ -37,11 +37,13 @@ const LanguageSwitcher = () => {
     [pathname, navigate, i18n]
   );
 
-  const selected = languages.find((lang) => lang.code === currentLang);
+  const selected = useMemo(() => {
+    return languages.find(lang => lang.code === i18n.language) || languages.find(lang => lang.code === 'en');
+  }, [languages, i18n.language]);
 
   return (
     <Select
-        value={currentLang}
+        value={i18n.language}
         onValueChange={handleChange}
     >
       <SelectTrigger>

@@ -1,12 +1,14 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Navigate, Outlet, useParams } from "react-router-dom";
+import { Navigate, Outlet, useLocation, useParams } from "react-router-dom";
 
-const supportedLangs = ["en", "sr"];
+import { supportedLangs } from "@/features/localization/consts/supportedLangs";
+import type { Language } from "@/features/localization/types/Language";
 
 const LanguageGuard = () => {
-  const { lang } = useParams<{ lang: string }>();
+  const { lang } = useParams<{ lang: Language }>();
   const { i18n } = useTranslation();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     if (lang && supportedLangs.includes(lang) && i18n.language !== lang) {
@@ -14,13 +16,16 @@ const LanguageGuard = () => {
     }
   }, [lang, i18n]);
 
-  if (!lang) {
-    return <Navigate to="/en" replace />;
+  if (!lang || lang === "unknown") {
+    const segments = pathname.split('/').filter(Boolean);
+    segments[0] = i18n.language || "en";
+    return <Navigate to={`/${segments.join("/")}`} replace />;
   }
 
   if (!supportedLangs.includes(lang)) {
-    const detectedLang = i18n.language.startsWith("sr") ? "sr" : "en";
-    return <Navigate to={`/${detectedLang}/${lang}`} replace />;
+    const segments = pathname.split('/').filter(Boolean);
+    segments[0] = "en";
+    return <Navigate to={`/${segments.join("/")}`} replace />;
   }
 
   return <Outlet />;

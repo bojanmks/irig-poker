@@ -70,6 +70,8 @@
     "notFoundTitle": "404 - Page not found",
     "notFoundDescription": "The page you are looking for does not exist.",
     "common": {
-        "anErrorOccurred": "An error occurred"
+        "anErrorOccurred": "An error occurred",
+        "pageNotFound": "Page not found",
+        "goHome": "Go home"
     }
 }

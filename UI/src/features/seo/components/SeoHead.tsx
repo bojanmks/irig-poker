@@ -1,6 +1,10 @@
+import { useCallback, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
+
+import { supportedLangs } from "@/features/localization/consts/supportedLangs";
+import type { Language } from "@/features/localization/types/Language";
 
 interface SeoHeadProps {
   titleKey: string;
@@ -11,14 +15,17 @@ const SeoHead = ({ titleKey, descriptionKey }: SeoHeadProps) => {
   const { t, i18n } = useTranslation();
   const { pathname } = useLocation();
 
-  const currentLang = i18n.language.startsWith("sr") ? "sr" : "en";
-  const otherLang = currentLang === "en" ? "sr" : "en";
+  const otherLangs = useMemo(() => {
+    return supportedLangs.filter(lang => lang !== i18n.language);
+  }, [i18n.language]);
 
-  const alternatePath = pathname.replace(`/${currentLang}`, `/${otherLang}`);
-  const origin = window.location.origin;
-  const currentUrl = origin + pathname;
+  const getOtherLangPath = useCallback((otherLang: Language) => {
+    return pathname.replace(`/${i18n.language}`, `/${otherLang}`);
+  }, [pathname, i18n.language]);
 
-  const jsonLd = {
+  const currentUrl = useMemo(() => window.location.origin + pathname, [pathname]);
+
+  const jsonLd = useMemo(() => ({
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: t(titleKey),
@@ -26,17 +33,17 @@ const SeoHead = ({ titleKey, descriptionKey }: SeoHeadProps) => {
     url: currentUrl,
     applicationCategory: "GameApplication",
     operatingSystem: "Web",
-    inLanguage: [ "en", "sr" ],
+    inLanguage: supportedLangs,
     offers: {
       "@type": "Offer",
       price: "0",
       priceCurrency: "USD",
     },
-  };
+  }), [currentUrl]);
 
   return (
     <Helmet>
-      <html lang={currentLang} />
+      <html lang={i18n.language} />
       <title>{t(titleKey)}</title>
       <meta name="description" content={t(descriptionKey)} />
       <meta property="og:title" content={t(titleKey)} />
@@ -48,8 +55,8 @@ const SeoHead = ({ titleKey, descriptionKey }: SeoHeadProps) => {
       <meta name="twitter:title" content={t(titleKey)} />
       <meta name="twitter:description" content={t(descriptionKey)} />
       <meta name="twitter:image" content={`${origin}/og-image.png`} />
-      <link rel="alternate" hrefLang={currentLang} href={currentUrl} />
-      <link rel="alternate" hrefLang={otherLang} href={origin + alternatePath} />
+      <link rel="alternate" hrefLang={i18n.language} href={currentUrl} />
+      {otherLangs.map(otherLang => (<link rel="alternate" hrefLang={otherLang} href={origin + getOtherLangPath(otherLang)} />))}
       <link rel="alternate" hrefLang="x-default" href={`${origin}/en`} />
       <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
     </Helmet>

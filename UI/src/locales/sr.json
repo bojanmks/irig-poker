@@ -70,6 +70,8 @@
     "notFoundTitle": "404 - Stranica nije pronađena",
     "notFoundDescription": "Stranica koju tražite ne postoji.",
     "common": {
-        "anErrorOccurred": "Došlo je do greške"
+        "anErrorOccurred": "Došlo je do greške",
+        "pageNotFound": "Stranica nije pronađena",
+        "goHome": "Početna"
     }
 }

@@ -1,15 +1,14 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-
-import i18n from "@/lib/i18n";
 
 const LanguageRedirect = () => {
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
 
   useEffect(() => {
-    const lang = i18n.language.startsWith("sr") ? "sr" : "en";
-    navigate(`/${lang}`, { replace: true });
-  }, [navigate]);
+    navigate(`/${i18n.language}`, { replace: true });
+  }, [navigate, i18n.language]);
 
   return null;
 };
