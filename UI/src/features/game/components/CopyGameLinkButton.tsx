@@ -20,7 +20,7 @@ export const CopyGameLinkButton = () => {
   const copyGameUrl = useMemo(() => {
     const url = new URL(window.location.href);
     return gameCode ? `${url.origin}/unknown/${gameCode}` : url.origin;
-  }, []);
+  }, [gameCode]);
 
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(copyGameUrl);
