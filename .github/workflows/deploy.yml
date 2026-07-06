@@ -12,21 +12,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # LOGIN TO GHCR
       - name: Login to GHCR
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      # BUILD IMAGE
       - name: Build Docker image
         run: |
           docker build -t ghcr.io/${{ github.actor }}/irig-poker-api:latest .
 
-      # PUSH IMAGE
       - name: Push Docker image
         run: |
           docker push ghcr.io/${{ github.actor }}/irig-poker-api:latest
 
-      # BUILD UI IMAGE
       - name: Build UI
         run: |
           docker build \
