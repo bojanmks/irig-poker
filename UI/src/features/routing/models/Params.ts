@@ -1,5 +1,7 @@
 import type { Language } from "@/features/localization/types/Language";
 
-export type LangParams = { lang: Language };
+export type Param<K extends string, V = string> = Partial<Record<K, V>>;
 
-export type GameCodeParams = { gameCode: string };
+export type LangParams = Param<"lang", Language>;
+
+export type GameCodeParams = Param<"gameCode">;
