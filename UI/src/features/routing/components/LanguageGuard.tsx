@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Navigate, Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { supportedLangs } from "@/features/localization/consts/supportedLangs";
 
-import type { LangParams } from "../models/Params";
 import { useGenericSearchParams } from "../hooks/useGenericSearchParams";
+import type { LangParams } from "../models/Params";
 import type { InviteQueryParams } from "../models/QueryParams";
 
 const LanguageGuard = () => {
