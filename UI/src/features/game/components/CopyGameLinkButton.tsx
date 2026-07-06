@@ -1,25 +1,19 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
 
 import { CopyIcon } from "lucide-react";
 
-import type { GameCodeParams } from "@/features/routing/models/Params";
 import { Button } from "@/features/shared/components/shadcn/Button";
 import { showSuccess } from "@/features/shared/utils/toast";
 
 export const CopyGameLinkButton = () => {
   const [isHovered, setIsHovered] = useState(false);
-  const { t, i18n } = useTranslation();
-  const { gameCode } = useParams<GameCodeParams>();
+  const { t } = useTranslation();
 
-  const gameUrl = useMemo(() => {
-    const url = new URL(window.location.href);
-    return gameCode ? `${url.origin}/${i18n.language}/${gameCode}` : url.origin;
-  }, [gameCode, i18n.language]);
+  const gameUrl = window.location.href.split("?")[0];
 
   const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText(gameUrl);
+    navigator.clipboard.writeText(`${gameUrl}?invite=true`);
     showSuccess(t("game.linkCopied"));
   }, [gameUrl]);
 
