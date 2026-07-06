@@ -25,15 +25,6 @@ public class GameHub(
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, request.Data.GameCode, Context.ConnectionAborted);
 
-            var player = result.Data.GameState.Players[result.Data.PlayerId];
-
-            await Clients
-                .GroupExcept(request.Data.GameCode, Context.ConnectionId)
-                .SendAsync("PlayerJoined", HubNotification.From(new PlayerJoinNotification(
-                    player,
-                    result.Data.GameState.PlayerOrder
-                ), _timeProvider));
-
             await Clients
                 .Group(request.Data.GameCode)
                 .SendAsync("GameStateUpdated", HubNotification.From(
