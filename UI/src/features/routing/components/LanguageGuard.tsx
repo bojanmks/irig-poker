@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 
@@ -14,8 +14,8 @@ const LanguageGuard = () => {
   const { pathname } = useLocation();
   const [ searchParams, setSearchParams ] = useGenericSearchParams<InviteQueryParams>();
   const navigate = useNavigate();
-
-  const isInvite = searchParams.invite === "true";
+  const [isInvite] = useState(searchParams.invite === "true");
+  
   const langIsValid = lang && supportedLangs.includes(lang);
 
   useEffect(() => {
