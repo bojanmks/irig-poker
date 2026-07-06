@@ -4,10 +4,10 @@ import { Navigate, Outlet, useLocation, useParams } from "react-router-dom";
 
 import { supportedLangs } from "@/features/localization/consts/supportedLangs";
 
-import type { GlobalParams } from "../models/Params";
+import type { LangParams } from "../models/Params";
 
 const LanguageGuard = () => {
-  const { lang } = useParams<GlobalParams>();
+  const { lang } = useParams<LangParams>();
   const { i18n } = useTranslation();
   const { pathname } = useLocation();
 

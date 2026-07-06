@@ -4,14 +4,14 @@ import { useParams } from "react-router-dom";
 
 import { CopyIcon } from "lucide-react";
 
-import type { GameParams } from "@/features/routing/models/Params";
+import type { GameCodeParams } from "@/features/routing/models/Params";
 import { Button } from "@/features/shared/components/shadcn/Button";
 import { showSuccess } from "@/features/shared/utils/toast";
 
 export const CopyGameLinkButton = () => {
   const [isHovered, setIsHovered] = useState(false);
   const { t, i18n } = useTranslation();
-  const { gameCode } = useParams<GameParams>();
+  const { gameCode } = useParams<GameCodeParams>();
 
   const gameUrl = useMemo(() => {
     const url = new URL(window.location.href);
