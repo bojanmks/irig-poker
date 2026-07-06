@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { supportedLangs } from "@/features/localization/consts/supportedLangs";
+import type { Language } from "@/features/localization/types/Language";
 
 import { useGenericSearchParams } from "../hooks/useGenericSearchParams";
 import type { LangParams } from "../models/Params";
@@ -14,43 +15,37 @@ const LanguageGuard = () => {
   const { pathname } = useLocation();
   const [ searchParams, setSearchParams ] = useGenericSearchParams<InviteQueryParams>();
   const navigate = useNavigate();
-  const [isInvite] = useState(searchParams.invite === "true");
   
+  const isInvite = searchParams.invite === "true"; 
   const langIsValid = lang && supportedLangs.includes(lang);
 
   useEffect(() => {
     if (!langIsValid) {
-      navigate("/en", { replace: true });
-    }
-  }, [langIsValid, navigate]);
-
-  useEffect(() => {
-    if (!langIsValid) {
-      return;
-    }
-
-    if (i18n.language === lang) {
-      return;
-    }
-
-    if (isInvite) {
       const segments = pathname.split('/').filter(Boolean);
-      segments[0] = i18n.language;
+      segments[0] = "en" satisfies Language;
       navigate(`/${segments.join("/")}`, { replace: true });
+      return;
     }
-    else {
-      i18n.changeLanguage(lang);
-    }
-  }, [langIsValid, i18n, lang, navigate]);
 
-  useEffect(() => {
+    if (i18n.language !== lang) {
+      if (isInvite) {
+        const segments = pathname.split('/').filter(Boolean);
+        segments[0] = i18n.language;
+        navigate(`/${segments.join("/")}`, { replace: true });
+      } else {
+        i18n.changeLanguage(lang);
+      }
+      return;
+    }
+
     if (isInvite) {
       setSearchParams(prev => {
-        delete prev["invite"];
-        return prev;
+        const copy = { ...prev };
+        delete copy["invite"];
+        return copy;
       });
     }
-  }, [isInvite, setSearchParams]);
+  }, [langIsValid, lang, pathname, i18n.language, i18n.changeLanguage, isInvite, navigate, setSearchParams]);
 
   return <Outlet />;
 };
