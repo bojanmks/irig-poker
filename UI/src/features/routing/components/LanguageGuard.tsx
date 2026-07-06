@@ -3,10 +3,11 @@ import { useTranslation } from "react-i18next";
 import { Navigate, Outlet, useLocation, useParams } from "react-router-dom";
 
 import { supportedLangs } from "@/features/localization/consts/supportedLangs";
-import type { Language } from "@/features/localization/types/Language";
+
+import type { GlobalParams } from "../models/Params";
 
 const LanguageGuard = () => {
-  const { lang } = useParams<{ lang: Language }>();
+  const { lang } = useParams<GlobalParams>();
   const { i18n } = useTranslation();
   const { pathname } = useLocation();
 

@@ -5,6 +5,7 @@ import type { GameWonNotification } from "@/features/game/models/GameWonNotifica
 import type { RoundResolvedNotification } from "@/features/game/models/RoundResolvedNotification";
 import { resetGameState, setRoundResultData, setWinnerData } from "@/features/game/store/gameStateSlice";
 import { useHub } from "@/features/http/hooks/useHub";
+import type { GameParams } from "@/features/routing/models/Params";
 import SeoHead from "@/features/seo/components/SeoHead";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 
@@ -28,7 +29,7 @@ const GamePage = () => {
   const dispatch = useAppDispatch();
   const gameState = useAppSelector((state) => state.gameState.gameState);
 
-  const { gameCode } = useParams();
+  const { gameCode } = useParams<GameParams>();
   const { username, setUsername } = useUsernameFromRoute();
   const [pageState, setPageState] = useState<GamePageState>(GamePageState.Joining);
 
