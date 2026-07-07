@@ -47,7 +47,7 @@ const LanguageSwitcher = () => {
       </SelectTrigger>
       <SelectContent>
         {languages.map((lang) => (
-          <SelectItem value={lang.code} key={lang.code}>
+          <SelectItem value={lang.code} key={lang.code} aria-label={lang.label}>
             <span>{lang.label}</span>
           </SelectItem>
         ))}
