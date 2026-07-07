@@ -1,5 +1,6 @@
 // BaseLayout.tsx
 import { useMemo } from "react"
+import { useTranslation } from "react-i18next"
 import { Link, Outlet } from "react-router-dom"
 
 import clsx from "clsx"
@@ -12,11 +13,29 @@ import { buttonVariants } from "@/features/shared/components/shadcn/Button"
 import { useAppSelector } from "@/features/store/hooks"
 import ThemeSwitcher from "@/features/themes/components/ThemeSwitcher"
 
-const Logo = () => (
-  <Link to="/" className="flex items-center">
-    <img src={logo} alt="Logo" className="h-10 lg:h-14 w-auto" />
-  </Link>
-)
+const Logo = () => {
+  const { t } = useTranslation();
+  return (
+    <Link to="/" className="flex items-center" aria-label={t("common.goHome")}>
+      <img src={logo} alt="" className="h-10 lg:h-14 w-auto" />
+    </Link>
+  );
+}
+
+const SourceCodeLink = () => {
+  const { t } = useTranslation();
+  return (
+    <a
+      href="https://github.com/bojanmks/irig-poker"
+      target="_blank"
+      rel="noopener noreferrer"
+      className={buttonVariants({ variant: "outline", size: "icon" })}
+      aria-label={t("common.sourceCode")}
+    >
+      <GitBranch size={16} />
+    </a>
+  );
+};
 
 const BaseLayout = () => {
   const additionalClass = useAppSelector((state) => state.wrapperClass.additionalClass)
@@ -29,14 +48,7 @@ const BaseLayout = () => {
       <div className="py-4 px-4 flex justify-between items-center gap-2">
         <Logo />
         <div className="flex items-center gap-2">
-          <a 
-            href="https://github.com/bojanmks/irig-poker" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className={buttonVariants({ variant: "outline", size: "icon" })}
-          >
-            <GitBranch size={16} />
-          </a>
+          <SourceCodeLink />
           <MuteToggle />
           <ThemeSwitcher />
           <LanguageSwitcher />

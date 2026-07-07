@@ -1,4 +1,8 @@
 {
+    "audio": {
+        "mute": "Mute",
+        "unmute": "Unmute"
+    },
     "form": {
         "required": "Field is required",
         "tooLong": "Text is too long"
@@ -30,6 +34,12 @@
         "selectRank": "Select rank",
         "selectSecondRank": " - select second rank",
         "selectSuit": "Select suit",
+        "suit": {
+            "hearts": "Hearts",
+            "diamonds": "Diamonds",
+            "clubs": "Clubs",
+            "spades": "Spades"
+        },
         "straightPreview": "Straight:",
         "claimed": "claimed",
         "calledBluff": "called bluff",
@@ -62,12 +72,14 @@
     "theme": {
         "light": "Light",
         "dark": "Dark",
-        "system": "System"
+        "system": "System",
+        "switchTheme": "Switch theme"
     },
     "common": {
         "anErrorOccurred": "An error occurred",
         "pageNotFound": "Page not found",
-        "goHome": "Go home"
+        "goHome": "Go home",
+        "sourceCode": "Source code"
     },
     "meta": {
         "title": "Irig Poker",

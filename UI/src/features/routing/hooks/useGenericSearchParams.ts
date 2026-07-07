@@ -1,4 +1,4 @@
-import { useSearchParams, type NavigateOptions } from "react-router-dom";
+import { type NavigateOptions,useSearchParams } from "react-router-dom";
 
 export function useGenericSearchParams<T extends Record<string, string>>() {
   const [searchParams, setSearchParams] = useSearchParams();

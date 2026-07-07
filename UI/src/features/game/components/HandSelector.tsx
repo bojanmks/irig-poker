@@ -9,8 +9,16 @@ import { cn } from "@/lib/utils";
 import { HandType } from "../models/HandType";
 import { Rank } from "../models/Rank";
 import { Suit } from "../models/Suit";
+import { rankLabel } from "../utils/describeRanks";
 
 import { CardSprite } from "./CardSprite";
+
+const suitKey: Record<number, string> = {
+  [Suit.Hearts]: "game.suit.hearts",
+  [Suit.Diamonds]: "game.suit.diamonds",
+  [Suit.Clubs]: "game.suit.clubs",
+  [Suit.Spades]: "game.suit.spades",
+};
 
 const allHandTypes = [
     HandType.HighCard,
@@ -266,6 +274,7 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
                             key={suit}
                             onClick={() => handleSuitClick(suit)}
                             className="rounded-md transition-all hover:ring-2 hover:ring-primary hover:ring-offset-2"
+                            aria-label={`${t("game.selectSuit")} ${t(suitKey[suit])}`}
                         >
                             <CardSprite suit={suit} rank={Rank.Ace} displayWidth={suitCardWidth} />
                         </button>
@@ -290,24 +299,25 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
                 </h3>
             </div>
             <div className="flex flex-wrap gap-1 justify-center">
-                {displayedRanks.map(rank => {
-                    const enabled = isRankEnabled(rank);
-                    const selected = rank === (step === "second-rank" ? firstRank : null);
-                    return (
-                        <button
-                            key={rank}
-                            onClick={() => step === "second-rank" ? handleSecondRankClick(rank) : handleFirstRankClick(rank)}
-                            disabled={!enabled || selected}
-                            className={cn(
-                                "rounded-xs transition-all",
-                                "disabled:opacity-40 disabled:pointer-events-none",
-                                (!enabled || selected) ? "grayscale" : "hover:ring-2 hover:ring-primary hover:ring-offset-1"
-                            )}
-                        >
-                            <CardSprite suit={displaySuit} rank={rank} displayWidth={rankCardWidth} />
-                        </button>
-                    );
-                })}
+                    {displayedRanks.map(rank => {
+                        const enabled = isRankEnabled(rank);
+                        const selected = rank === (step === "second-rank" ? firstRank : null);
+                        return (
+                            <button
+                                key={rank}
+                                onClick={() => step === "second-rank" ? handleSecondRankClick(rank) : handleFirstRankClick(rank)}
+                                disabled={!enabled || selected}
+                                className={cn(
+                                    "rounded-xs transition-all",
+                                    "disabled:opacity-40 disabled:pointer-events-none",
+                                    (!enabled || selected) ? "grayscale" : "hover:ring-2 hover:ring-primary hover:ring-offset-1"
+                                )}
+                                aria-label={`${t("game.selectRank")} ${rankLabel(rank)}`}
+                            >
+                                <CardSprite suit={displaySuit} rank={rank} displayWidth={rankCardWidth} />
+                            </button>
+                        );
+                    })}
             </div>
         </div>
     );

@@ -39,7 +39,7 @@ export const RoundHistoryDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="icon">
+        <Button variant="outline" size="icon" aria-label={t("game.roundHistory")}>
           <ScrollText className="h-4 w-4" />
         </Button>
       </DialogTrigger>

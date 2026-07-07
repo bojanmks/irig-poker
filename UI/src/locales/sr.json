@@ -1,4 +1,8 @@
 {
+    "audio": {
+        "mute": "Utišaj",
+        "unmute": "Uključi zvuk"
+    },
     "form": {
         "required": "Polje je obavezno",
         "tooLong": "Tekst je predugačak"
@@ -30,6 +34,12 @@
         "selectRank": "Izaberi kartu",
         "selectSecondRank": " - izaberi drugu kartu",
         "selectSuit": "Izaberi boju",
+        "suit": {
+            "hearts": "Srce",
+            "diamonds": "Kocka",
+            "clubs": "List",
+            "spades": "Pik"
+        },
         "straightPreview": "Skala:",
         "claimed": "je izjavio/la",
         "calledBluff": "je prozvao/la blef",
@@ -62,12 +72,14 @@
     "theme": {
         "light": "Svetla",
         "dark": "Tamna",
-        "system": "Sistem"
+        "system": "Sistem",
+        "switchTheme": "Promeni temu"
     },
     "common": {
         "anErrorOccurred": "Došlo je do greške",
         "pageNotFound": "Stranica nije pronađena",
-        "goHome": "Početna"
+        "goHome": "Početna",
+        "sourceCode": "Izvorni kod"
     },
     "meta": {
         "title": "Iriški Poker",
