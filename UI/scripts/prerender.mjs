@@ -34,6 +34,13 @@ const template = readFileSync(resolve(root, "dist/index.html"), "utf-8");
 for (const [lang, locale] of Object.entries(locales)) {
   const title = escapeHtml(get(locale, "meta.title"));
   const description = escapeHtml(get(locale, "meta.description"));
+  const keywords = escapeHtml(get(locale, "meta.keywords"));
+  const aboutHeading = escapeHtml(get(locale, "about.heading"));
+  const aboutSubtitle = escapeHtml(get(locale, "about.subtitle"));
+  const aboutDescription = escapeHtml(get(locale, "about.description"));
+  const howToPlay = escapeHtml(get(locale, "about.howToPlay"));
+  const rules = locale.about?.rules ?? [];
+  const note = escapeHtml(get(locale, "about.note"));
 
   const jsonLd = JSON.stringify({
     "@context": "https://schema.org",
@@ -49,6 +56,7 @@ for (const [lang, locale] of Object.entries(locales)) {
 
   const headTags = `
     <meta name="description" content="${description}" />
+    <meta name="keywords" content="${keywords}" />
     <meta property="og:title" content="${title}" />
     <meta property="og:description" content="${description}" />
     <meta property="og:image" content="${domain}/og-image.png" />
@@ -65,11 +73,13 @@ for (const [lang, locale] of Object.entries(locales)) {
     <script type="application/ld+json">${jsonLd}</script>
   `;
 
+  const fallbackContent = `<h1>${title}</h1><p>${description}</p><h2>${aboutHeading}</h2><p>${aboutSubtitle}</p><p>${aboutDescription}</p><h3>${howToPlay}</h3><ol>${rules.map(r => `<li>${escapeHtml(r)}</li>`).join("")}</ol><p>${note}</p>`;
+
   let html = template
     .replace('<html lang="en">', `<html lang="${lang}">`)
     .replace("<title>Irig Poker</title>", `<title>${title}</title>`)
     .replace("</head>", `${headTags}\n  </head>`)
-    .replace('<div id="root"></div>', `<div id="root"><h1>${title}</h1><p>${description}</p></div>`);
+    .replace('<div id="root"></div>', `<div id="root">${fallbackContent}</div>`);
 
   const outDir = resolve(root, "dist", lang);
   if (!existsSync(outDir)) {
