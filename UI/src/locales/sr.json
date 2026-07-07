@@ -28,7 +28,7 @@
         "eliminatedAt": "Eliminacija na {{max}} karata",
         "back": "Nazad",
         "selectRank": "Izaberi kartu",
-        "selectSecondRank": " — izaberi drugu kartu",
+        "selectSecondRank": " - izaberi drugu kartu",
         "selectSuit": "Izaberi boju",
         "straightPreview": "Skala:",
         "claimed": "je izjavio/la",
@@ -72,8 +72,24 @@
     "meta": {
         "title": "Iriški Poker",
         "description": "Igraj Iriški Poker - multiplayer igra blefiranja. Izazovi prijatelje i prozivaj blefove!",
+        "keywords": "iriški poker, multiplayer kartaška igra, igra blefiranja, online poker sa prijateljima, prozovi blef",
         "gameDescription": "Pridruži se Iriški Poker igri. Igraj multiplayer igru blefiranja u realnom vremenu.",
         "notFoundTitle": "404 - Stranica nije pronađena",
         "notFoundDescription": "Stranica koju tražite ne postoji."
+    },
+    "about": {
+        "heading": "Šta je Iriški Poker?",
+        "subtitle": "Poker varijanta u kojoj je blefiranje ključ igre.",
+        "description": "Iriški Poker je multiplayer kartaška igra u realnom vremenu koja kombinuje tradicionalne poker kombinacije sa jedinstvenim mehanizmom blefiranja. Svaki igrač dobija samo jednu kartu, a izazov je ubediti druge da imate bolju kombinaciju nego što stvarno imate.",
+        "howToPlay": "Kako se igra",
+        "rules": [
+            "Svaki igrač dobija jednu kartu - samo vi vidite svoju kartu",
+            "Na svom potezu izjavi koju poker kombinaciju držiš (možeš da blefiraš!)",
+            "Sledeći igrač mora da izjavi jaču kombinaciju ili da prozove blef",
+            "Kada se prozove blef, sve karte se otkrivaju - ako tvoja izjava postoji u skupu karata, pobedio si rundu",
+            "Gubitnik dobija kartu - eliminacija na 7* karata",
+            "Poslednji preostali igrač pobedjuje"
+        ],
+        "note": "*Broj karata za eliminaciju zavisi od broja igrača"
     }
 }

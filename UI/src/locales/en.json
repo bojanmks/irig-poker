@@ -28,7 +28,7 @@
         "eliminatedAt": "Eliminated at {{max}} cards",
         "back": "Back",
         "selectRank": "Select rank",
-        "selectSecondRank": " — select second rank",
+        "selectSecondRank": " - select second rank",
         "selectSuit": "Select suit",
         "straightPreview": "Straight:",
         "claimed": "claimed",
@@ -72,8 +72,24 @@
     "meta": {
         "title": "Irig Poker",
         "description": "Play Irig Poker - a multiplayer bluffing card game. Challenge your friends and call their bluffs!",
+        "keywords": "irig poker, multiplayer card game, bluffing game, online poker with friends, call bluff game",
         "gameDescription": "Join an Irig Poker game room. Play the multiplayer bluffing card game in real-time.",
         "notFoundTitle": "404 - Page not found",
         "notFoundDescription": "The page you are looking for does not exist."
+    },
+    "about": {
+        "heading": "What is Irig Poker?",
+        "subtitle": "A custom poker variant where bluffing is the name of the game.",
+        "description": "Irig Poker is a real-time multiplayer card game that blends traditional poker hand rankings with a unique bluffing mechanic. Each player receives just one card, and the challenge is to convince others you hold a stronger hand than you really do.",
+        "howToPlay": "How to play",
+        "rules": [
+            "Each player receives one card - only you can see your own card",
+            "On your turn, claim what poker hand you hold (you may bluff!)",
+            "The next player must either claim a stronger hand or call your bluff",
+            "When a bluff is called, all cards are revealed - if your claimed hand exists in the pool of cards, you win the round",
+            "The loser gains a card - eliminated at 7* cards",
+            "The last player standing wins the game"
+        ],
+        "note": "*The number of cards required for elimination depends on the number of players"
     }
 }

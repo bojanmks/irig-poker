@@ -9,9 +9,10 @@ import type { Language } from "@/features/localization/types/Language";
 interface SeoHeadProps {
   titleKey: string;
   descriptionKey: string;
+  keywordsKey?: string;
 }
 
-const SeoHead = ({ titleKey, descriptionKey }: SeoHeadProps) => {
+const SeoHead = ({ titleKey, descriptionKey, keywordsKey }: SeoHeadProps) => {
   const { t, i18n } = useTranslation();
   const { pathname } = useLocation();
 
@@ -56,6 +57,7 @@ const SeoHead = ({ titleKey, descriptionKey }: SeoHeadProps) => {
       <html lang={i18n.language} />
       <title>{t(titleKey)}</title>
       <meta name="description" content={t(descriptionKey)} />
+      {keywordsKey && <meta name="keywords" content={t(keywordsKey)} />}
       <meta property="og:title" content={t(titleKey)} />
       <meta property="og:description" content={t(descriptionKey)} />
       <meta property="og:image" content={`${origin}/og-image.png`} />
