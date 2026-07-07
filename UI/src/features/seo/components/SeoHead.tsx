@@ -67,6 +67,7 @@ const SeoHead = ({ titleKey, descriptionKey, keywordsKey }: SeoHeadProps) => {
       <meta name="twitter:title" content={t(titleKey)} />
       <meta name="twitter:description" content={t(descriptionKey)} />
       <meta name="twitter:image" content={`${origin}/og-image.png`} />
+      <link rel="canonical" href={currentUrl} />
       <link rel="alternate" hrefLang={i18n.language} href={currentUrl} />
       {otherLangs.map(otherLang => (<link rel="alternate" hrefLang={otherLang} href={origin + getOtherLangPath(otherLang)} />))}
       <link rel="alternate" hrefLang="x-default" href={`${origin}/en`} />
