@@ -16,13 +16,15 @@ const SeoHead = ({ titleKey, descriptionKey, keywordsKey }: SeoHeadProps) => {
   const { t, i18n } = useTranslation();
   const { pathname } = useLocation();
 
+  const cleanPathname = pathname.replace(/\/+$/, "") || "/";
+
   const otherLangs = useMemo(() => {
     return supportedLangs.filter(lang => lang !== i18n.language);
   }, [i18n.language]);
 
   const getOtherLangPath = useCallback(
     (otherLang: Language) => {
-      const segments = pathname.split("/");
+      const segments = cleanPathname.split("/");
 
       if (supportedLangs.includes(segments[1] as Language)) {
         segments[1] = otherLang;
@@ -30,11 +32,11 @@ const SeoHead = ({ titleKey, descriptionKey, keywordsKey }: SeoHeadProps) => {
 
       return segments.join("/");
     },
-    [pathname]
+    [cleanPathname]
   );
 
   const origin = window.location.origin;
-  const currentUrl = useMemo(() => origin + pathname, [origin, pathname]);
+  const currentUrl = useMemo(() => origin + cleanPathname, [origin, cleanPathname]);
 
   const jsonLd = useMemo(() => ({
     "@context": "https://schema.org",
