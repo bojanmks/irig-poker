@@ -41,7 +41,7 @@ const BaseLayout = () => {
   const additionalClass = useAppSelector((state) => state.wrapperClass.additionalClass)
 
   const baseClass = useMemo(() => "mx-auto p-6 border rounded-2xl shadow-lg bg-background", []);
-  const finalClass = useMemo(() => clsx(baseClass, additionalClass), [baseClass, additionalClass]);
+  const finalClass = useMemo(() => clsx(baseClass, additionalClass || "max-w-md"), [baseClass, additionalClass]);
 
   return (
     <div>
