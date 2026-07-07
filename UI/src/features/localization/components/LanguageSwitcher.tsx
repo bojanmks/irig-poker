@@ -9,23 +9,19 @@ import {
   SelectTrigger,
 } from "@/features/shared/components/shadcn/Select";
 
-import type { Language } from "../types/Language";
-
 function replaceLanguage(pathname: string, lang: string) {
   return pathname.replace(/^\/[^/]+/, `/${lang}`);
 }
 
+const languages = [
+  { code: "sr", label: "SR", flag: "rs" },
+  { code: "en", label: "EN", flag: "gb" }
+] as const;
+
 const LanguageSwitcher = () => {
-  const { i18n, t } = useTranslation();
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-
-  const languages = useMemo<{code: Language, label: string, imageAlt: string, flag: string}[]>(() => {
-    return [
-      { code: "sr", label: "SR", imageAlt: t('serbianLanguage'), flag: "rs" },
-      { code: "en", label: "EN", imageAlt: t('englishLanguage'), flag: "gb" }
-    ];
-  }, [t]);
 
   const handleChange = useCallback(
     (newLang: string) => {
@@ -47,26 +43,12 @@ const LanguageSwitcher = () => {
         onValueChange={handleChange}
     >
       <SelectTrigger>
-        <div className="flex items-center gap-2">
-          <img
-            src={`https://flagcdn.com/w20/${selected?.flag}.png`}
-            alt={selected?.imageAlt}
-            className="rounded-full w-4 h-4"
-          />
-          <span>{selected?.label}</span>
-        </div>
+        <span>{selected?.label}</span>
       </SelectTrigger>
       <SelectContent>
         {languages.map((lang) => (
           <SelectItem value={lang.code} key={lang.code}>
-            <div className="flex items-center gap-2">
-              <img
-                src={`https://flagcdn.com/w20/${lang.flag}.png`}
-                alt={lang.imageAlt}
-                className="rounded-full w-4 h-4"
-              />
-              <span>{lang.label}</span>
-            </div>
+            <span>{lang.label}</span>
           </SelectItem>
         ))}
       </SelectContent>
