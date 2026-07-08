@@ -57,7 +57,7 @@ const ClaimHandDialog = ({ open, onOpenChange, onClaim, currentClaimedHand, curr
                     {t(labelKey)}
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[calc(100%-2rem)] lg:max-w-4xl">
+            <DialogContent className="sm:max-w-[calc(100%-2rem)] lg:max-w-[min(72rem,calc(100%-2rem))]">
                 <DialogHeader>
                     <DialogTitle>{t(labelKey)}</DialogTitle>
                 </DialogHeader>
