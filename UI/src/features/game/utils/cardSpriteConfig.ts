@@ -7,7 +7,7 @@ const CARD_W = 143;
 const CARD_H = 206;
 
 // Actual pixel positions of each card column in the sprite (non-uniform gaps)
-const COL_X: number[] = [9, 156, 302, 448, 594, 741, 887, 1033, 1179, 1325, 1472, 1616, 1761];
+const COL_X: number[] = [9, 156, 302, 448, 594, 741, 887, 1033, 1179, 1325, 1472, 1616, 1762];
 
 // Actual pixel positions of each card row in the sprite (uniform 4px gaps)
 const ROW_Y: number[] = [121, 331, 541, 751];
