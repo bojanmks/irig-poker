@@ -38,22 +38,6 @@ const SeoHead = ({ titleKey, descriptionKey, keywordsKey }: SeoHeadProps) => {
   const origin = window.location.origin;
   const currentUrl = useMemo(() => origin + cleanPathname, [origin, cleanPathname]);
 
-  const jsonLd = useMemo(() => ({
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: t(titleKey),
-    description: t(descriptionKey),
-    url: currentUrl,
-    applicationCategory: "GameApplication",
-    operatingSystem: "Web",
-    inLanguage: supportedLangs,
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-    },
-  }), [currentUrl]);
-
   return (
     <Helmet>
       <html lang={i18n.language} />
@@ -73,7 +57,6 @@ const SeoHead = ({ titleKey, descriptionKey, keywordsKey }: SeoHeadProps) => {
       <link rel="alternate" hrefLang={i18n.language} href={currentUrl} />
       {otherLangs.map(otherLang => (<link rel="alternate" hrefLang={otherLang} href={origin + getOtherLangPath(otherLang)} />))}
       <link rel="alternate" hrefLang="x-default" href={`${origin}/en`} />
-      <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
     </Helmet>
   );
 };
