@@ -16,7 +16,7 @@ const SeoHead = ({ titleKey, descriptionKey, keywordsKey }: SeoHeadProps) => {
   const { t, i18n } = useTranslation();
   const { pathname } = useLocation();
 
-  const cleanPathname = pathname.replace(/\/+$/, "") || "/";
+  const cleanPathname = useMemo(() => pathname.replace(/\/+$/, "") || "/", [pathname]);
 
   const otherLangs = useMemo(() => {
     return supportedLangs.filter(lang => lang !== i18n.language);
