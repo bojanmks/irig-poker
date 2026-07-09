@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
@@ -38,10 +38,13 @@ const SeoHead = ({ titleKey, descriptionKey, keywordsKey }: SeoHeadProps) => {
   const origin = window.location.origin;
   const currentUrl = useMemo(() => origin + cleanPathname, [origin, cleanPathname]);
 
+  useEffect(() => {
+    document.title = t(titleKey);
+  }, [t, titleKey]);
+
   return (
     <Helmet>
       <html lang={i18n.language} />
-      <title>{t(titleKey)}</title>
       <meta name="description" content={t(descriptionKey)} />
       {keywordsKey && <meta name="keywords" content={t(keywordsKey)} />}
       <meta property="og:title" content={t(titleKey)} />
