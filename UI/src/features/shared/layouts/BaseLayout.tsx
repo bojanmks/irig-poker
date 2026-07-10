@@ -1,7 +1,7 @@
 // BaseLayout.tsx
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
-import { Link, Outlet } from "react-router-dom"
+import { Link, Outlet, useParams } from "react-router-dom"
 
 import clsx from "clsx"
 import { GitBranch } from "lucide-react"
@@ -9,14 +9,17 @@ import { GitBranch } from "lucide-react"
 import logo from "@/assets/logo.png"
 import MuteToggle from "@/features/audio/components/MuteToggle"
 import LanguageSwitcher from "@/features/localization/components/LanguageSwitcher"
+import type { LangParams } from "@/features/routing/models/Params"
 import { buttonVariants } from "@/features/shared/components/shadcn/Button"
 import { useAppSelector } from "@/features/store/hooks"
 import ThemeSwitcher from "@/features/themes/components/ThemeSwitcher"
 
 const Logo = () => {
   const { t } = useTranslation();
+  const { lang } = useParams<LangParams>();
+
   return (
-    <Link to="/" className="flex items-center" aria-label={t("common.goHome")}>
+    <Link to={`/${lang}`} className="flex items-center" aria-label={t("common.goHome")}>
       <img src={logo} alt="" className="h-10 lg:h-14 w-auto" />
     </Link>
   );
