@@ -2,7 +2,15 @@
 
 ## Project Overview
 
-A web-based multiplayer poker game with a bluffing mechanic. Built with an ASP.NET Core 10 backend (C#) and a React 19 + TypeScript frontend. The actual poker hand logic and game loop have **not yet been implemented** — only lobby, joining, and turn tracking exist.
+A web-based multiplayer poker game with a bluffing mechanic. Built with an ASP.NET Core 10 backend (C#) and a React 19 + TypeScript frontend.
+
+## Project Layout
+
+```
+src/
+├── backend/          # .NET solution (IrigPoker.sln) + 4 projects
+└── frontend/         # React/Vite app (package.json at root)
+```
 
 ---
 
@@ -70,7 +78,7 @@ This is a custom poker variant. Standard poker hand rankings apply with these di
 ### General
 
 - No tests exist anywhere in the codebase (frontend or backend)
-- Pre-commit hook runs `lint-staged` on frontend only (`cd UI && npx --no-install lint-staged`)
+- Pre-commit hook runs `lint-staged` on frontend only (`cd src/frontend && npx --no-install lint-staged`)
 - Both frontend and backend use structured localization with parallel JSON locale files
 
 ### Frontend (TypeScript / React)

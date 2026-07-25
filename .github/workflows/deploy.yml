@@ -17,7 +17,7 @@ jobs:
 
       - name: Build BE Docker image
         run: |
-          docker build -t ghcr.io/${{ github.actor }}/irig-poker-api:latest .
+          docker build -t ghcr.io/${{ github.actor }}/irig-poker-api:latest ./src/backend
 
       - name: Push BE Docker image
         run: |
@@ -28,7 +28,7 @@ jobs:
           docker build \
             -t ghcr.io/${{ github.actor }}/irig-poker-ui:latest \
             --build-arg VITE_API_BASE_URL= \
-            ./UI
+            ./src/frontend
 
       - name: Push FE Docker image
         run: |
