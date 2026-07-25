@@ -102,10 +102,10 @@ This is a custom poker variant. Standard poker hand rankings apply with these di
 ### Backend (C# / .NET)
 
 - **Architecture**: Clean Architecture / Vertical Slicing across 4 projects:
-  - `WebApi.Common` — Domain models, enums, Result types (no dependencies)
-  - `WebApi.Application` — Interfaces, commands, CQRS abstractions (depends on Common)
-  - `WebApi.Implementation` — Concrete implementations, handlers, stores, validators (depends on Application + Common)
-  - `WebApi.Api` — Host, DI wiring, endpoints, hubs, modules (depends on all)
+  - `IrigPoker.Common` — Domain models, enums, Result types (no dependencies)
+  - `IrigPoker.Application` — Interfaces, commands, CQRS abstractions (depends on Common)
+  - `IrigPoker.Implementation` — Concrete implementations, handlers, stores, validators (depends on Application + Common)
+  - `IrigPoker.Api` — Host, DI wiring, endpoints, hubs, modules (depends on all)
 - **File-scoped namespaces** everywhere
 - **Primary constructors** (C# 12) for DI-heavy classes
 - **`record` types** for DTOs/commands

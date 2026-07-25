@@ -1,0 +1,69 @@
+using MediatR;
+using IrigPoker.Application.Core.ApplicationUsers;
+using IrigPoker.Application.Core.Localization;
+using IrigPoker.Application.Features.Games.Commands;
+using IrigPoker.Application.Features.Games.Services;
+using IrigPoker.Common.Core.Result.Models;
+using IrigPoker.Common.Features.Games.Models;
+
+using static IrigPoker.Common.Features.Games.Helpers.HandStrengthHelper;
+
+namespace IrigPoker.Implementation.Features.Games.CommandHandlers;
+
+public class ClaimHandCommandHandler(
+    IApplicationUserResolver _applicationUserResolver,
+    IGetGameService _getGameService,
+    IGameLockService _gameLockService,
+    ITranslator _translator
+) : IRequestHandler<ClaimHandCommand, Result<ClaimResult>>
+{
+    public async Task<Result<ClaimResult>> Handle(ClaimHandCommand command, CancellationToken cancellationToken)
+    {
+        var applicationUser = await _applicationUserResolver.ResolveAsync(cancellationToken);
+
+        if (string.IsNullOrWhiteSpace(applicationUser.GameCode))
+        {
+            return Result<ClaimResult>.Error(_translator.Translate("user.notInGame"));
+        }
+
+        string gameCode = applicationUser.GameCode;
+
+        using (await _gameLockService.AcquireLockAsync(gameCode, cancellationToken))
+        {
+            var game = await _getGameService.GetAsync(gameCode, cancellationToken);
+
+            if (game is null)
+            {
+                return Result<ClaimResult>.Error(_translator.Translate("game.notFound"));
+            }
+
+            if (!game.HasStarted)
+            {
+                return Result<ClaimResult>.Error(_translator.Translate("game.notStarted"));
+            }
+
+            if (game.CurrentTurnPlayerId != applicationUser.PlayerId)
+            {
+                return Result<ClaimResult>.Error(_translator.Translate("game.notYourTurn"));
+            }
+
+            if (game.CurrentClaimedHand.HasValue && game.ClaimingPlayerId is not null && game.Ranks is not null)
+            {
+                if (!IsStrongerThan(command.Data.ClaimedHand, command.Data.Ranks, game.CurrentClaimedHand.Value, game.Ranks))
+                {
+                    return Result<ClaimResult>.Error(_translator.Translate("game.mustClaimStrongerHand"));
+                }
+            }
+
+            game.SetClaim(applicationUser.PlayerId!, command.Data.ClaimedHand, command.Data.Ranks, command.Data.Suit);
+            game.NextTurn();
+
+            game.LastActivityAt = DateTimeOffset.UtcNow;
+
+            return new ClaimResult(
+                PublicGameState.FromGameState(game),
+                new ClaimNotification(applicationUser.PlayerId!, command.Data.ClaimedHand, command.Data.Ranks, command.Data.Suit)
+            );
+        }
+    }
+}

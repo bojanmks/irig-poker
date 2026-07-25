@@ -4,9 +4,9 @@ WORKDIR /src
 
 COPY . .
 
-RUN dotnet restore WebApi.Api/WebApi.Api.csproj
+RUN dotnet restore IrigPoker.Api/IrigPoker.Api.csproj
 
-RUN dotnet publish WebApi.Api/WebApi.Api.csproj \
+RUN dotnet publish IrigPoker.Api/IrigPoker.Api.csproj \
     -c Release \
     -o /app/publish
 
@@ -20,4 +20,4 @@ EXPOSE 8080
 
 ENV ASPNETCORE_URLS=http://+:8080
 
-ENTRYPOINT ["dotnet", "WebApi.Api.dll"]
+ENTRYPOINT ["dotnet", "IrigPoker.Api.dll"]

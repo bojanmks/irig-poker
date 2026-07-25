@@ -1,0 +1,6 @@
+namespace IrigPoker.Application.Core.Localization;
+
+public interface ITranslator
+{
+    string Translate(string key);
+}
