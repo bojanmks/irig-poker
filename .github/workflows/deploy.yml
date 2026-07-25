@@ -15,23 +15,22 @@ jobs:
       - name: Login to GHCR
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Build Docker image
+      - name: Build BE Docker image
         run: |
           docker build -t ghcr.io/${{ github.actor }}/irig-poker-api:latest .
 
-      - name: Push Docker image
+      - name: Push BE Docker image
         run: |
           docker push ghcr.io/${{ github.actor }}/irig-poker-api:latest
 
-      - name: Build UI
+      - name: Build FE Docker image
         run: |
           docker build \
             -t ghcr.io/${{ github.actor }}/irig-poker-ui:latest \
             --build-arg VITE_API_BASE_URL= \
             ./UI
 
-      # PUSH UI IMAGE
-      - name: Push UI
+      - name: Push FE Docker image
         run: |
           docker push ghcr.io/${{ github.actor }}/irig-poker-ui:latest
   deploy:
