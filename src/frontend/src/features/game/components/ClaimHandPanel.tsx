@@ -20,7 +20,7 @@ import { Rank } from "../models/Rank";
 import { describeRanks } from "../utils/describeRanks";
 
 import { ClaimedHandCards } from "./ClaimedHandCards";
-import { HandSelector, type Step } from "./HandSelector";
+import { HandSelector } from "./HandSelector";
 
 const handTypeLabels: Record<HandType, string> = {
     [HandType.HighCard]: "game.hands.highCard",
@@ -49,13 +49,8 @@ type ClaimHandDialogProps = {
 
 const ClaimHandDialog = ({ open, onOpenChange, onClaim, currentClaimedHand, currentRanks, actionLoading, labelKey }: ClaimHandDialogProps) => {
     const { t } = useTranslation();
-    const [step, setStep] = useState<Step>("hand-type");
 
     const handleOpenChange = useCallback((nextOpen: boolean) => {
-        if (nextOpen) {
-            setStep("hand-type");
-        }
-
         onOpenChange(nextOpen);
     }, [onOpenChange]);
 
@@ -79,7 +74,6 @@ const ClaimHandDialog = ({ open, onOpenChange, onClaim, currentClaimedHand, curr
                         currentClaimedHand={currentClaimedHand}
                         currentRanks={currentRanks}
                         disabled={actionLoading}
-                        onStepChange={setStep}
                     />
                 </div>
             </DialogContent>

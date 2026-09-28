@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { ArrowLeft } from "lucide-react";
@@ -99,12 +99,11 @@ type HandSelectorProps = {
     currentClaimedHand: HandType | null;
     currentRanks: Rank[] | null;
     disabled?: boolean;
-    onStepChange?: (step: Step) => void;
 };
 
 const BackArrow = () => <ArrowLeft size={18} />;
 
-export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disabled, onStepChange }: HandSelectorProps) => {
+export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disabled, }: HandSelectorProps) => {
     const { t } = useTranslation();
     const isLg = useMediaQuery("(min-width: 1024px)");
     const suitCardWidth = isLg ? 90 : 60;
@@ -116,10 +115,6 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
 
     const [selectedFlushSuit, setSelectedFlushSuit] = useState<Suit>(Suit.Hearts);
     const displaySuit = useMemo(() => selectedHandType === HandType.StraightFlush ? selectedFlushSuit : Suit.Hearts, [selectedHandType, selectedFlushSuit]);
-
-    useEffect(() => {
-        onStepChange?.(step);
-    }, [step, onStepChange]);
 
     const handleHandTypeClick = useCallback((ht: HandType) => {
         setSelectedHandType(ht);
