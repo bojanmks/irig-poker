@@ -285,7 +285,7 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
                         <button
                             key={suit}
                             onClick={() => handleSuitClick(suit)}
-                            className="rounded-md transition-all hover:ring-2 hover:ring-primary hover:ring-offset-2"
+                            className="rounded-md p-0.5 transition-colors hover:bg-primary"
                             aria-label={`${t("game.selectSuit")} ${t(suitKey[suit])}`}
                         >
                             <CardSprite suit={suit} rank={Rank.Ace} displayWidth={suitCardWidth} />
@@ -320,9 +320,9 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
                                 onClick={() => step === "second-rank" ? handleSecondRankClick(rank) : handleFirstRankClick(rank)}
                                 disabled={!enabled || selected}
                                 className={cn(
-                                    "rounded-xs transition-all",
+                                    "rounded-sm p-0.5 transition-colors",
                                     "disabled:opacity-40 disabled:pointer-events-none",
-                                    (!enabled || selected) ? "grayscale" : "hover:ring-2 hover:ring-primary hover:ring-offset-1"
+                                    (!enabled || selected) ? "grayscale" : "hover:bg-primary"
                                 )}
                                 aria-label={`${t("game.selectRank")} ${rankLabel(rank)}`}
                             >

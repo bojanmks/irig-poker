@@ -65,8 +65,8 @@ export const RoundResultDisplay = () => {
   const loserUsername = gameState.players[roundResult.losingPlayerId]?.username ?? "?";
 
   const highlightClass = roundResult.wasTruthful
-    ? "ring-2 ring-primary ring-offset-1 rounded-xs"
-    : "ring-2 ring-red-500 ring-offset-1 rounded-xs";
+    ? "rounded-sm p-0.5 bg-primary"
+    : "rounded-sm p-0.5 bg-red-500";
 
   return (
     <Dialog open onOpenChange={(open) => { if (!open) handleDismiss(); }}>
