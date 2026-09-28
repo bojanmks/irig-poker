@@ -20,7 +20,7 @@ import { Rank } from "../models/Rank";
 import { describeRanks } from "../utils/describeRanks";
 
 import { ClaimedHandCards } from "./ClaimedHandCards";
-import { HandSelector } from "./HandSelector";
+import { HandSelector, type Step } from "./HandSelector";
 
 const handTypeLabels: Record<HandType, string> = {
     [HandType.HighCard]: "game.hands.highCard",
@@ -49,24 +49,39 @@ type ClaimHandDialogProps = {
 
 const ClaimHandDialog = ({ open, onOpenChange, onClaim, currentClaimedHand, currentRanks, actionLoading, labelKey }: ClaimHandDialogProps) => {
     const { t } = useTranslation();
+    const [step, setStep] = useState<Step>("hand-type");
+
+    const handleOpenChange = useCallback((nextOpen: boolean) => {
+        if (nextOpen) {
+            setStep("hand-type");
+        }
+
+        onOpenChange(nextOpen);
+    }, [onOpenChange]);
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog open={open} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
                 <Button variant="outline" size="sm" loading={actionLoading}>
                     {t(labelKey)}
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[min(72rem,calc(100%-2rem))]">
+            <DialogContent className={cn(
+                "max-h-[90dvh] flex flex-col",
+                "sm:max-w-[min(72rem,calc(100%-2rem))]"
+            )}>
                 <DialogHeader>
                     <DialogTitle>{t(labelKey)}</DialogTitle>
                 </DialogHeader>
-                <HandSelector
-                    onSelect={onClaim}
-                    currentClaimedHand={currentClaimedHand}
-                    currentRanks={currentRanks}
-                    disabled={actionLoading}
-                />
+                <div className="min-h-0 overflow-y-auto pb-1">
+                    <HandSelector
+                        onSelect={onClaim}
+                        currentClaimedHand={currentClaimedHand}
+                        currentRanks={currentRanks}
+                        disabled={actionLoading}
+                        onStepChange={setStep}
+                    />
+                </div>
             </DialogContent>
         </Dialog>
     );

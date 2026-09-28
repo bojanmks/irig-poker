@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { ArrowLeft } from "lucide-react";
@@ -12,6 +12,7 @@ import { Suit } from "../models/Suit";
 import { rankLabel } from "../utils/describeRanks";
 
 import { CardSprite } from "./CardSprite";
+import { HandTypePreview } from "./HandTypePreview";
 
 const suitKey: Record<number, string> = {
   [Suit.Hearts]: "game.suit.hearts",
@@ -22,6 +23,7 @@ const suitKey: Record<number, string> = {
 
 const allHandTypes = [
     HandType.HighCard,
+
     HandType.OnePair,
     HandType.TwoPair,
     HandType.Straight,
@@ -90,28 +92,34 @@ function handTypeLabelKey(handType: HandType): string {
     }
 }
 
-type Step = "hand-type" | "suit" | "first-rank" | "second-rank";
+export type Step = "hand-type" | "suit" | "first-rank" | "second-rank";
 
 type HandSelectorProps = {
     onSelect: (handType: HandType, ranks: Rank[], suit?: Suit) => void;
     currentClaimedHand: HandType | null;
     currentRanks: Rank[] | null;
     disabled?: boolean;
+    onStepChange?: (step: Step) => void;
 };
 
 const BackArrow = () => <ArrowLeft size={18} />;
 
-export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disabled }: HandSelectorProps) => {
+export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disabled, onStepChange }: HandSelectorProps) => {
     const { t } = useTranslation();
     const isLg = useMediaQuery("(min-width: 1024px)");
     const suitCardWidth = isLg ? 90 : 60;
     const rankCardWidth = isLg ? 75 : 50;
+    const handTypePreviewWidth = isLg ? 48 : 36;
     const [step, setStep] = useState<Step>("hand-type");
     const [selectedHandType, setSelectedHandType] = useState<HandType | null>(null);
     const [firstRank, setFirstRank] = useState<Rank | null>(null);
 
     const [selectedFlushSuit, setSelectedFlushSuit] = useState<Suit>(Suit.Hearts);
     const displaySuit = useMemo(() => selectedHandType === HandType.StraightFlush ? selectedFlushSuit : Suit.Hearts, [selectedHandType, selectedFlushSuit]);
+
+    useEffect(() => {
+        onStepChange?.(step);
+    }, [step, onStepChange]);
 
     const handleHandTypeClick = useCallback((ht: HandType) => {
         setSelectedHandType(ht);
@@ -237,15 +245,24 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
     if (step === "hand-type") {
         return (
             <div className="flex flex-col gap-2">
-                <div className="flex flex-wrap gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 justify-items-center sm:w-fit sm:mx-auto">
                     {allHandTypes.map(ht => (
                         <button
                             key={ht}
                             onClick={() => handleHandTypeClick(ht)}
                             disabled={!isHandTypeEnabled(ht)}
-                            className="px-3 py-1.5 text-sm font-medium rounded-md border border-border bg-card hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50 disabled:pointer-events-none"
+                            className={cn(
+                                "w-full sm:w-60 h-20 sm:h-32 p-2 sm:p-3",
+                                "flex flex-row-reverse sm:flex-col items-center justify-between sm:justify-center gap-1 sm:gap-2",
+                                "rounded-md border border-border bg-card",
+                                "transition-colors hover:bg-accent hover:text-accent-foreground",
+                                "disabled:opacity-50 disabled:grayscale disabled:pointer-events-none"
+                            )}
                         >
-                            {t(handTypeLabelKey(ht))}
+                            <HandTypePreview handType={ht} cardWidth={handTypePreviewWidth} />
+                            <span className="text-sm font-medium">
+                                {t(handTypeLabelKey(ht))}
+                            </span>
                         </button>
                     ))}
                 </div>

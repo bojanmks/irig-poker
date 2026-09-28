@@ -1,10 +1,13 @@
 import { useMemo } from "react";
 
+import { cn } from "@/lib/utils";
+
 import type { Card } from "../models/Card";
 import { HandType } from "../models/HandType";
 import { Rank } from "../models/Rank";
 import type { Suit as SuitType } from "../models/Suit";
 import { Suit } from "../models/Suit";
+import { CARD_H,CARD_W } from "../utils/cardSpriteConfig";
 
 import { CardSprite } from "./CardSprite";
 
@@ -13,6 +16,8 @@ type ClaimedHandCardsProps = {
   ranks: Rank[];
   suit?: SuitType | null;
   displayWidth?: number;
+  overlap?: number;
+  className?: string;
 };
 
 const OVERLAP_VISIBLE = 0.18;
@@ -68,11 +73,11 @@ function generateCards(handType: HandType, ranks: Rank[], suit: SuitType): Card[
   }
 }
 
-export const ClaimedHandCards = ({ handType, ranks, suit, displayWidth = 60 }: ClaimedHandCardsProps) => {
+export const ClaimedHandCards = ({ handType, ranks, suit, displayWidth = 60, overlap = OVERLAP_VISIBLE, className }: ClaimedHandCardsProps) => {
   const defaultSuit = suit ?? Suit.Hearts;
   const cardWidth = displayWidth;
-  const overlapOffset = Math.round(cardWidth * OVERLAP_VISIBLE);
-  const cardHeight = Math.round(206 * cardWidth / 143);
+  const overlapOffset = Math.round(cardWidth * overlap);
+  const cardHeight = Math.round(CARD_H * cardWidth / CARD_W);
 
   const cards = useMemo(() => generateCards(handType, ranks, defaultSuit), [handType, ranks, defaultSuit]);
 
@@ -88,7 +93,7 @@ export const ClaimedHandCards = ({ handType, ranks, suit, displayWidth = 60 }: C
 
     return (
       <div
-        className="flex items-end gap-2"
+        className={cn("flex items-end gap-2", className)}
         style={{ height: cardHeight }}
       >
         <div className="relative shrink-0" style={{ width: group1Width, height: cardHeight }}>
@@ -120,7 +125,7 @@ export const ClaimedHandCards = ({ handType, ranks, suit, displayWidth = 60 }: C
   const totalWidth = cards.length > 1 ? cardWidth + (cards.length - 1) * overlapOffset : cardWidth;
 
   return (
-    <div className="relative" style={{ width: totalWidth, height: cardHeight }}>
+    <div className={cn("relative", className)} style={{ width: totalWidth, height: cardHeight }}>
       {cards.map((card, i) => (
         <div
           key={i}
