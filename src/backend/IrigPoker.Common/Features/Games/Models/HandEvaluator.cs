@@ -2,12 +2,46 @@ namespace IrigPoker.Common.Features.Games.Models;
 
 public static class HandEvaluator
 {
+    private static readonly Rank[] StraightSequence =
+    [
+        Rank.Two,
+        Rank.Three,
+        Rank.Four,
+        Rank.Five,
+        Rank.Six,
+        Rank.Seven,
+        Rank.Eight,
+        Rank.Nine,
+        Rank.Ten,
+        Rank.Jack,
+        Rank.Queen,
+        Rank.King,
+        Rank.Ace
+    ];
+
     public static int CompareRanks(Rank a, Rank b)
     {
         return ((int)a).CompareTo((int)b);
     }
 
-    public static bool HandExistsWithRanks(IReadOnlyList<Card> allCards, HandType handType, List<Rank> ranks)
+    // The ranks a straight with the given top card is made of, or an empty list when the rank cannot top a straight.
+    public static IReadOnlyList<Rank> GetStraightRanks(Rank topRank)
+    {
+        if (topRank == Rank.Five)
+        {
+            return [Rank.Ace, Rank.Two, Rank.Three, Rank.Four, Rank.Five];
+        }
+
+        var topIndex = Array.IndexOf(StraightSequence, topRank);
+        if (topIndex < 4)
+        {
+            return [];
+        }
+
+        return StraightSequence[(topIndex - 4)..(topIndex + 1)];
+    }
+
+    public static bool HandExistsWithRanks(IReadOnlyList<Card> allCards, HandType handType, List<Rank> ranks, Suit? claimedSuit = null)
     {
         return handType switch
         {
@@ -18,7 +52,7 @@ public static class HandEvaluator
             HandType.ThreeOfAKind => ranks.Count > 0 && HasNOfAKind(allCards, 3, ranks[0]),
             HandType.FullHouse => ranks.Count > 1 && HasFullHouse(allCards, ranks[0], ranks[1]),
             HandType.FourOfAKind => ranks.Count > 0 && HasNOfAKind(allCards, 4, ranks[0]),
-            HandType.StraightFlush => ranks.Count > 0 && HasStraightFlushWithTop(allCards, ranks[0]),
+            HandType.StraightFlush => ranks.Count > 0 && HasStraightFlushWithTop(allCards, ranks[0], claimedSuit),
             HandType.RoyalFlush => HasRoyalFlush(allCards),
             _ => false
         };
@@ -37,26 +71,15 @@ public static class HandEvaluator
 
     private static bool HasStraightWithTop(IReadOnlyList<Card> cards, Rank topRank)
     {
-        var topValue = (int)topRank;
-        var values = cards.Select(c => (int)c.Rank).Distinct().OrderBy(v => v).ToArray();
-        if (values.Length < 5) return false;
+        var straightRanks = GetStraightRanks(topRank);
+        if (straightRanks.Count != 5)
+        {
+            return false;
+        }
 
-        if (values.Contains(topValue)
-            && values.Contains(topValue - 1)
-            && values.Contains(topValue - 2)
-            && values.Contains(topValue - 3)
-            && values.Contains(topValue - 4))
-            return true;
+        var presentRanks = cards.Select(c => c.Rank).ToHashSet();
 
-        if (topRank == Rank.Five
-            && values.Contains(14)
-            && values.Contains(2)
-            && values.Contains(3)
-            && values.Contains(4)
-            && values.Contains(5))
-            return true;
-
-        return false;
+        return straightRanks.All(presentRanks.Contains);
     }
 
     private static bool HasFullHouse(IReadOnlyList<Card> cards, Rank triple, Rank pair)
@@ -65,11 +88,16 @@ public static class HandEvaluator
         return cards.Count(c => c.Rank == triple) >= 3 && cards.Count(c => c.Rank == pair) >= 2;
     }
 
-    private static bool HasStraightFlushWithTop(IReadOnlyList<Card> cards, Rank topRank)
+    private static bool HasStraightFlushWithTop(IReadOnlyList<Card> cards, Rank topRank, Suit? claimedSuit)
     {
         var suits = cards.GroupBy(c => c.Suit);
         foreach (var suitGroup in suits)
         {
+            if (claimedSuit.HasValue && suitGroup.Key != claimedSuit.Value)
+            {
+                continue;
+            }
+
             if (suitGroup.Count() >= 5 && HasStraightWithTop(suitGroup.ToList(), topRank))
                 return true;
         }

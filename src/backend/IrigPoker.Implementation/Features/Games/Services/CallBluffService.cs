@@ -17,7 +17,7 @@ public class CallBluffService(
         var claimedSuit = game.ClaimedSuit;
 
         var allCards = game.GetAllCombinedCards();
-        var wasTruthful = HandEvaluator.HandExistsWithRanks(allCards, claimedHand, ranks);
+        var wasTruthful = HandEvaluator.HandExistsWithRanks(allCards, claimedHand, ranks, claimedSuit);
 
         string losingPlayerId = wasTruthful ? callingPlayerId : claimingPlayerId;
 

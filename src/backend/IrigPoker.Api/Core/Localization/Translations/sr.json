@@ -17,6 +17,7 @@
     "failedToJoin": "Nije uspelo pridruživanje igri",
     "notYourTurn": "Nije tvoj potez",
     "mustClaimStrongerHand": "Moraš da prijaviš jaču kombinaciju od trenutne",
+    "invalidClaim": "Prijavljena kombinacija nije ispravna",
     "noClaimToCall": "Nema aktivne prijave za prozivku",
     "cannotCallOwnBluff": "Ne možeš da prozivaš samog sebe"
   },

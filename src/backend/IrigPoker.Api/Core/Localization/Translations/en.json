@@ -17,6 +17,7 @@
     "failedToJoin": "Failed to join the game",
     "notYourTurn": "It is not your turn",
     "mustClaimStrongerHand": "You must claim a stronger hand than the current claim",
+    "invalidClaim": "The claimed hand is not valid",
     "noClaimToCall": "There is no active claim to call",
     "cannotCallOwnBluff": "You cannot call your own bluff"
   },
