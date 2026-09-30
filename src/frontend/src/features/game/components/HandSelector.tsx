@@ -240,14 +240,14 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
     if (step === "hand-type") {
         return (
             <div className="flex flex-col gap-2">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 justify-items-center sm:w-fit sm:mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 justify-items-center sm:w-fit sm:mx-auto">
                     {allHandTypes.map(ht => (
                         <button
                             key={ht}
                             onClick={() => handleHandTypeClick(ht)}
                             disabled={!isHandTypeEnabled(ht)}
                             className={cn(
-                                "w-full sm:w-60 h-20 sm:h-32 p-2 sm:p-3",
+                                "w-full sm:w-60 lg:w-40 xl:w-48 h-20 sm:h-32 p-2 sm:p-3",
                                 "flex flex-row-reverse sm:flex-col items-center justify-between sm:justify-center gap-1 sm:gap-2",
                                 "rounded-md border border-border bg-card",
                                 "transition-colors hover:bg-accent hover:text-accent-foreground",
