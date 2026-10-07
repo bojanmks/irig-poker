@@ -1,13 +1,11 @@
-import { useCallback,useMemo } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/features/shared/components/shadcn/Select";
+import { supportedLangs } from "@/features/localization/consts/supportedLangs";
+import type { Language } from "@/features/localization/types/Language";
+import { buttonVariants } from "@/features/shared/components/shadcn/Button";
+import { cn } from "@/lib/utils";
 
 function replaceLanguage(pathname: string, lang: string) {
   return pathname.replace(/^\/[^/]+/, `/${lang}`);
@@ -20,39 +18,31 @@ const languages = [
 
 const LanguageSwitcher = () => {
   const { i18n } = useTranslation();
-  const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const handleChange = useCallback(
-    (newLang: string) => {
-      i18n.changeLanguage(newLang);
-      navigate(replaceLanguage(pathname, newLang), {
-        replace: true,
-      });
-    },
-    [pathname, navigate, i18n]
-  );
-
-  const selected = useMemo(() => {
-    return languages.find(lang => lang.code === i18n.language) || languages.find(lang => lang.code === 'en');
-  }, [languages, i18n.language]);
+  const currentLang = useMemo(() => {
+    const segment = pathname.split("/").filter(Boolean)[0];
+    return supportedLangs.includes(segment as Language) ? segment : "en";
+  }, [pathname]);
 
   return (
-    <Select
-        value={i18n.language}
-        onValueChange={handleChange}
-    >
-      <SelectTrigger>
-        <span>{selected?.label}</span>
-      </SelectTrigger>
-      <SelectContent>
-        {languages.map((lang) => (
-          <SelectItem value={lang.code} key={lang.code} aria-label={lang.label}>
-            <span>{lang.label}</span>
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <div className="flex items-center gap-1">
+      {languages.map((lang) => (
+        <Link
+          key={lang.code}
+          to={replaceLanguage(pathname, lang.code)}
+          onClick={() => i18n.changeLanguage(lang.code)}
+          aria-current={lang.code === currentLang ? "true" : undefined}
+          className={cn(
+            buttonVariants({ variant: "ghost", size: "sm" }),
+            "px-2",
+            lang.code === currentLang && "bg-accent text-accent-foreground"
+          )}
+        >
+          {lang.label}
+        </Link>
+      ))}
+    </div>
   );
 };
 

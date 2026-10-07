@@ -53,21 +53,25 @@ const GamePage = () => {
 
   useDiconnectOnPageLeave(hub.disconnect);
 
+  const seoHead = (
+    <SeoHead titleKey="meta.title" descriptionKey="meta.gameDescription" robots="noindex, follow" />
+  );
+
   if (!hub.connected) {
-    return <ConnectingToServer setPageState={setPageState} />
+    return <>{seoHead}<ConnectingToServer setPageState={setPageState} /></>
   }
 
   if (!username) {
-    return <EnterNameForm setUsername={setUsername} setPageState={setPageState} />;
+    return <>{seoHead}<EnterNameForm setUsername={setUsername} setPageState={setPageState} /></>;
   }
 
   if (pageState === GamePageState.Joining) {
-    return <JoiningGame hub={hub} gameCode={gameCode!} username={username} setPageState={setPageState} />;
+    return <>{seoHead}<JoiningGame hub={hub} gameCode={gameCode!} username={username} setPageState={setPageState} /></>;
   }
 
   return (
     <>
-      <SeoHead titleKey="meta.title" descriptionKey="meta.gameDescription" />
+      {seoHead}
       {gameState?.hasStarted ? (
         <ActualGame hub={hub} />
       ) : (

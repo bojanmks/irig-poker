@@ -10,17 +10,28 @@ interface SeoHeadProps {
   titleKey: string;
   descriptionKey: string;
   keywordsKey?: string;
+  robots?: string;
 }
 
-const SeoHead = ({ titleKey, descriptionKey, keywordsKey }: SeoHeadProps) => {
+const SeoHead = ({ titleKey, descriptionKey, keywordsKey, robots }: SeoHeadProps) => {
   const { t, i18n } = useTranslation();
   const { pathname } = useLocation();
 
   const cleanPathname = useMemo(() => pathname.replace(/\/+$/, "") || "/", [pathname]);
 
+  const pageLang = useMemo(() => {
+    const segment = cleanPathname.split("/").filter(Boolean)[0];
+
+    if (segment && supportedLangs.includes(segment as Language)) {
+      return segment as Language;
+    }
+
+    return supportedLangs.includes(i18n.language as Language) ? (i18n.language as Language) : "en";
+  }, [cleanPathname, i18n.language]);
+
   const otherLangs = useMemo(() => {
-    return supportedLangs.filter(lang => lang !== i18n.language);
-  }, [i18n.language]);
+    return supportedLangs.filter(lang => lang !== pageLang);
+  }, [pageLang]);
 
   const getOtherLangPath = useCallback(
     (otherLang: Language) => {
@@ -41,8 +52,9 @@ const SeoHead = ({ titleKey, descriptionKey, keywordsKey }: SeoHeadProps) => {
   return (
     <Helmet>
       <title>{t(titleKey)}</title>
-      <html lang={i18n.language} />
+      <html lang={pageLang} />
       <meta name="description" content={t(descriptionKey)} />
+      {robots && <meta name="robots" content={robots} />}
       {keywordsKey && <meta name="keywords" content={t(keywordsKey)} />}
       <meta property="og:title" content={t(titleKey)} />
       <meta property="og:description" content={t(descriptionKey)} />
@@ -54,7 +66,7 @@ const SeoHead = ({ titleKey, descriptionKey, keywordsKey }: SeoHeadProps) => {
       <meta name="twitter:description" content={t(descriptionKey)} />
       <meta name="twitter:image" content={`${origin}/og-image.png`} />
       <link rel="canonical" href={currentUrl} />
-      <link rel="alternate" hrefLang={i18n.language} href={currentUrl} />
+      <link rel="alternate" hrefLang={pageLang} href={currentUrl} />
       {otherLangs.map(otherLang => (<link key={otherLang} rel="alternate" hrefLang={otherLang} href={origin + getOtherLangPath(otherLang)} />))}
       <link rel="alternate" hrefLang="x-default" href={`${origin}/en`} />
     </Helmet>
