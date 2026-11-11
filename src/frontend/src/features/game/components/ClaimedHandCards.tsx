@@ -4,10 +4,11 @@ import { cn } from "@/lib/utils";
 
 import type { Card } from "../models/Card";
 import { HandType } from "../models/HandType";
-import { Rank } from "../models/Rank";
+import type { Rank } from "../models/Rank";
 import type { Suit as SuitType } from "../models/Suit";
 import { Suit } from "../models/Suit";
-import { CARD_H,CARD_W } from "../utils/cardSpriteConfig";
+import { CARD_H, CARD_W } from "../utils/cardSpriteConfig";
+import { getStraightRanks } from "../utils/straight";
 
 import { CardSprite } from "./CardSprite";
 
@@ -21,23 +22,6 @@ type ClaimedHandCardsProps = {
 };
 
 const OVERLAP_VISIBLE = 0.18;
-
-const RANK_SEQUENCE: Rank[] = [
-  Rank.Two, Rank.Three, Rank.Four, Rank.Five, Rank.Six,
-  Rank.Seven, Rank.Eight, Rank.Nine, Rank.Ten,
-  Rank.Jack, Rank.Queen, Rank.King, Rank.Ace,
-];
-
-function getStraightRanks(topRank: Rank): Rank[] {
-  if (topRank === Rank.Five) {
-    return [Rank.Ace, Rank.Two, Rank.Three, Rank.Four, Rank.Five];
-  }
-
-  const topIdx = RANK_SEQUENCE.indexOf(topRank);
-  if (topIdx < 4) return [];
-
-  return RANK_SEQUENCE.slice(topIdx - 4, topIdx + 1);
-}
 
 const ALL_SUITS: SuitType[] = [Suit.Hearts, Suit.Diamonds, Suit.Clubs, Suit.Spades];
 

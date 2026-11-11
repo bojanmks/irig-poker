@@ -10,8 +10,10 @@ import { HandType } from "../models/HandType";
 import { Rank } from "../models/Rank";
 import { Suit } from "../models/Suit";
 import { rankLabel } from "../utils/describeRanks";
+import { getStraightRanks, STRAIGHT_TOP_RANKS } from "../utils/straight";
 
 import { CardSprite } from "./CardSprite";
+import { ClaimedHandCards } from "./ClaimedHandCards";
 import { HandTypePreview } from "./HandTypePreview";
 
 const suitKey: Record<number, string> = {
@@ -58,6 +60,13 @@ const allSuits: Suit[] = [
 
 function isStraightHandType(ht: HandType): boolean {
     return ht === HandType.Straight || ht === HandType.StraightFlush;
+}
+
+function formatStraightRange(topRank: Rank): string {
+    const sequence = getStraightRanks(topRank);
+    const low = rankLabel(sequence[0]);
+    const high = rankLabel(topRank);
+    return `${high}-high (${low}-${high})`;
 }
 
 function isStrongerThan(handType: HandType, ranks: Rank[], otherHandType: HandType, otherRanks: Rank[]): boolean {
@@ -152,25 +161,43 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
         setFirstRank(null);
     }, [selectedHandType, firstRank, onSelect]);
 
+    const handleStraightRangeClick = useCallback((topRank: Rank) => {
+        if (selectedHandType === null || !isStraightHandType(selectedHandType)) return;
+        onSelect(selectedHandType, [topRank], selectedHandType === HandType.StraightFlush ? selectedFlushSuit : undefined);
+        setStep("hand-type");
+        setSelectedHandType(null);
+        setFirstRank(null);
+    }, [selectedHandType, onSelect, selectedFlushSuit]);
+
     const handleBack = useCallback(() => {
         if (step === "second-rank") {
             setStep("first-rank");
             setFirstRank(null);
-        } else if (step === "suit" || selectedHandType !== HandType.StraightFlush) {
+        } else if (step === "first-rank" && selectedHandType === HandType.StraightFlush) {
+            setStep("suit");
+        } else if (step === "first-rank" || step === "suit") {
             setStep("hand-type");
             setSelectedHandType(null);
-        } else {
-            setStep("suit");
         }
     }, [step, selectedHandType]);
 
-    const displayedRanks = useMemo<Rank[]>(() => {
-        if (selectedHandType !== null && isStraightHandType(selectedHandType)) {
-            return [Rank.Five, Rank.Six, Rank.Seven, Rank.Eight, Rank.Nine, Rank.Ten, Rank.Jack, Rank.Queen, Rank.King, Rank.Ace];
+    const displayedRanks = useMemo<Rank[]>(() => allRanks, []);
+
+    const isStraightRangeEnabled = useCallback((topRank: Rank) => {
+        if (selectedHandType === null || !isStraightHandType(selectedHandType) || disabled) {
+            return false;
         }
 
-        return allRanks;
-    }, [selectedHandType]);
+        if (currentClaimedHand === null || currentRanks === null) {
+            return true;
+        }
+
+        if (selectedHandType !== currentClaimedHand) {
+            return selectedHandType > currentClaimedHand;
+        }
+
+        return isStrongerThan(selectedHandType, [topRank], currentClaimedHand, currentRanks);
+    }, [selectedHandType, disabled, currentClaimedHand, currentRanks]);
 
     const isHandTypeEnabled = useCallback((ht: HandType) => {
         if (disabled) {
@@ -291,6 +318,55 @@ export const HandSelector = ({ onSelect, currentClaimedHand, currentRanks, disab
                             <CardSprite suit={suit} rank={Rank.Ace} displayWidth={suitCardWidth} />
                         </button>
                     ))}
+                </div>
+            </div>
+        );
+    }
+
+    if (selectedHandType !== null && isStraightHandType(selectedHandType)) {
+        return (
+            <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={handleBack}
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center"
+                    >
+                        <BackArrow /> {t("game.back")}
+                    </button>
+                    <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+                        {t(handTypeLabelKey(selectedHandType))}
+                        {" — "}{t("game.selectStraight")}
+                    </h3>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {STRAIGHT_TOP_RANKS.map((topRank) => {
+                        const enabled = isStraightRangeEnabled(topRank);
+                        const label = formatStraightRange(topRank);
+                        return (
+                            <button
+                                key={topRank}
+                                onClick={() => handleStraightRangeClick(topRank)}
+                                disabled={!enabled}
+                                className={cn(
+                                    "w-full rounded-md border border-border bg-card p-2 sm:p-3",
+                                    "flex items-center justify-between gap-3 text-left",
+                                    "transition-colors hover:bg-accent hover:text-accent-foreground",
+                                    "disabled:opacity-50 disabled:grayscale disabled:pointer-events-none"
+                                )}
+                                aria-label={`${t("game.selectStraight")}: ${label}`}
+                            >
+                                <span className="text-sm font-medium whitespace-nowrap">{label}</span>
+                                <ClaimedHandCards
+                                    handType={selectedHandType}
+                                    ranks={[topRank]}
+                                    suit={displaySuit}
+                                    displayWidth={isLg ? 34 : 26}
+                                    overlap={0.2}
+                                    className="shrink-0"
+                                />
+                            </button>
+                        );
+                    })}
                 </div>
             </div>
         );

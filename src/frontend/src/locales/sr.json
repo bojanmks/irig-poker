@@ -37,6 +37,7 @@
         "selectRank": "Izaberi kartu",
         "selectSecondRank": " - izaberi drugu kartu",
         "selectSuit": "Izaberi boju",
+        "selectStraight": "Izaberi kentu",
         "suit": {
             "hearts": "Srce",
             "diamonds": "Kocka",

@@ -2,6 +2,8 @@ import { HandType } from "../models/HandType";
 import { Rank } from "../models/Rank";
 import { Suit } from "../models/Suit";
 
+import { getStraightRanks } from "./straight";
+
 const suitSymbols: Record<number, string> = {
   [Suit.Hearts]: "♥",
   [Suit.Diamonds]: "♦",
@@ -32,15 +34,27 @@ export function rankLabel(rank: Rank): string {
 
 export function describeRanks(handType: HandType, ranks: Rank[], suit?: number | null): string {
   if (ranks.length === 0) return "";
+
   if (handType === HandType.TwoPair) {
     return `${rankLabel(ranks[0])} & ${rankLabel(ranks[1])}`;
   }
+
   if (handType === HandType.FullHouse) {
     return `3x${rankLabel(ranks[0])} & 2x${rankLabel(ranks[1])}`;
   }
-  const label = rankLabel(ranks[0]);
-  if (handType === HandType.StraightFlush && suit !== null && suit !== undefined) {
-    return `${label}${suitSymbols[suit] ?? ""}`;
+
+  if (handType === HandType.Straight || handType === HandType.StraightFlush) {
+    const sequence = getStraightRanks(ranks[0]);
+    const low = rankLabel(sequence[0]);
+    const high = rankLabel(ranks[0]);
+    const base = `${high}-high (${low}-${high})`;
+
+    if (handType === HandType.StraightFlush && suit !== null && suit !== undefined) {
+      return `${base} ${suitSymbols[suit] ?? ""}`.trim();
+    }
+
+    return base;
   }
-  return label;
+
+  return rankLabel(ranks[0]);
 }

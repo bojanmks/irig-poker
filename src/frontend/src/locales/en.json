@@ -37,6 +37,7 @@
         "selectRank": "Select rank",
         "selectSecondRank": " - select second rank",
         "selectSuit": "Select suit",
+        "selectStraight": "Select a straight",
         "suit": {
             "hearts": "Hearts",
             "diamonds": "Diamonds",
