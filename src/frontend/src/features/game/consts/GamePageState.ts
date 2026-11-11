@@ -1,5 +1,6 @@
 export const GamePageState = {
     Connecting: 'Connecting',
+    Checking: 'Checking',
     Joining: 'Joining',
     EnterNameToJoin: 'EnterNameToJoin',
     Ready: 'Ready'

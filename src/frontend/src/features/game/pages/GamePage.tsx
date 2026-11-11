@@ -10,6 +10,7 @@ import SeoHead from "@/features/seo/components/SeoHead";
 import { useAppDispatch, useAppSelector } from "@/features/store/hooks";
 
 import ActualGame from "../components/ActualGame";
+import { CheckingGame } from "../components/CheckingGame";
 import { ConnectingToServer } from "../components/ConnectingToServer";
 import { EnterNameForm } from "../components/EnterNameForm";
 import { GameLobby } from "../components/GameLobby";
@@ -20,6 +21,7 @@ import { useDiconnectOnPageLeave } from "../hooks/useDisconnectOnPageLeave";
 import { useGameHubDisconnectHandler } from "../hooks/useGameHubDisconnectHandler";
 import { useGamePageEventListeners } from "../hooks/useGamePageEventListeners";
 import { useGamePageWrapperClass } from "../hooks/useGamePageWrapperClass";
+import { useGameStatus } from "../hooks/useGameStatus";
 import { useUsernameFromRoute } from "../hooks/useUsernameFromRoute";
 
 const GamePage = () => {
@@ -31,6 +33,7 @@ const GamePage = () => {
 
   const { gameCode } = useParams<GameCodeParams>();
   const { username, setUsername } = useUsernameFromRoute();
+  const { isLoading: isCheckingGame } = useGameStatus({ gameCode });
   const [pageState, setPageState] = useState<GamePageState>(GamePageState.Joining);
 
   const onGameWon = useCallback((data: GameWonNotification) => {
@@ -56,6 +59,10 @@ const GamePage = () => {
   const seoHead = (
     <SeoHead titleKey="meta.title" descriptionKey="meta.gameDescription" robots="noindex, follow" />
   );
+
+  if (isCheckingGame) {
+    return <>{seoHead}<CheckingGame setPageState={setPageState} /></>
+  }
 
   if (!hub.connected) {
     return <>{seoHead}<ConnectingToServer setPageState={setPageState} /></>
