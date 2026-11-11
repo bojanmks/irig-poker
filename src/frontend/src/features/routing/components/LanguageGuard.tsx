@@ -5,6 +5,7 @@ import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import { supportedLangs } from "@/features/localization/consts/supportedLangs";
 import type { Language } from "@/features/localization/types/Language";
 
+import { QueryParam } from "../consts/QueryParam";
 import { useGenericSearchParams } from "../hooks/useGenericSearchParams";
 import type { LangParams } from "../models/Params";
 import type { InviteQueryParams } from "../models/QueryParams";
@@ -16,7 +17,7 @@ const LanguageGuard = () => {
   const [ searchParams, setSearchParams ] = useGenericSearchParams<InviteQueryParams>();
   const navigate = useNavigate();
   
-  const isInvite = searchParams.invite === "true"; 
+  const isInvite = QueryParam.Join in searchParams;
   const langIsValid = lang && supportedLangs.includes(lang);
 
   useEffect(() => {
@@ -41,9 +42,9 @@ const LanguageGuard = () => {
     if (isInvite) {
       setSearchParams(prev => {
         const copy = { ...prev };
-        delete copy["invite"];
+        delete copy[QueryParam.Join];
         return copy;
-      });
+      }, { replace: true });
     }
   }, [langIsValid, lang, pathname, i18n.language, i18n.changeLanguage, isInvite, navigate, setSearchParams]);
 

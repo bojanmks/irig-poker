@@ -1,8 +1,9 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { CopyIcon } from "lucide-react";
 
+import { QueryParam } from "@/features/routing/consts/QueryParam";
 import { Button } from "@/features/shared/components/shadcn/Button";
 import { showSuccess } from "@/features/shared/utils/toast";
 
@@ -10,12 +11,18 @@ export const CopyGameLinkButton = () => {
   const [isHovered, setIsHovered] = useState(false);
   const { t } = useTranslation();
 
-  const gameUrl = window.location.href.split("?")[0];
+  const inviteUrl = useMemo(() => {
+    const url = new URL(window.location.href);
+    // Assigning a raw string keeps the flag bare ("?join") instead of "?join="
+    url.search = QueryParam.Join;
+    url.hash = "";
+    return url.toString();
+  }, []);
 
   const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText(`${gameUrl}?invite=true`);
+    navigator.clipboard.writeText(inviteUrl);
     showSuccess(t("game.linkCopied"));
-  }, [gameUrl]);
+  }, [inviteUrl, t]);
 
   return (
     <Button
@@ -27,7 +34,7 @@ export const CopyGameLinkButton = () => {
     >
       {isHovered ? (
         <>
-          <span className="truncate">{gameUrl}</span>
+          <span className="truncate">{inviteUrl}</span>
           <CopyIcon className="w-4 h-4 shrink-0" />
         </>
       ) : (
