@@ -13,7 +13,12 @@ export function useRequest() {
 
   const send = async<TBody = unknown, TResponse = unknown> (config: AxiosRequestConfig<TBody>): Promise<EndpointResponse<TResponse>> => {
     try {
-      config.data ??= config.data = {} as TBody;
+      const method = config.method?.toUpperCase();
+
+      if (config.data == null && method !== "GET" && method !== "HEAD") {
+        config.data = {} as TBody;
+      }
+
       config.headers ??= {};
 
       config.headers["Accept-Language"] = i18n.language;
