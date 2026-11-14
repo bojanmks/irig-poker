@@ -8,16 +8,16 @@ import type { Language } from "@/features/localization/types/Language";
 import { QueryParam } from "../consts/QueryParam";
 import { useGenericSearchParams } from "../hooks/useGenericSearchParams";
 import type { LangParams } from "../models/Params";
-import type { InviteQueryParams } from "../models/QueryParams";
+import type { AutoLangQueryParams } from "../models/QueryParams";
 
 const LanguageGuard = () => {
   const { lang } = useParams<LangParams>();
   const { i18n } = useTranslation();
   const { pathname } = useLocation();
-  const [ searchParams, setSearchParams ] = useGenericSearchParams<InviteQueryParams>();
+  const [ searchParams, setSearchParams ] = useGenericSearchParams<AutoLangQueryParams>();
   const navigate = useNavigate();
-  
-  const isInvite = QueryParam.Join in searchParams;
+
+  const isAutoLang = QueryParam.AutoLang in searchParams;
   const langIsValid = lang && supportedLangs.includes(lang);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const LanguageGuard = () => {
     }
 
     if (i18n.language !== lang) {
-      if (isInvite) {
+      if (isAutoLang) {
         const segments = pathname.split('/').filter(Boolean);
         segments[0] = i18n.language;
         navigate(`/${segments.join("/")}`, { replace: true });
@@ -39,14 +39,14 @@ const LanguageGuard = () => {
       return;
     }
 
-    if (isInvite) {
+    if (isAutoLang) {
       setSearchParams(prev => {
         const copy = { ...prev };
-        delete copy[QueryParam.Join];
+        delete copy[QueryParam.AutoLang];
         return copy;
       }, { replace: true });
     }
-  }, [langIsValid, lang, pathname, i18n.language, i18n.changeLanguage, isInvite, navigate, setSearchParams]);
+  }, [langIsValid, lang, pathname, i18n.language, i18n.changeLanguage, isAutoLang, navigate, setSearchParams]);
 
   return <Outlet />;
 };

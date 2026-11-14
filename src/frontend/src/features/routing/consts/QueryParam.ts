@@ -1,3 +1,3 @@
 export const QueryParam = {
-    Join: "join"
+    AutoLang: "autolang"
 } as const;

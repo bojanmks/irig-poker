@@ -15,8 +15,7 @@ export const CopyGameLinkButton = () => {
 
   const inviteUrl = useMemo(() => {
     const url = new URL(window.location.href);
-    // Assigning a raw string keeps the flag bare ("?join") instead of "?join="
-    url.search = QueryParam.Join;
+    url.search = QueryParam.AutoLang;
     url.hash = "";
     return url.toString();
   }, [location.pathname]);
