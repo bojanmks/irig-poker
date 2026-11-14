@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 
 import { CopyIcon } from "lucide-react";
 
@@ -10,6 +11,7 @@ import { showSuccess } from "@/features/shared/utils/toast";
 export const CopyGameLinkButton = () => {
   const [isHovered, setIsHovered] = useState(false);
   const { t } = useTranslation();
+  const location = useLocation();
 
   const inviteUrl = useMemo(() => {
     const url = new URL(window.location.href);
@@ -17,7 +19,7 @@ export const CopyGameLinkButton = () => {
     url.search = QueryParam.Join;
     url.hash = "";
     return url.toString();
-  }, []);
+  }, [location.pathname]);
 
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(inviteUrl);
